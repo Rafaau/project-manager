@@ -1,0 +1,11 @@
+﻿.home-row {
+    min-height: 50vh;
+}
+
+.left {
+    border: 1px solid white;
+}
+
+.right {
+    border: 1px solid white;
+}

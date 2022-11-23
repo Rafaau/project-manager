@@ -1,0 +1,24 @@
+﻿.add-icon {
+    position: absolute;
+    right: 0;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+
+.pm-modal-btn {
+    display: inline-block;
+    color: #8100cb;
+    font-weight: bold;
+    font-size: 1.2vw;
+    border: 2px solid #8100cb;
+    padding: 1%;
+    margin-top: 10%;
+    width: 30%;
+    background-color: rgba(0,0,0,0);
+    transition: 0.25s;
+}
+
+    .pm-modal-btn:hover {
+        box-shadow: inset 0 -3.25em 0 0 #8100cb;
+        color: #fdfdfd;
+    }

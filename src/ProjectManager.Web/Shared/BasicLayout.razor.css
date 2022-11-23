@@ -1,0 +1,11 @@
+﻿.background {
+     background-color: #0b0d11;
+     height: 100vh;
+     overflow: scroll;
+     position: relative;
+     user-select: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}

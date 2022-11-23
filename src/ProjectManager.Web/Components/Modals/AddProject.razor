@@ -1,0 +1,21 @@
+﻿<span class="fa-regular fa-plus add-icon" data-bs-toggle="modal" data-bs-target="#addProject"/>
+<div class="modal fade" id="addProject" tabindex="-1" aria-labelledby="addProjectLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content pm-modal-container  p-3">
+            <div class="modal-header pm-modal-header">
+                <h5 class="modal-title">Create new project</h5>
+                <span class="fa-solid fa-xmark cross" data-bs-dismiss="modal" aria-label="Close"></span>
+            </div>
+            <EditForm Model="@model" OnValidSubmit="Submit">
+                <div class="modal-body">
+                    <label>Name:</label>
+                    <InputText class="form-control pm-modal-input shadow-none" @bind-Value="@model.Name" placeholder="Name"/>
+                </div>
+                <div class="modal-footer pm-modal-footer">
+                    <button class="pm-modal-btn" type="button" data-bs-dismiss="modal">Cancel</button>
+                    <button class="pm-modal-btn" type="button" @onclick="Submit">Create</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>

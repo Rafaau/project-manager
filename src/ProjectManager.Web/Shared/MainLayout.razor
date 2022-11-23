@@ -1,0 +1,36 @@
+﻿@using ProjectManager.Web.Components
+@using ProjectManager.Web.Components.ProjectComponents
+@inherits LayoutComponentBase
+@layout BasicLayout
+
+<PageTitle>Project Manager</PageTitle>
+
+<div class="page">
+    <div class="sidebar">
+    @if (navManager.Uri == navManager.BaseUri+"pm"
+        || navManager.Uri == navManager.BaseUri + "general-calendar")
+    {
+        <SideNav />
+    }
+    else
+    {      
+        <ProjectNav/>
+    }
+    </div>
+    <main>
+        <AuthorizeView>
+            <NotAuthorized>
+                <LoginRedirect/>
+            </NotAuthorized>
+            <Authorized>
+                @Body
+            </Authorized>
+        </AuthorizeView>
+    </main>
+    @if (navManager.Uri.Contains("project"))
+    {
+        <div class="user-list">
+            <MemberList/>
+        </div>
+    }
+</div>

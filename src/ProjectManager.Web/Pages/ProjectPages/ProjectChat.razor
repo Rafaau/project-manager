@@ -1,0 +1,76 @@
+﻿@page "/project/chat"
+@using ProjectManager.Web.Components
+@using ProjectManager.Web.Components.Modals
+@using ProjectManager.Web.Components.ProjectComponents
+
+@layout CascadeLayout
+
+<div class="row content-block mt-3 ms-3">
+    <div class="col-lg-9 pt-5 content-child">
+        @if (Messages != null && Project != null)
+        {
+            <div style="display: flex;">
+                @foreach (var channel in Project.ChatChannels)
+                {
+                    var channelStyle = channel.Id == CurrentChannel ? "current-channel" : "rest-of-channels";
+                    <div class="@channelStyle" @onclick="() => { SetCurrentChannel(channel.Id); }">
+                        <i style="padding-right: 0.2rem;">#</i>
+                        @channel.Name
+                    </div>
+                }
+            </div>
+            <div class="mt-3 ms-3 chat-frame pe-1">
+                @{ var previousId = 0;
+                var previousDate = new DateTime(); }
+                @foreach (var message in Messages.Where(m => m.ChatChannelId == CurrentChannel))
+                {
+                    <div class="single-message">
+                        @if (message.User.Id == User.Id)
+                        {
+                            <div class="message-actions flex">
+                                <span class="fa-solid fa-trash-can remove-button" data-bs-toggle="modal" data-bs-target="#removeConfirm" @onclick="() => { PassMessageData(message); }"/>
+                            </div>
+                        }
+                        <div class="row">
+                            <div class="col-lg-1">
+                                @if (previousId != message.User.Id || message.PostDate.Date != previousDate)
+                                {
+                                    <span class="fa-solid fa-circle-user mt-1 ms-1 user-icon" />
+                                }
+                                else
+                                {
+                                    <div class="post-date ms-3 mt-1 hour-on-hover">
+                                        @message.PostDate.ToString("H:mmm")
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-lg-11">
+                                @if (previousId != message.User.Id || message.PostDate.Date != previousDate)
+                                {
+                                    <div class="flex">
+                                        <div class="message-owner">
+                                            @message.User.Firstname @message.User.Lastname 
+                                        </div>
+                                        <div class="post-date ms-3 mt-1">
+                                            @message.PostDate.ToString("dddd H:mmm")
+                                        </div>
+                                    </div>
+                                }
+                                <p class="message-content">@message.Content</p>
+                            </div>
+                        </div>
+                    </div>
+                    previousId = message.User.Id;
+                    previousDate = message.PostDate.Date;
+                }
+                <section id="anchor" style="position: relative; margin-top: 5vh;" />
+            </div>
+        }
+        <div class="input-container">
+            <EditForm Model="@model" OnValidSubmit="Submit" id="message-form">
+                <InputText @bind-Value="@model.Content" class="form-control message-input shadow-none" placeholder="Message #general" />
+            </EditForm>
+        </div>
+    </div>
+</div>
+<RemoveConfirm Message="@MessageToPass" RefreshMessages="RefreshMessages" />

@@ -1,0 +1,74 @@
+﻿@page "/register"
+
+@layout BasicLayout
+
+<div class="row">
+    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 mt-5 px-5 form-container">
+        @if (View == "form")
+        {
+            <div class="mb-3 text-center">
+                <h3>SIGN UP</h3>
+            </div>
+            <EditForm Model="@model" OnValidSubmit="Submit">
+                <div class="mb-3 flex">
+                    <div class="pe-4">
+                        <label>Firstname</label>
+                        <InputText @bind-Value="model.Firstname" class="form-control register-input shadow-none" placeholder="Firstname" />
+                    </div>
+                    <div>
+                        <label>Lastname</label>
+                        <InputText @bind-Value="model.Lastname" class="form-control register-input shadow-none" placeholder="Lastname" />
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <label>Role</label>
+                    <InputRadioGroup @bind-Value="model.Role">
+                        <div style="display: flex;">
+                            <label class="form-control radio-container flex">
+                            <InputRadio Value="0" />
+                            <span class="ms-2 checkmark"></span>
+                                Manager
+                            </label>
+                            <label class="form-control radio-container flex">
+                            <InputRadio Value="1" />
+                            <span class="ms-2 checkmark"></span>
+                                Developer
+                            </label>
+                        </div>
+                    </InputRadioGroup>
+                </div>
+                <div class="mb-3">
+                    <label>Email</label>
+                    <InputText @bind-Value="model.Email" class="form-control register-input shadow-none" placeholder="Email" />
+                </div>
+                <div class="mb-3">
+                    <label>Password</label>
+                    <InputText @bind-Value="model.Password" type="password" class="form-control register-input shadow-none" placeholder="Password" />
+                </div>
+                <div class="mb-3 mt-2 d-grid gap-2">
+                    <button class="register-btn" type="submit">SIGN UP</button>
+                </div>
+            </EditForm>
+            <p class="no-account">Have an account? <a href="/login"><b>Log in now</b></a></p>
+        }
+        else
+        {
+            if (View == "success")
+            {
+                <div class="mb-3 text-center">
+                    <h3>SUCCESS</h3>
+                    <h6 class="info">Your account has been created successfuly.<br/> You can now <u class="redirect" @onclick="RedirectToLogin">back to log in page</u></h6>
+                </div>
+            }
+            else
+            {
+                <div class="mb-3 text-center">
+                    <h3>SOMETHING WENT WRONG</h3>
+                    <h6 class="info"><u class="redirect" @onclick="BackToFormView">Try again</u><br />If the error persists, contact the administrator</h6>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+

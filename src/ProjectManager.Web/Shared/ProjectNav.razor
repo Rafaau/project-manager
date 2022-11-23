@@ -1,0 +1,46 @@
+﻿@using ProjectManager.Web.Components.ProjectComponents
+@if (Project != null)
+{
+    <div style="position: fixed">
+        <div class="mt-3 navbar navbar-dark">
+            <div class="container-fluid">
+                <div class="flex">
+                    <i class="fa-solid fa-chevron-left me-3 mt-1 pt-2 back-btn" @onclick="() => { navManager.NavigateTo(pm, true); }"/>
+                    <a class="navbar-brand">@Project.Name</a>
+                </div>
+                <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+        <div class="@SideNavCssClass" @onclick="ToggleNavMenu">
+            <nav class="flex-column">
+                <div class="nav-item px-3 mt-4">
+                    @{
+                        var hrefOne = $"/project/general?id={Id}&";
+                    }
+                    <NavLink class="nav-link" href="@hrefOne" Match="NavLinkMatch.All">
+                        <span class="fa-solid fa-house-chimney me-2" aria-hidden="true"></span> General
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    @{
+                        var hrefTwo = $"/project/chat?id={Id}&";
+                    }
+                    <NavLink class="nav-link" href="@hrefTwo">
+                        <span class="fa-regular fa-comments me-2" aria-hidden="true"></span> Chat
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    @{
+                        var hrefThree = $"/project/board?id={Id}&";
+                    }
+                    <NavLink class="nav-link" href="@hrefThree">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Board
+                    </NavLink>
+                </div>
+            </nav>
+        </div>
+    </div>
+}
+

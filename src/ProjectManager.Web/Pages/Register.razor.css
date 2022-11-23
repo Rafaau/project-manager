@@ -1,0 +1,94 @@
+﻿.form-container {
+    background-color: #181818;
+    border-radius: 1rem;
+}
+
+.register-btn {
+    display: block;
+    color: #8100cb;
+    font-weight: bold;
+    font-size: 1.2vw;
+    border: 2px solid #8100cb;
+    padding: 1%;
+    margin-top: 10%;
+    width: 100%;
+    background-color: rgba(0,0,0,0);
+    transition: 0.25s;
+}
+
+    .register-btn:hover {
+        box-shadow: inset 0 -3.25em 0 0 #8100cb;
+        color: #fdfdfd;
+    }
+
+.register-input {
+    background-color: rgba(0,0,0,0);
+    color: #fdfdfd;
+    opacity: 0.6;
+}
+
+    .register-input:focus {
+        border: 1px solid #fdfdfd;
+    }
+
+.flex {
+    display: flex;
+}
+
+.radio-container {
+    background: none;
+    border: none;
+    color: #8d8d8d;
+}
+
+.checkmark {
+    color: #8100cb;
+}
+
+input[type="radio"] {
+    appearance: none;
+    background-color: rgba(0,0,0,0);
+    margin: 0;
+    font: inherit;
+    color: #8d8d8d;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid;
+    border-radius: 50%;
+    place-content: center;
+    display: grid;
+    transform: translateY(0.1em);
+}
+
+    input[type="radio"]::before {
+        content: "";
+        display: inline-block;
+        width: 0.4rem;
+        height: 0.4rem;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: 0.2s ease-in-out;
+        background: #8100cb;
+    }
+
+    input[type="radio"]:checked::before {
+        transform: scale(1);
+    }
+
+.info {
+    color: #8d8d8d;
+}
+
+.redirect {
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.redirect:hover {
+    color: #fdfdfd;
+}
+
+.no-account {
+    margin-top: 2rem;
+    text-align: center;
+}

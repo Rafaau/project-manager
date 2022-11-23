@@ -1,0 +1,152 @@
+﻿@page "/project/board"
+@using ProjectManager.Web.Components.Modals
+@using ProjectManager.Web.Components.ProjectComponents
+
+<div class="row content-block mt-3 ms-3">
+    @if (Project != null)
+    {
+        <div class="col-lg-9 pt-5 border board-parent">
+            <div class="parent-1">
+                <div class="parent-2">
+                    <i class="fa-solid fa-plus new-stage-button" @onclick="AddNewStage" />              
+                </div>
+            </div>
+            <div class="board-row">
+            @foreach (var stage in Project.AssignmentStages.OrderBy(x => x.Id))
+            {
+                if (DragAndPlaceStageId == stage.Id)
+                {
+                    IsDragOver = "drag-over";
+                }
+                else
+                {
+                    IsDragOver = "";
+                }
+                <div class="stage-column @IsDragOver" ondragover="event.preventDefault();" @ondragenter="() => { OnDragEnter(stage.Id); }">
+                    <div class="stage-name">
+                        @if (ShowStageNameForm && StageId == stage.Id)
+                        {
+                            <input @bind-value="StageName" class="stage-input"/>
+                            <i class="fa-solid fa-check save-button" @onclick="SaveStageName"/>
+                        }
+                        else 
+                        {
+                            @stage.Name
+                            <div class="action-buttons">
+                                <i class="fa-regular fa-pen-to-square edit-button" @onclick="() => { OnEditStageClick(stage); }"/>
+                                <i class="fa-regular fa-trash-can delete-button" data-bs-toggle="modal" data-bs-target="#removeConfirm" @onclick="() => { StageId = stage.Id; }" />
+                            </div>
+                        }
+                    </div>
+                    <div class="stage-content">
+                        @foreach (var assignment in Assignments.Where(x => x.AssignmentStage.Id == stage.Id))
+                        {
+                            if (DragAndPlaceAssignmentId == assignment.Id)
+                            {
+                                IsDragged = "is-dragged";
+                            }
+                            else
+                            {
+                                IsDragged = "";
+                            }
+                            <div draggable="true" 
+                                class="assignment @IsDragged" 
+                                @ondragstart="() => { OnDrag(assignment.Id); }"
+                                @ondragend="OnDrop"
+                                @onclick="() => { OnAssignmentClick(assignment.Id); }">
+
+                                <div class="assignment-name">
+                                    @assignment.Name
+                                </div>
+                                <hr/>
+                                <div class="assignment-description">
+                                    @assignment.Description
+                                </div>
+                                @if (ShowAssignmentDetails == assignment.Id)
+                                {
+                                    <div class="mt-2" style="font-size: 0.8rem">
+                                        Priority:
+                                        <div style="float: right">
+                                            @assignment.Priority
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 0.8rem">
+                                        Deadline: 
+                                        <div style="float: right">
+                                            @assignment.Deadline.ToString("dd.MM.yyyy")
+                                        </div>
+                                    </div>
+                                    @foreach (var bound in assignment.Users)
+                                    {
+                                        <span class="fa-solid fa-circle-user user-icon" data-bs-toggle="tooltip" title="@bound.Firstname @bound.Lastname"/>
+                                    }
+                                }
+                                
+                            </div>
+                        }
+                        @if (ShowAssignmentForm && CurrentStage == stage.Id)
+                        {
+                            <i class="fa-solid fa-xmark close-button" @onclick="() => { ShowAssignmentForm = false; }" />
+                            <EditForm Model="@AssignmentToAdd" OnValidSubmit="SubmitAssignment">
+                                <InputText class="form-control input-text shadow-none mb-2" @bind-Value="AssignmentToAdd.Name" placeholder="Name" />
+                                <InputText class="form-control input-text shadow-none mb-2"  @bind-Value="AssignmentToAdd.Description" placeholder="Description" />
+                                <div style="display: flex; width: 100%;" class="mb-2">
+                                        <label style="width: 80%;" class="mt-2">Deadline: </label>
+                                    <InputDate class="form-control input-date shadow-none" @bind-Value="AssignmentToAdd.Deadline"/>
+                                </div>
+                                <div style="display: flex; width: 100%;" class="mb-2">
+                                    <label style="width: 80%;" class="mt-2">Priority: </label>
+                                    <InputSelect class="form-control input-select shadow-none" @bind-Value="SelectValue">
+                                        <option selected value=0>Low</option>
+                                        <option value=1>Medium</option>
+                                        <option value=2>High</option>
+                                    </InputSelect>
+                                </div>
+                                <div style="display: flex; width: 100%;">
+                                    <label style="width: 100%;" class="mt-2">Bound: </label>
+                                    @if (UnboundUsers.Count()>0)
+                                    {
+                                        <button class="dropdown-toggle bound-dropdown" type="button" id="boundDevsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Developers
+                                        </button>
+                                        <ul class="dropdown-menu dev-ul" aria-labelledby="boundDevsDropdown">
+                                            @foreach (var dev in UnboundUsers)
+                                            {
+                                                <li class="dev-li" @onclick="() => { BoundUser(dev); }">
+                                                    <span class="fa-solid fa-circle-user"/>
+                                                    @dev.Firstname @dev.Lastname
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                </div>
+                                <div style="display: flex">
+                                    @if (UsersToBound != null)
+                                    {
+                                        foreach (var bound in UsersToBound)
+                                        {
+                                            <span class="fa-solid fa-circle-user user-icon" data-bs-toggle="tooltip" title="@bound.Firstname @bound.Lastname" 
+                                                @onmouseover="() => { ShowUnboundButton = bound.Id; }" @onmouseout="() => { ShowUnboundButton = 0; }">
+                                                @if (ShowUnboundButton == bound.Id)
+                                                {
+                                                    <i class="fa-solid fa-circle-xmark delete-bound" @onclick="() => { UnboundUser(bound); }"/>
+                                                }
+                                            </span>
+                                        }
+                                    }
+                                </div>
+                                <button class="submit-button" type="submit">Add</button>
+                            </EditForm>
+                        }
+                        else
+                        {
+                            <i class="fa-solid fa-ellipsis add-button" @onclick="() => { ShowForm(stage.Id); }" />
+                        }
+                    </div>
+                </div>
+            }
+            </div>
+        </div>
+    }
+</div>
+<RemoveStageConfirm StageId="StageId" OnStageDelete="RefreshProject"/>

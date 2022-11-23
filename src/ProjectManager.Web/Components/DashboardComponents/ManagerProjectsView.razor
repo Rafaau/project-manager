@@ -1,0 +1,64 @@
+﻿@using ProjectManager.Web.Components.Modals
+
+@if (User != null && User.ManagedProjects != null)
+{
+    <div class="border">
+        <div class="flex mt-3 ms-3 me-2 border">
+            <h4>Managed projects</h4>
+            <AddProject UpdateProjectList="Rerender"/>
+        </div>
+
+        <div id="carouselExampleControls" class="carousel slide mt-4 pb-4" data-bs-ride="carousel" data-bs-interval="false">
+            @if (User.ManagedProjects.Count() > 2)
+            {
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="0" class="active indicator" aria-current="true"></button>
+                    @for (var i = 2; i < User.ManagedProjects.Count(); i+=2) 
+                    {
+                        var j = i - (i/2);
+                        <button type="button" class="indicator" data-bs-target="#carouselExampleControls" data-bs-slide-to="@j"></button>
+                    }
+                </div>
+            }
+            <div class="carousel-inner">
+                @if (User.ManagedProjects.Count() > 1)
+                {
+                    <div class="carousel-item active">
+                        <div class="projects-slider">
+                            <div class="single-project ms-3" @onclick="() => { Redirect(User.ManagedProjects.FirstOrDefault().Id.ToString()); }">
+                                <p>@User.ManagedProjects.FirstOrDefault().Name</p>
+                            </div>
+                                <div class="single-project ms-4" @onclick="() => { Redirect(User.ManagedProjects.Skip(1).FirstOrDefault().Id.ToString()); }">
+                                <p>@User.ManagedProjects.Skip(1).FirstOrDefault().Name</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="carousel-item active">
+                            <div class="single-project ms-3" @onclick="() => { Redirect(User.ManagedProjects.FirstOrDefault().Id.ToString()); }">
+                            <p>@User.ManagedProjects.FirstOrDefault().Name</p>
+                        </div>
+                    </div>
+                }
+                @for (var i = 2; i < User.ManagedProjects.Count(); i+=2)
+                {
+                    <div class="carousel-item">
+                        <div class="projects-slider">
+                            <div class="single-project ms-3" @onclick="() => { Redirect(User.ManagedProjects.Skip(i-2).FirstOrDefault().Id.ToString()); }">
+                                <p>@User.ManagedProjects.Skip(i).FirstOrDefault().Name</p>
+                            </div>
+                            @if (@User.ManagedProjects.Skip(i + 1).FirstOrDefault() != null)
+                            {
+                                    <div class="single-project ms-4" @onclick="() => { Redirect(User.ManagedProjects.Skip(i-1).FirstOrDefault().Id.ToString()); }">
+                                    <p>@User.ManagedProjects.Skip(i+1).FirstOrDefault().Name</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

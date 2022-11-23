@@ -1,0 +1,26 @@
+﻿@page "/pm"
+@using ProjectManager.Web.Components
+@using ProjectManager.Web.Components.DashboardComponents
+
+@layout CascadeLayout
+
+<AuthorizeView>
+     <Authorized>
+          <div class="row home-row mt-3 ms-3">
+               <div class="col-lg-7 ps-4 pe-3 left">
+                   <h1 class="ps-3">Dashboard</h1>
+                   <ProjectsTab/>
+               </div>
+               <div class="col-lg-5 px-4 right">
+                   <UserTab onShowUserSettings="ShowUserSettings" @ref="userTab"/>
+                   @if (showUserSettings)
+                   {
+                        <UserSettings onSaveClick="SaveUserProfile"/>
+                   }
+               </div>
+          </div>
+     </Authorized>
+     <NotAuthorized>
+          <h1>Wypierdalaj</h1>
+     </NotAuthorized>
+</AuthorizeView>

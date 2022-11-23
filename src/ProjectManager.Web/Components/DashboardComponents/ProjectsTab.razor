@@ -1,0 +1,13 @@
+﻿@using ProjectManager.Web.Components.Modals
+
+@if (User != null)
+{
+    @if (User.Role == 0)
+    {
+        <ManagerProjectsView />
+    }
+    else
+    {
+        <DeveloperProjectsView />
+    }
+}

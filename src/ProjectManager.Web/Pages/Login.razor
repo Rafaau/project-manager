@@ -1,0 +1,32 @@
+﻿@page "/login"
+
+@layout BasicLayout
+
+<div class="row">
+     <div class="col-lg-4 offset-lg-4 pt-4 pb-4 mt-5 px-5 form-container">
+          <div class="mb-3 text-center">
+               <h3>LOGIN</h3>
+          </div>
+          <div class="mb-3">
+               <label>Email</label>
+               <input @bind="model.Email" class="form-control login-input shadow-none" placeholder="Email" />
+          </div>
+          <div class="mb-3">
+               <label>Password</label>
+               <input @bind="model.Password" type="password" class="form-control login-input shadow-none" placeholder="Password" />
+          </div>
+          <div class="mb-1">
+              <label>Remember me</label>
+              <label class="switch mt-2">
+                  <input type="checkbox" @bind="@Remember"/>
+                  <span class="slider"/>
+              </label>
+          </div>
+          <div class="mb-3 mt-3 d-grid gap-2">
+               <button @onclick="Authenticate" class="login-btn">Login</button>
+          </div>
+          <p class="no-account">Don't have an account? <a href="/register"><b>Sign Up</b></a></p>
+     </div>
+</div>
+
+

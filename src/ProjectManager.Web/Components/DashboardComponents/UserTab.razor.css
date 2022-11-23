@@ -1,0 +1,71 @@
+﻿.user-label {
+    border: 1px solid white;
+    text-align: center;
+}
+
+.user-avatar-container {
+    position: relative;
+}
+
+.user-icon {
+    font-size: 7rem;
+    border: 1px solid white;
+    position: relative;
+}
+
+.edit-avatar {
+    position: absolute;
+    background-color: #181818;
+    font-size: 1.3rem;
+    top: -0.5rem;
+    padding: 0.8rem;
+    border-radius: 50%;
+    right: -0.5rem;
+}
+
+.user-type {
+    color: #8d8d8d;
+}
+
+.flex {
+    display: flex;
+    position: relative;
+}
+
+.float {
+    font-size: 1.6rem;
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    user-select: none;
+}
+
+.actions-container {
+    background-color: #0b0d11;
+    border: 1px solid #fdfdfd;
+    text-align: right;
+    width: 50px !important;
+    user-select: none;
+}
+
+.action {
+    color: #8d8d8d;
+    transition: 0.2s;
+    user-select: none;
+}
+
+.action:hover {
+    background: none;
+    color: #fdfdfd;
+}
+
+.icon-container {
+    cursor: pointer;
+    color: #8d8d8d;
+    font-size: 1.3rem;
+    padding: 1rem;
+    padding-inline: 1.2rem;
+    margin: 0.6rem;
+    border-radius: 50%;
+    background-color: #181818;
+}

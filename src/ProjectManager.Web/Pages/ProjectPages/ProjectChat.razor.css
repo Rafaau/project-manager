@@ -1,0 +1,107 @@
+﻿.content-block {
+    position: fixed;
+    bottom: 2%;
+    right: 1%;
+    left: 275px;
+    height: 90%;
+}
+
+.content-child {
+    position: relative;
+    height: 100%;
+}
+
+.input-container {
+    position: absolute;
+    width: 97%;
+    bottom: 0;
+    background-color: #0b0d11;
+}
+
+.chat-frame {
+    padding-top: 1rem;
+    height: 80%;
+    overflow: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+    .chat-frame::-webkit-scrollbar {
+        display: none;
+    }
+
+
+.post-date {
+    color: #8d8d8d;
+    font-family: Poppins-light;
+    font-size: 0.8rem;
+}
+
+.message-content {
+    font-family: Poppins-light;
+}
+
+.message-owner {
+    font-size: 1.2rem;
+}
+
+.user-icon {
+    font-size: 3.5vw;
+    color: #8d8d8d;
+}
+
+.message-actions {
+    top: -1rem;
+    display: none;
+    padding: 0.3rem;
+    padding-inline: 0.6rem;
+    position: absolute;
+    right: 0;
+    background-color: #181818;
+    height: auto;
+    width: auto;
+    border-radius: 0.5rem;
+}
+
+.hour-on-hover {
+    display: none;
+}
+
+.single-message {
+    position: relative;
+}
+
+.single-message:hover .hour-on-hover {
+    display: inline-block;
+    position: absolute;
+}
+
+.single-message:hover > .message-actions {
+    display: inline-block;
+}
+
+.remove-button {
+    cursor: pointer;
+}
+
+.current-channel {
+    cursor: pointer;
+    padding: 0.5rem;
+    padding-right: 1.3rem;
+    padding-left: 0.9rem;
+    border-radius: 0.4rem;
+    background-color: #181818;
+    margin-right: 0.5rem;
+}
+
+.rest-of-channels {
+    cursor: pointer;
+    padding: 0.5rem;
+    padding-right: 1.3rem;
+    padding-left: 0.9rem;
+    border-radius: 0.4rem;
+    background-color: #181818;
+    margin-right: 0.5rem;
+    color: #8d8d8d;
+}
+

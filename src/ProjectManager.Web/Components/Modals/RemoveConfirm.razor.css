@@ -1,0 +1,28 @@
+﻿.post-date {
+    color: #8d8d8d;
+    font-family: Poppins-light;
+    font-size: 0.8rem;
+    user-select: none;
+}
+
+.message-content {
+    font-family: Poppins-light;
+    user-select: none;
+}
+
+.message-owner {
+    font-size: 1.2rem;
+    user-select: none;
+}
+
+.user-icon {
+    font-size: 3rem;
+    user-select: none;
+}
+
+.message-preview {
+    border: 1px solid #0b0d11;
+    border-radius: 0.5rem;
+    padding-top: 1rem;
+    box-shadow: rgba(0,0,0,0.5) 0px 0px 5px;
+}

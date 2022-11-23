@@ -1,0 +1,17 @@
+﻿<div class="modal fade" id="removeConfirm" tabindex="-1" aria-labelledby="removeConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content pm-modal-container  p-3">
+            <div class="modal-header pm-modal-header">
+                <h5 class="modal-title">Delete stage</h5>
+                <span class="fa-solid fa-xmark cross" data-bs-dismiss="modal" aria-label="Close"></span>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this stage and its assignments?
+            </div>
+            <div class="modal-footer pm-modal-footer">
+                <button class="pm-modal-btn" type="button" data-bs-dismiss="modal">Cancel</button>
+                <button class="pm-modal-btn" type="button" @onclick="DeleteStage">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

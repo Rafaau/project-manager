@@ -1,0 +1,40 @@
+﻿<div class="flex border">
+    <h4>Profile</h4>
+    <div class="dropdown float">
+        <span class="fa-solid fa-ellipsis-vertical" id="accountActionsDropdown" data-bs-toggle="dropdown" aria-expanded="false"/>
+        <ul class="dropdown-menu actions-container" aria-labelledby="accountActionsDropdown">
+            <li class="dropdown-item action" @onclick="RedirectToProfile">My Profile</li>
+            <li class="dropdown-item action" @onclick="Logout">Logout</li>
+        </ul>
+    </div>
+</div>
+@if (User != null)
+{
+    <div class="user-label">
+        <div class="user-avatar-container">
+            <span class="fa-solid fa-circle-user user-icon">
+                @if (isSettingsOn)
+                {
+                    <span class="fa-solid fa-camera-rotate edit-avatar" />
+                }
+            </span>
+            <img src=""/>
+        </div>
+        <h6 class="mt-3">@User.Firstname @User.Lastname</h6>
+        <h6 class="user-type">@User.Role</h6>
+        <div style="display: flex; justify-content: center;">
+        @if (!isSettingsOn)
+        {
+            <div class="icon-container" @onclick="ShowUserSettings">
+                <i class="fa-regular fa-pen-to-square"/>
+            </div>
+            <div class="icon-container">
+                <i class="fa-regular fa-envelope"/>
+            </div>
+            <div class="icon-container">
+                <i class="fa-regular fa-bell"/>
+            </div>
+        }
+        </div>
+    </div>
+}

@@ -1,0 +1,50 @@
+﻿@page "/general-calendar"
+
+<div class="calendar-container">
+    <div class="calendar-nav"> 
+        <div>
+            <button class="nav-button" @onclick="() => { monthsAway--; CreateMonth(); }">
+                <i class="fa-solid fa-arrow-left"/>
+            </button>
+            <button class="nav-button" @onclick="() => { monthsAway++; CreateMonth(); }">
+                <i class="fa-solid fa-arrow-right"/>
+            </button>
+            <button class="nav-button" @onclick="() => { monthsAway=0; CreateMonth(); }">
+                <span>Today</span>
+            </button>
+            <span class="month-span">@monthName, @year</span>
+        </div>
+        <div class="week-nav">
+            <div>MON</div>
+            <div>TUE</div>
+            <div>WED</div>
+            <div>THU</div>
+            <div>FRI</div>
+            <div>SAT</div>
+            <div>SUN</div>
+        </div>
+    </div>
+    <section>
+        @for (int i = previousMonthEnd - numDummyColumn + 1; i < previousMonthEnd + 1; i++)
+        {
+            <div>
+                <span class="gray-span">@i</span>
+            </div>
+        }
+        @for (int i = 1; i <= monthEnd.Day; i++)
+        {
+            <div>
+                <span>@i</span>
+            </div>
+        }
+        @if (nextMonthStart < 7)
+        {
+            @for (int i = 1; i < nextMonthStart + 1; i++)
+            {
+                <div>
+                    <span class="gray-span">@i</span>
+                </div>
+            }
+        }
+    </section>
+</div>
