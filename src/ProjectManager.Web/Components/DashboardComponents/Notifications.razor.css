@@ -1,0 +1,58 @@
+﻿.hide-button {
+    font-size: 2rem;
+    cursor: pointer;
+    text-align: right;
+}
+
+.notifications-container {
+    width: 100%;
+    margin-top: 1vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.notifications-container::-webkit-scrollbar {
+    display: none;
+}
+
+.single-notification {
+    margin-left: 0.25vh;
+    width: 100%;
+    margin-top: 0.6rem;
+    padding: 0.8rem;
+    background-color: #181818;
+    font-size: 0.8rem;
+    animation: fade .1s linear forwards;
+    opacity: 0;
+    border-radius: 0.8rem;
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.notification-date {
+    text-align: right;
+}
+
+.eye {
+    padding-top: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.is-seen-False {
+    color: #fdfdfd;
+}
+
+.is-seen-True {
+    color: #8d8d8d;
+}

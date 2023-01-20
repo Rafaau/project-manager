@@ -1,0 +1,8 @@
+﻿.channel-tab {
+    border: 1px solid #0b0d11;
+    padding: 1rem;
+    -webkit-box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 1);
+    -moz-box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 1);
+    box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 1);
+    margin-bottom: 1rem;
+}

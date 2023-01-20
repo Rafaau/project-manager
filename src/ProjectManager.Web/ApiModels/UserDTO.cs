@@ -29,8 +29,10 @@ public class UserComplex
   public string Email { get; set; }
   public string Password { get; set; }
   public UserRole Role { get; set; }
+  public UserSpecialization? Specialization { get; set; }
   public List<ProjectSimplified>? ManagedProjects { get; set; }
   public List<ProjectSimplified>? Projects { get; set; }
+  public List<AssignmentSimplified>? Assignments { get; set; } 
 }
 
 public class UserSimplified
@@ -41,4 +43,16 @@ public class UserSimplified
   public string Email { get; set; }
   public string Password { get; set; }
   public UserRole Role { get; set; }
+  public UserSpecialization? Specialization { get; set; }
+
+  public UserSimplified(int id, string firstname, string lastname)
+  {
+    Id = id;
+    Firstname = firstname;
+    Lastname = lastname;
+  }
+
+  public UserSimplified()
+  {
+  }
 }

@@ -32,13 +32,13 @@ public class CreateUserControllerTests : IClassFixture<ApiFactory>, IAsyncLifeti
     var response = await _client.PostAsJsonAsync("/api/user", user);
 
     // Assert
-    var userResponse = await response.Content.ReadFromJsonAsync<UserRequest>();
-    userResponse!.Should().BeEquivalentTo(user);
+    var userResponse = await response.Content.ReadFromJsonAsync<Response<UserSimplified>>();
+    userResponse!.Data.Should().BeEquivalentTo(user, o => o.Excluding(u => u.Id));
     response.StatusCode.Should().Be(HttpStatusCode.Created);
     response.Headers.Location!.ToString().Should()
-      .Be($"http://localhost/api/User/{userResponse!.Email}");
+      .Be($"http://localhost/api/User/{userResponse!.Data.Email}");
 
-    _idsToDelete.Add(userResponse.Id);
+    _idsToDelete.Add(userResponse.Data.Id);
   }
 
   [Fact]

@@ -1,0 +1,56 @@
+﻿@layout CascadeLayout
+
+<ul class="dropdown-menu user-details-container" aria-labelledby="dropdownUserDetails">
+    @if (ViewedUser != null)
+    {
+        <div class="details-header">
+            @if (System.IO.File.Exists(Path.Combine(env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{ViewedUser.Id}.jpg")))
+            {
+                var path = $"/avatars/pm-avatar-{ViewedUser.Id}.jpg";
+                <img src="@path" class="user-avatar" />
+            }
+            else
+            {
+                <span class="fa-solid fa-circle-user mt-1 ms-1 user-icon" />
+            }
+            <div class="fullname">
+                @ViewedUser.Firstname @ViewedUser.Lastname
+            </div>
+            <div class="user-role">
+                @ViewedUser.Role
+            </div>
+        </div>
+        <div class="other-details-container">
+            @if ((int)ViewedUser.Role == 1)
+            {
+                <div class="details-label">
+                    Specialization
+                </div>
+                <div class="details-field">
+                    @if (userComplex != null)
+                    {
+                        @userComplex.Specialization
+                    }
+                </div>
+            }
+            <div class="details-label">
+                Assignments:
+            </div>
+            <div class="details-field">
+                <i class="fa-solid fa-file-lines me-2" />
+                @if (userComplex != null)
+                {
+                    @userComplex.Assignments.Count()
+                }
+            </div>
+            @if (User != null && ViewedUser.Id != User.Id)
+            {
+                <div class="message-field">
+                    <EditForm Model="privateMessage" OnValidSubmit="Submit">
+                        <InputText class="form-control pm-modal-input shadow-none" @bind-Value="privateMessage.Content" placeholder="Message"/>
+                    </EditForm>
+                </div>
+            }
+        </div>
+    }
+</ul>

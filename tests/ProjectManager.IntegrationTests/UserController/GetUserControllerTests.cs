@@ -28,15 +28,15 @@ public class GetUserControllerTests : IClassFixture<ApiFactory>, IAsyncLifetime
     // Arrange
     var user = _userGenerator.Generate();
     var createdResponse = await _client.PostAsJsonAsync("/api/user", user);
-    var createdUser = await createdResponse.Content.ReadFromJsonAsync<UserSimplified>();
-    _idsToDelete.Add(createdUser!.Id);
+    var createdUser = await createdResponse.Content.ReadFromJsonAsync<Response<UserSimplified>>();
+    _idsToDelete.Add(createdUser!.Data.Id);
 
     // Act
-    var response = await _client.GetAsync($"/api/user/{createdUser!.Email}");
+    var response = await _client.GetAsync($"/api/user/{createdUser!.Data.Email}");
 
     // Assert
     var retrievedUser = await response.Content.ReadFromJsonAsync<Response<UserComplex>>();
-    retrievedUser!.Data.Should().BeEquivalentTo(createdUser);
+    retrievedUser!.Data.Should().BeEquivalentTo(createdUser.Data);
     response.StatusCode.Should().Be(HttpStatusCode.OK);
   }
 

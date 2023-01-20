@@ -30,6 +30,6 @@ public class AssignmentSimplified
 {
   public int Id { get; set; }
   public string Name { get; set; }
-  public ProjectSimplified Project { get; set; }
-  public AssignmentStageSimplified AssignmentStage { get; set; }
+  public int ProjectId { get; set; }
+  public int AssignmentStageId { get; set; }
 }

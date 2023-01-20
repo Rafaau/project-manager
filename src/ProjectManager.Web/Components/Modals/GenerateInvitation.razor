@@ -1,0 +1,19 @@
+﻿<div class="modal fade" id="generateInvitationLink" tabindex="-1" aria-labelledby="generateInvitationLinkLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content pm-modal-container p-3">
+            <div class="modal-header pm-modal-header">
+                <h5 class="modal-title">Generate invitation link</h5>
+                <span class="fa-solid fa-xmark cross" data-bs-dismiss="modal" aria-label="Close"></span>
+            </div>
+            <div class="input-group ms-3 me-3 pe-2">
+                <input id="fieldToCopy" class="form-control link-field" type="text" value="@generatedLink" aria-label="Disabled input example" disabled readonly>
+                <span class="input-group-btn">
+                    <button class="btn btn-default shadow-none copy-link-btn me-4" @onclick="CopyToClipboard">Copy</button>
+                </span>
+            </div>
+            <div class="modal-footer pm-modal-footer">
+                <button class="pm-modal-btn generate-btn" @onclick="GenerateInvitationLink">Generate</button>
+            </div>
+        </div>
+    </div>
+</div>

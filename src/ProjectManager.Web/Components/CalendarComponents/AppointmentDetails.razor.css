@@ -1,0 +1,51 @@
+﻿.appointment-details-container {
+    padding: 1rem;
+    background-color: #181818;
+    border-radius: 0.5rem;
+    min-width: 15rem;
+    width: auto;
+    color: #fdfdfd;
+}
+
+.details-header {
+    font-size: 1.2rem;
+    display: flex;
+}
+
+.details-description {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.details-date {
+    width: 100%;
+    text-align: right;
+    margin-top: 0.3rem;
+}
+
+.details-type {
+    display: inline-block;
+    float: right;
+    font-size: 0.9rem;
+    color: #8d8d8d;
+    margin-top: 0.2rem;
+    margin-left: 1rem;
+    text-align: right;
+    width: 100%;
+}
+
+.participants-container {
+    margin-top: 1rem;
+    display: flex;
+}
+
+.user-icon {
+    font-size: 2rem;
+    margin-right: 0.7rem;
+}
+
+.user-avatar {
+    border-radius: 50%;
+    width: 2rem;
+    margin-right: 0.7rem;
+}

@@ -33,6 +33,8 @@ using System.Reflection;
 using ProjectManager.Web.DirectApiCalls.Interfaces;
 using ProjectManager.Web.DirectApiCalls.Services;
 using Majorsoft.Blazor.Components.Common.JsInterop.Scroll;
+using ProjectManager.Web.FileServices.Interfaces;
+using ProjectManager.Web.FileServices.Services;
 
 //namespace ProjectManager.Web;
 
@@ -109,19 +111,31 @@ builder.Services.AddHostedService<BackgroundWorkerService>();
 //builder.Services.AddLogging();
 
 builder.Services.AddTransient(typeof(ILoggerAdapter<>), typeof(LoggerAdapter<>));
+builder.Services.AddScoped<IImageService, ImageService>();
 
 // API SERVICES
 builder.Services.AddTransient<IUserCallService, UserCallService>();
 builder.Services.AddTransient<IProjectCallService, ProjectCallService>();
-builder.Services.AddTransient<IMessageCallService, MessageCallService>();
+builder.Services.AddTransient<IChatMessageCallService, ChatMessageCallService>();
 builder.Services.AddTransient<IAssignmentCallService, AssignmentCallService>();
 builder.Services.AddTransient<IAssignmentStageCallService, AssignmentStageCallService>();
+builder.Services.AddTransient<IAppointmentCallService, AppointmentCallService>();
+builder.Services.AddTransient<INotificationCallService, NotificationCallService>();
+builder.Services.AddTransient<IPrivateMessageCallService, PrivateMessageCallService>();
+builder.Services.AddTransient<IChatChannelCallService, ChatChannelCallService>();
+builder.Services.AddTransient<IInvitationLinkCallService, InvitationLinkCallService>();
 
+// CORE SERVICES
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IProjectService, ProjectService>();
-builder.Services.AddTransient<IMessageService, MessageService>();
+builder.Services.AddTransient<IChatMessageService, ChatMessageService>();
 builder.Services.AddTransient<IAssignmentService, AssignmentService>();
 builder.Services.AddTransient<IAssignmentStageService, AssignmentStageService>();
+builder.Services.AddTransient<IAppointmentService, AppointmentService>();
+builder.Services.AddTransient<INotificationService, NotificationService>();
+builder.Services.AddTransient<IPrivateMessageService, PrivateMessageService>();
+builder.Services.AddTransient<IChatChannelService, ChatChannelService>();
+builder.Services.AddTransient<IInvitationLinkService, InvitationLinkService>();
 
 // FRONTEND SERVICES
 builder.Services.AddTransient<IScrollHandler, ScrollHandler>();

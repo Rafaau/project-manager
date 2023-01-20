@@ -1,0 +1,23 @@
+﻿@layout CascadeLayout
+
+<i class="fa-solid fa-chevron-up hide-button" @onclick="HideNotifications"/>
+
+<div class="notifications-container">
+    @if (notifications != null) 
+    {
+        var count = 1;
+        foreach (var notification in notifications.OrderBy(x => x.IsSeen).OrderByDescending(x => x.Date)) 
+        {
+            string style = $"{notification.IsSeen}";
+            <div class="single-notification row">
+                <div class="col-8 is-seen-@style">
+                    @notification.Content
+                </div>
+                <div class="col-4 notification-date is-seen-@style">
+                    @notification.Date.ToString("MMMM dd")
+                    <br/>
+                </div>
+            </div>
+        }
+    }
+</div>

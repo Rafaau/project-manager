@@ -44,7 +44,7 @@ public static class FakesFactory
       Manager = FakeUser(),
       Users = new List<User>(),
       Assignments = new List<Assignment>(),
-      Messages = new List<Message>()
+      Messages = new List<ChatMessage>()
     };
   }
 
@@ -56,9 +56,9 @@ public static class FakesFactory
     };
   }
 
-  public static Message FakeMessage()
+  public static ChatMessage FakeMessage()
   {
-    return new Message()
+    return new ChatMessage()
     {
       Id = 1,
       Content = "Test",
@@ -70,9 +70,9 @@ public static class FakesFactory
     };
   }
 
-  public static List<Message> FakeMessageList()
+  public static List<ChatMessage> FakeMessageList()
   {
-    return new List<Message>()
+    return new List<ChatMessage>()
     {
       FakeMessage()
     };
@@ -107,6 +107,8 @@ public static class FakesFactory
       Name = "Test",
       ProjectId = 1,
       Index = 1,
+      Assignments = new List<Assignment>(),
+      Project = FakeProject(),
     };
   }
 
@@ -115,6 +117,91 @@ public static class FakesFactory
     return new List<AssignmentStage>()
     {
       FakeStage()
+    };
+  }
+
+  public static Appointment FakeAppointment()
+  {
+    return new Appointment()
+    {
+      Id = 1,
+      Name = "Test",
+      Description = "Test",
+      Date = new DateTime(2026, 6, 17),
+      Users = FakeUsersList()
+    };
+  }
+
+  public static List<Appointment> FakeAppointmentsList()
+  {
+    return new List<Appointment>()
+    {
+      FakeAppointment()
+    };
+  }
+
+  public static ChatChannel FakeChatChannel()
+  {
+    return new ChatChannel()
+    {
+      Id = 1,
+      ProjectId = 1,
+      Project = FakeProject(),
+      PermissedUsers = FakeUsersList(),
+      Messages = FakeMessageList()
+    };
+  }
+
+  public static InvitationLink FakeInvitationLink()
+  {
+    return new InvitationLink()
+    {
+      Id = 1,
+      ProjectId = 1,
+      Url = "Test",
+      IsUsed = false,
+      ExpirationTime = DateTime.UtcNow
+    };
+  }
+
+  public static Notification FakeNotification()
+  {
+    return new Notification()
+    {
+      Id = 1,
+      User = FakeUser(),
+      Content = "Test",
+      IsSeen = false,
+      Date = DateTime.UtcNow
+    };
+  }
+
+  public static List<Notification> FakeNotificationsList()
+  {
+    return new List<Notification>()
+    {
+      FakeNotification()
+    };
+  }
+
+  public static PrivateMessage FakePrivateMessage()
+  {
+    return new PrivateMessage()
+    {
+      Id = 1,
+      ReceiverId = 1,
+      SenderId = 2,
+      Content = "Test",
+      PostDate = DateTime.UtcNow,
+      IsSeen = false
+    };
+  }
+
+  public static List<PrivateMessage> FakePrivateMessagesList()
+  {
+    return new List<PrivateMessage>()
+    {
+      FakePrivateMessage()
     };
   }
 }

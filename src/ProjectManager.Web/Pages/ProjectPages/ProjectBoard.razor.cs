@@ -30,6 +30,8 @@ public partial class ProjectBoard
   [Inject] private IAssignmentCallService _assignmentService { get; set; }
   [Inject] private IAssignmentStageCallService _stageService { get; set; }
   [Inject] private IMapper _mapper { get; set; }
+  [Inject] IWebHostEnvironment env { get; set; }
+  [CascadingParameter] User User { get; set; }
   private ProjectComplex Project { get; set; }
   private AssignmentComplex[] Assignments { get; set; }
   private int Id { get; set; }
@@ -171,5 +173,12 @@ public partial class ProjectBoard
   {
     UsersToBound.Remove(user);
     UnboundUsers.Add(user);
+  }
+
+  private async Task SignUpUserToAssignment(int assignmentId)
+  {
+    var response = await _assignmentService.SignUpUserToAssignment(assignmentId, User.Id);
+    if (response.IsSuccess)
+      await RefreshAssignments();
   }
 }

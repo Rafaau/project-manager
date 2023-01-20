@@ -1,6 +1,6 @@
 ﻿<div class="modal fade" id="removeConfirm" tabindex="-1" aria-labelledby="removeConfirmLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content pm-modal-container  p-3">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content pm-modal-container  p-3 border-2">
             <div class="modal-header pm-modal-header">
                 <h5 class="modal-title">Delete message</h5>
                 <span class="fa-solid fa-xmark cross" data-bs-dismiss="modal" aria-label="Close"></span>
@@ -26,10 +26,36 @@
                         </div>
                     </div>
                 }
+                @if (PrivateMessage != null)
+                {
+                    <div class="row message-preview mt-3">
+                        <div class="col-lg-2">
+                            <span class="fa-solid fa-circle-user mt-1 ms-1 user-icon" />
+                        </div>
+                        <div class="col-lg-10">
+                            <div class="flex">
+                                <div class="message-owner">
+                                    @PrivateMessage.Sender.Firstname @PrivateMessage.Sender.Lastname
+                                </div>
+                                <div class="post-date ms-3 mt-1">
+                                    @PrivateMessage.PostDate.ToString("dddd H:mmm")
+                                </div>
+                            </div>
+                            <p class="message-content">@PrivateMessage.Content</p>
+                        </div>
+                    </div>
+                }
             </div>
             <div class="modal-footer pm-modal-footer">
                 <button class="pm-modal-btn" type="button" data-bs-dismiss="modal">Cancel</button>
-                <button class="pm-modal-btn" type="button" @onclick="Remove">Delete</button>
+                @if (Message != null)
+                {
+                    <button class="pm-modal-btn" type="button" @onclick="Remove">Delete</button>
+                }
+                @if (PrivateMessage != null)
+                {
+                    <button class="pm-modal-btn" type="button" @onclick="RemovePM">Delete</button>
+                }
             </div>
         </div>
     </div>

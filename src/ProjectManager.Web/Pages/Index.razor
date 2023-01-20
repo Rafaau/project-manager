@@ -12,15 +12,19 @@
                    <ProjectsTab/>
                </div>
                <div class="col-lg-5 px-4 right">
-                   <UserTab onShowUserSettings="ShowUserSettings" @ref="userTab"/>
-                   @if (showUserSettings)
-                   {
-                        <UserSettings onSaveClick="SaveUserProfile"/>
-                   }
+                    <UserTab onShowUserSettings="ShowUserSettings" onShowNotifications="ShowNotifications" onShowConversations="ShowConversations" @ref="userTab"/>
+                    @if (showNotifications) 
+                    {
+                        <Notifications onHideNotifications="HideNotifications" MarkNotificationsAsSeen="MarkNotificationsAsSeen"/>
+                    }
+                    @if (showConversations)
+                    {
+                        <Conversations onHideConversations="HideConversations"/>
+                    }
                </div>
           </div>
      </Authorized>
      <NotAuthorized>
-          <h1>Wypierdalaj</h1>
+          <h1>You should not be here</h1>
      </NotAuthorized>
 </AuthorizeView>

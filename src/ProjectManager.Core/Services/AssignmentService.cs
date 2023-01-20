@@ -149,9 +149,6 @@ public class AssignmentService : IAssignmentService
       var assignmentSpec = new AssignmentById(assignmentId);
       var assignmentToPatch = await _assignmentRepository.FirstOrDefaultAsync(assignmentSpec);
 
-      //var stageSpec = new AssignmentStageById(stageId);
-      //var stage = await _stageRepository.FirstOrDefaultAsync(stageSpec);
-
       assignmentToPatch.AssignmentStageId = stageId;
 
       await _assignmentRepository.UpdateAsync(assignmentToPatch);
@@ -166,6 +163,35 @@ public class AssignmentService : IAssignmentService
     {
       stopWatch.Stop();
       _logger.LogInformation("Assignment (id: {0}) moved to stage (id: {1}) in {2}ms", assignmentId, stageId, stopWatch.ElapsedMilliseconds);
+    }
+  }
+
+  public async Task<Assignment> SignUpUserToAssignment(int assignmentId, int userId)
+  {
+    _logger.LogInformation("Signing up user (id: {0}) to assignment (id: {1})", userId, assignmentId);
+    var stopWatch = Stopwatch.StartNew();
+
+    try
+    {
+      var assignmentSpec = new AssignmentById(assignmentId);
+      var assignmentToPatch = await _assignmentRepository.FirstOrDefaultAsync(assignmentSpec);
+
+      var userSpec = new UserById(userId);
+      var userToAdd = await _userRepository.FirstOrDefaultAsync(userSpec);
+
+      assignmentToPatch.Users.Add(userToAdd);
+      await _assignmentRepository.UpdateAsync(assignmentToPatch);
+      return assignmentToPatch;
+    }
+    catch (Exception e)
+    {
+      _logger.LogError(e, "Something went wrong while signing up user (id: {0}) to assignment (id: {1})", userId, assignmentId);
+      throw;
+    } 
+    finally
+    {
+      stopWatch.Stop();
+      _logger.LogInformation("User (id: {0}) signed up to assignment (id: {1}) in {3}ms", userId, assignmentId, stopWatch.ElapsedMilliseconds);
     }
   }
 

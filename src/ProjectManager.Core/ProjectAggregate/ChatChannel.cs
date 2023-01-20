@@ -13,7 +13,7 @@ public class ChatChannel : EntityBase, IAggregateRoot
   public int ProjectId { get; set; }
   public virtual Project2 Project { get; set; }
   public virtual ICollection<User>? PermissedUsers { get; set; }
-  public virtual ICollection<Message>? Messages { get; set; }
+  public virtual ICollection<ChatMessage>? Messages { get; set; }
 
   public ChatChannel()
   {

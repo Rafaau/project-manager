@@ -33,11 +33,11 @@ public class UpdateUserControllerTests : IClassFixture<ApiFactory>, IAsyncLifeti
     // Arrange
     var user = _userGenerator.Generate();
     var createdResponse = await _client.PostAsJsonAsync("/api/user", user);
-    var createdUser = await createdResponse.Content.ReadFromJsonAsync<UserSimplified>();
-    _idsToDelete.Add(createdUser!.Id);
+    var createdUser = await createdResponse.Content.ReadFromJsonAsync<Response<UserSimplified>>();
+    _idsToDelete.Add(createdUser!.Data.Id);
 
     user = _userGenerator.Clone()
-      .RuleFor(x => x.Id, createdUser!.Id).Generate();
+      .RuleFor(x => x.Id, createdUser!.Data.Id).Generate();
 
     // Act
     var response = await _client.PutAsJsonAsync($"/api/user", user);

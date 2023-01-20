@@ -10,7 +10,10 @@ using ProjectManager.Web.ApiModels;
 namespace ProjectManager.Web.DirectApiCalls.Interfaces;
 public interface IProjectCallService
 {
+  Task<Response<ProjectComplex[]>> GetUserProjects(int userId);
+  Task<Response<ProjectComplex[]>> GetManagerProjects(int managerId);
   Task<Response<ProjectComplex>> GetById(int id);
-  Task<Response<Project2>> AddProject(Project2 project);
+  Task<Response<ProjectComplex>> AddProject(ProjectRequest project);
   Task<Response<ProjectComplex>> UpdateProject(ProjectComplex project);
+  Task<Response<ProjectComplex>> DeleteProject(int projectId);
 }

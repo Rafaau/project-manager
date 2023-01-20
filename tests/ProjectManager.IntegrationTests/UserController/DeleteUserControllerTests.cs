@@ -30,14 +30,14 @@ public class DeleteUserControllerTests : IClassFixture<ApiFactory>
     // Arrange
     var user = _userGenerator.Generate();
     var createdResponse = await _client.PostAsJsonAsync("/api/user", user);
-    var createdUser = await createdResponse.Content.ReadFromJsonAsync<UserSimplified>();
+    var createdUser = await createdResponse.Content.ReadFromJsonAsync<Response<UserSimplified>>();
 
     // Act
-    var response = await _client.DeleteAsync($"/api/user/{createdUser!.Id}");
+    var response = await _client.DeleteAsync($"/api/user/{createdUser!.Data.Id}");
 
     // Assert
     var deletedUser = await response.Content.ReadFromJsonAsync<Response<UserSimplified>>();
-    deletedUser!.Data.Should().BeEquivalentTo(createdUser);
+    deletedUser!.Data.Should().BeEquivalentTo(createdUser.Data);
     response.StatusCode.Should().Be(HttpStatusCode.OK);
   }
 

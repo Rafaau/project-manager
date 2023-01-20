@@ -6,17 +6,19 @@
 <PageTitle>Project Manager</PageTitle>
 
 <div class="page">
-    <div class="sidebar">
     @if (navManager.Uri == navManager.BaseUri+"pm"
         || navManager.Uri == navManager.BaseUri + "general-calendar")
     {
-        <SideNav />
+        <div class="sidebar">
+            <SideNav />
+        </div>
     }
-    else
-    {      
-        <ProjectNav/>
+    else if (navManager.Uri.Contains("project"))
+    {
+        <div class="sidebar">
+            <ProjectNav/>
+        </div>
     }
-    </div>
     <main>
         <AuthorizeView>
             <NotAuthorized>
@@ -27,10 +29,10 @@
             </Authorized>
         </AuthorizeView>
     </main>
-    @if (navManager.Uri.Contains("project"))
+@*    @if (navManager.Uri.Contains("project"))
     {
         <div class="user-list">
             <MemberList/>
         </div>
-    }
+    }*@
 </div>

@@ -11,6 +11,7 @@ section {
     height: 100%;
     grid-gap: 1px;
     background-color: #8d8d8d;
+    overflow: scroll;
 }
 
     section > div {
@@ -18,7 +19,12 @@ section {
         background-color: #0b0d11;
         width: 100%;
         height: 16vh;
+        position: relative;
     }
+
+::-webkit-scrollbar {
+    display: none;
+}
 
 .calendar-nav {
     display: inline-block;
@@ -69,4 +75,34 @@ section {
 
 .gray-span {
     color: #8d8d8d;
+}
+
+.today {
+    border: 2px solid #8100cb;
+    border-radius: 0.5rem;
+}
+
+.day-span {
+    display: block;
+}
+
+.appointment {
+    cursor: pointer;
+    font-size: 2rem;
+    color: #3F7CC6;
+    margin-right: 0.7rem;
+}
+
+.assignment {
+    cursor: pointer;
+    font-size: 2rem;
+    color: #C63F3F;
+    margin-right: 0.7rem;
+}
+
+.add-button {
+    cursor: pointer;
+    position: absolute;
+    right: 0.8rem;
+    top: 0.7rem;
 }

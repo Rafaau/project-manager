@@ -1,0 +1,158 @@
+﻿.header {
+    border-bottom: 1px solid #8d8d8d;
+}
+
+.single-message {
+
+    position: relative;
+}
+
+.user-icon {
+    font-size: 2.5rem;
+    margin-top: 1rem;
+}
+
+.fullname {
+    margin-top: 0.8rem;
+    display: inline-block;
+    position: absolute;
+    margin-left: 0.5rem;
+}
+
+.message-content-1 {
+    display: inline-block;
+    color: #8d8d8d;
+    margin-left: 0.8rem;
+    margin-top: 1.3rem;
+}
+
+.message-content-1-5 {
+    display: inline-block;
+    color: #8d8d8d;
+    margin-left: 0.8rem;
+    margin-top: 1.3rem;
+    position: absolute;
+    top: 0.75rem;
+}
+
+.message-content-2 {
+    color: #8d8d8d;
+    margin-left: 3.3rem;
+    display: inline-block;
+}
+
+.modal-pm {
+    height: 67vh;
+    overflow: scroll;
+}
+
+    .modal-pm::-webkit-scrollbar {
+        display: none;
+    }
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.input-container {
+    position: relative;
+    justify-content: center;
+    margin: 0;
+}
+
+.date-part {
+    display: flex;
+    justify-content: center;
+    color: #8d8d8d;
+}
+
+.date-span {
+    margin-top: 0.25rem;
+    margin-inline: 0.5rem;
+}
+
+.datetime-1 {
+    font-family: Poppins-light;
+    display: none;
+    margin-left: 0.5rem;
+    color: #8d8d8d;
+}
+
+.single-message:hover .datetime-1 {
+    display: inline-block;
+}
+
+.datetime-2 {
+    font-family: Poppins-light;
+    display: none;
+    color: #8d8d8d;
+    position: absolute;
+    left: 0;
+}
+
+.message-content-2:hover ~ .datetime-2 {
+    display: initial;
+}
+
+.delete-button {
+    position: absolute;
+    right: -1rem;
+    border: 1px solid #0b0d11;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background-color: #181818;
+    display: none;
+    top: -1rem;
+    cursor: pointer;
+}
+
+.single-message:hover .delete-button {
+    display: block;
+}
+
+.edit-button {
+    position: absolute;
+    right: 1.1rem;
+    border: 1px solid #0b0d11;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background-color: #181818;
+    top: -1rem;
+    cursor: pointer;
+    display: none;
+}
+
+.single-message:hover .edit-button {
+    display: block;
+}
+
+.close-edit-button {
+    position: absolute;
+    right: 1.5rem;
+    top: 0.4rem;
+    cursor: pointer;
+}
+
+.actions-hide:hover ~ .delete-button {
+    display: none;
+}
+
+.actions-hide:hover ~ .edit-button {
+    display: none;
+}
+
+.close-edit-button:hover ~ .delete-button {
+    display: none;
+}
+
+.close-edit-button:hover ~ .edit-button {
+    display: none;
+}
+
+.user-avatar {
+    border-radius: 50%;
+    width: 2.5rem;
+    margin-top: 0.8rem;
+    margin-bottom: 0.15rem;
+}
+

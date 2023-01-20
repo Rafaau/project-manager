@@ -1,4 +1,9 @@
 ﻿@page "/general-calendar"
+@using ProjectManager.Web.Components
+@using ProjectManager.Web.Components.CalendarComponents
+@using ProjectManager.Web.Components.Modals
+
+@layout CascadeLayout
 
 <div class="calendar-container">
     <div class="calendar-nav"> 
@@ -33,9 +38,79 @@
         }
         @for (int i = 1; i <= monthEnd.Day; i++)
         {
-            <div>
-                <span>@i</span>
-            </div>
+            int day = i;
+            if (monthsAway == 0 && i == DateTime.Now.Day)
+            {
+                <div class="today" @onmouseover="() => { showAddButton = day; }" @onmouseout="() => { showAddButton = 0; }">
+                    <div style="display: flex; width: 100%">
+                        <span class="day-span">@i</span>
+                        @if (showAddButton == i)
+                        {
+                            <i class="fa-regular fa-calendar-plus add-button" 
+                                data-bs-target="#addAppointment" 
+                                data-bs-toggle="modal" 
+                                aria-expanded="false"
+                                @onclick="() => { DateToPass = new DateTime(year, month, day); }"/>
+                        }
+                    </div>
+                    <div style="display: flex; margin-top: 0.7rem;">
+                        @if (appointments != null)
+                        {
+                            @foreach (var appointment in appointments.Where(a => a.Date.Date == new DateTime(year, month, day).Date))
+                            {
+                                <div class="dropstart">
+                                    <i class="fa-solid fa-file-lines appointment" id="appointmentDetailsDropdown" data-bs-toggle="dropdown" aria-expanded="false"/>
+                                    <AppointmentDetails Appointment="appointment"/>
+                                </div>
+                            }
+                        }
+                        @if (assignments != null)
+                        {
+                            @foreach (var assignment in assignments.Where(a => a.Deadline.Date == new DateTime(year, month, day).Date))
+                            {
+                                <i class="fa-solid fa-file-lines assignment" id="appointmentDetailsDropdown" data-bs-toggle="dropdown" aria-expanded="false" />
+                                <AppointmentDetails Assignment="assignment" />
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div @onmouseover="() => { showAddButton = day; }" @onmouseout="() => { showAddButton = 0; }">
+                    <div style="display: flex; width: 100%">
+                        <span class="day-span">@i</span>
+                        @if (showAddButton == i)
+                        {
+                            <i class="fa-regular fa-calendar-plus add-button" 
+                                data-bs-target="#addAppointment" 
+                                data-bs-toggle="modal" 
+                                aria-expanded="false"
+                                @onclick="() => { PassDateToModal(day); }" />
+                        }
+                    </div>
+                    <div style="display: flex; margin-top: 0.7rem;">
+                        @if (appointments != null)
+                        {
+                            @foreach (var appointment in appointments.Where(a => a.Date.Date == new DateTime(year, month, day).Date))
+                            {
+                                <div class="dropstart">
+                                    <i class="fa-solid fa-file-lines appointment" id="appointmentDetailsDropdown" data-bs-toggle="dropdown" aria-expanded="false"/>
+                                    <AppointmentDetails Appointment="appointment"/>
+                                </div>
+                            }
+                        }
+                        @if (assignments != null)
+                        {
+                            @foreach (var assignment in assignments.Where(a => a.Deadline.Date == new DateTime(year, month, day).Date))
+                            {
+                                <i class="fa-solid fa-file-lines assignment" id="appointmentDetailsDropdown" data-bs-toggle="dropdown" aria-expanded="false" />
+                                <AppointmentDetails Assignment="assignment"/>
+                            }
+                        }
+                    </div>
+                </div>
+            }
         }
         @if (nextMonthStart < 7)
         {
@@ -45,6 +120,10 @@
                     <span class="gray-span">@i</span>
                 </div>
             }
+        }
+        @if (User != null)
+        {
+            <AddAppointment Date="DateToPass" @ref="child" onAppointmentCreate="GetAppointments"/>
         }
     </section>
 </div>

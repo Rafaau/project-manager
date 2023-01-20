@@ -200,6 +200,10 @@ input[type="radio"] {
     border-top: none;
 }
 
+.pm-message-footer {
+    padding-bottom: 0;
+}
+
 .pm-modal-input {
     background-color: rgba(0,0,0,0);
     color: #fdfdfd;
@@ -207,6 +211,41 @@ input[type="radio"] {
 }
 
     .pm-modal-input:focus {
+        border: 1px solid #fdfdfd;
+        background-color: rgba(0,0,0,0);
+        color: #8d8d8d;
+    }
+
+.pm-message-input {
+    background-color: rgba(0,0,0,0);
+    color: #fdfdfd;
+    opacity: 0.6;
+    border-radius: 0.5rem;
+    border: 1px solid #8d8d8d;
+    margin: 0;
+    padding: 0.5rem;
+    width: 770px;
+}
+
+    .pm-message-input:focus {
+        border: 1px solid #fdfdfd;
+        background-color: rgba(0,0,0,0);
+        color: #8d8d8d;
+    }
+
+.pm-message-edit-input {
+    background-color: rgba(0,0,0,0);
+    color: #fdfdfd;
+    opacity: 0.6;
+    border-radius: 0.5rem;
+    border: 1px solid #8d8d8d;
+    margin: 0;
+    padding: 0.5rem;
+    width: 670px;
+    margin-left: 3rem;
+}
+
+    .pm-message-edit-input:focus {
         border: 1px solid #fdfdfd;
         background-color: rgba(0,0,0,0);
         color: #8d8d8d;
@@ -285,3 +324,13 @@ input[type="radio"] {
         color: #8d8d8d;
     }
 
+.custom-file-input {
+    position: absolute;
+    width: 2.5rem;
+    right: 0.3rem;
+    padding: 0.6rem;
+    border-radius: 50%;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}

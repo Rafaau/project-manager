@@ -1,0 +1,124 @@
+﻿<div class="modal fade" id="conversationModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="conversationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content pm-modal-container  p-3">
+            <div class="modal-header pm-modal-header header">
+                    @if (messages != null && messages.Length > 0) 
+                    {
+                        if (messages[0].Sender.Id == UserId)
+                        {
+                            <h5 class="modal-title">
+                                Conversation with
+                                @@@messages[0].Receiver.Firstname @messages[0].Receiver.Lastname
+                            </h5>
+                        }
+                        else
+                        {
+                            <h5 class="modal-title">
+                                Conversation with
+                                @@@messages[0].Sender.Firstname @messages[0].Sender.Lastname
+                            </h5>
+                        }
+                    }
+                <span class="fa-solid fa-xmark cross" data-bs-dismiss="modal" aria-label="Close" @onclick="ResetMessages"/>
+            </div>
+            <div class="modal-body modal-pm">
+                @if (messages != null)
+                {
+                    for (int i = 0; i <= messages.Length - 1; i++)
+                    {
+                        int number = i;
+                        @if (i == 0 || (i != 0 && messages[i - 1].PostDate.Date != messages[i].PostDate.Date))
+                        {
+                            <div class="date-part">
+                                <hr style="width: 10%" />
+                                <div class="date-span">
+                                    @messages[i].PostDate.ToString("dd MMMM yyy")
+                                </div>
+                                <hr style="width: 10%" />
+                            </div>
+                        }
+                        <div class="single-message">
+                            @if (i == 0 || (i != 0 && (messages[i - 1].Sender.Id != messages[i].Sender.Id || messages[i - 1].PostDate.Date != messages[i].PostDate.Date)))
+                            {
+                                @if (messages[i].Sender.Id == UserId && isUserAvatarExist)
+                                {
+                                    var path = $"/avatars/pm-avatar-{UserId}.jpg";
+                                    <img src="@path" class="user-avatar"/>
+                                }
+                                else if (messages[i].Sender.Id != UserId && isReceiverAvatarExist)
+                                {
+                                    var path = $"/avatars/pm-avatar-{ReceiverId}.jpg";
+                                    <img src="@path" class="user-avatar"/>
+                                }
+                                else
+                                {
+                                    <span class="fa-solid fa-circle-user user-icon"/>
+                                }
+                                <div class="fullname">
+                                    @messages[i].Sender.Firstname @messages[i].Sender.Lastname
+
+                                        <div class="datetime-1">
+                                            @messages[i].PostDate.ToString("HH:mm")
+                                        </div>
+                                </div>
+                                @if (messages[i].Id != messageToEdit.Id || !EditMode)
+                                {
+                                    @if ((messages[i].Sender.Id == UserId && isUserAvatarExist) || (messages[i].Sender.Id != UserId && isReceiverAvatarExist))
+                                    {
+                                        <div class="message-content-1-5">
+                                            @messages[i].Content
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="message-content-1">
+                                            @messages[i].Content
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <EditForm Model="messageToEdit" OnValidSubmit="Update">
+                                        <InputText class="pm-message-edit-input" @bind-Value="messageToEdit.Content" placeholder="Enter message" />
+                                    </EditForm>
+                                    <i class="fa-solid fa-xmark close-edit-button" @onclick="() => { messageToEdit.Id = 0; EditMode = false; }" />
+                                }
+                            }
+                            else
+                            {
+                                @if (messages[i].Id != messageToEdit.Id || !EditMode)
+                                {
+                                    <div class="message-content-2">
+                                        @messages[i].Content
+                                    </div>
+                                }
+                                else
+                                {
+                                    <EditForm Model="messageToEdit" OnValidSubmit="Update" class="actions-hide">
+                                        <InputText class="pm-message-edit-input" @bind-Value="messageToEdit.Content" placeholder="Enter message" />
+                                    </EditForm>
+                                    <i class="fa-solid fa-xmark close-edit-button" @onclick="() => { messageToEdit.Id = 0; EditMode = false; }" />
+                                }
+                                <div class="datetime-2">
+                                    @messages[i].PostDate.ToString("HH:mm")
+                                </div>
+                            }
+                            @if (messages[i].Sender.Id == UserId)
+                            {
+                                <i class="fa-solid fa-pen edit-button" @onclick="() => { messageToEdit.Id = messages[number].Id; messageToEdit.Content = messages[number].Content; EditMode = true; }"/>
+                                <i class="fa-solid fa-trash-can delete-button" data-bs-toggle="modal" data-bs-target="#removeConfirm" @onclick="() => { PassMessage(messages[number]); }" />
+                            }
+                        </div>
+                    }
+                    <section id="anchor" />
+                }
+            </div>
+            <div class="modal-footer border-0 input-container pm-message-footer">
+                <EditForm Model="message" OnValidSubmit="Submit">
+                    <InputText class="pm-message-input" @bind-Value="message.Content" placeholder="Enter message"/>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+<RemoveConfirm PrivateMessage="@messageToDelete" RefreshMessages="GetMessages"/>

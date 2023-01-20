@@ -1,0 +1,61 @@
+﻿@using ProjectManager.Web.Extensions
+
+@layout CascadeLayout
+
+<div class="modal fade" id="addAppointment" tabindex="-1" aria-labelledby="addAppointment" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content pm-modal-container  p-3">
+            <div class="modal-header pm-modal-header">
+                <h5 class="modal-title">Add appointment</h5>
+                <span class="fa-solid fa-xmark cross" data-bs-dismiss="modal" aria-label="Close"></span>
+            </div>
+            <EditForm Model="appointmentReq" OnValidSubmit="Submit">
+                <InputText class="form-control input-text shadow-none mt-2" @bind-Value="appointmentReq.Name" placeholder="Name"/>
+                <InputText class="form-control input-text shadow-none mt-2" @bind-Value="appointmentReq.Description" placeholder="Description" />
+                <InputDate class="form-control input-date shadow-none mt-2" @bind-Value="Date" />
+                <div class="mt-3" style="display: flex;">
+                    <div>
+                        Participants:
+                    </div>
+                    @if (userProjects != null)
+                    {
+                        <button class="dropdown-toggle projects-dropdown ms-5" type="button" id="participantsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select
+                        </button>
+                        <ul class="dropdown-menu project-ul" aria-labelledby="boundDevsDropdown">
+                            @foreach (var project in userProjects)
+                            {
+                                <li class="project-li" @onclick="() => { AddParticipantsByProject(project); }">
+                                    @project.Name
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+                @if (participants != null)
+                {
+                    <div style="display: flex;">
+                        @foreach (var user in participants)
+                        {
+                            <div class="icon-container" @onmouseover="() => { ParticipantToRemove = user; }" @onmouseout="() => { ParticipantToRemove = null; }">
+                                @if (user.CheckIfAvatarExist(env))
+                                {
+                                    <img src="@user.GetAvatarPath()" class="user-avatar" data-bs-toggle="tooltip" title="@user.Firstname @user.Lastname"/>
+                                }
+                                else
+                                {
+                                    <span class="fa-solid fa-circle-user user-icon" data-bs-toggle="tooltip" title="@user.Firstname @user.Lastname"/>
+                                }
+                                @if (ParticipantToRemove == user)
+                                {
+                                    <i class="fa-solid fa-circle-xmark delete-user" @onclick="() => { RemoveParticipant(user); }" />
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                <button type="submit" class="pm-modal-btn mt-4">Submit</button>
+            </EditForm>
+        </div>
+    </div>
+</div>

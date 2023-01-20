@@ -1,0 +1,112 @@
+﻿<ul class="dropdown-menu chat-channel-create-container" aria-labelledby="dropdownCreateChatChannel">
+    <div class="header mb-3">
+        Create new channel
+    </div>
+    <EditForm Model="@model" OnValidSubmit="Submit">
+        <InputText class="form-control pm-modal-input shadow-none" @bind-Value="model.Name" placeholder="Channel name" />
+
+    <div class="channel-type mt-3 ms-1">
+        <div style="width: 2rem;">
+            @if (isPrivate)
+            {
+                <span class="fa-solid fa-lock mt-1" />
+            }
+            else
+            {
+                <span class="fa-solid fa-lock-open mt-1" />
+            }
+        </div>
+        Private channel?
+        <label class="switch ms-3">
+            <input type="checkbox" @bind="@isPrivate" />
+            <span class="slider" />
+        </label>
+    </div>
+    @if (isPrivate)
+    {
+        @if (Project != null)
+        {
+            <div class="permissed-users mt-2">
+                @if (System.IO.File.Exists(Path.Combine(Env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{Project.Manager.Id}.jpg")))
+                {
+                    var path = $"/avatars/pm-avatar-{Project.Manager.Id}.jpg";
+                    <div class="icon-container">
+                        <img src="@path" class="user-avatar" data-bs-toggle="tooltip" title="@Project.Manager.Firstname @Project.Manager.Lastname" />
+                    </div>
+                }
+                else
+                {
+                    <div class="icon-container">
+                        <span class="fa-solid fa-circle-user user-icon" data-bs-toggle="tooltip" title="@Project.Manager.Firstname @Project.Manager.Lastname" />
+                    </div>
+                }
+                @foreach (var user in permissedUsers)
+                {
+                    @if (user.Id != Project.Manager.Id)
+                    {
+                        @if (System.IO.File.Exists(Path.Combine(Env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{user.Id}.jpg")))
+                        {
+                            var path = $"/avatars/pm-avatar-{user.Id}.jpg";
+                            <div class="icon-container" @onmouseover="() => { UserToRemove = user.Id; }" @onmouseout="() => { UserToRemove = 0; }">
+                            <img src="@path"
+                                 class="user-avatar" 
+                                 data-bs-toggle="tooltip" 
+                                 title="@user.Firstname @user.Lastname"/>
+                                 @if (UserToRemove == user.Id)
+                                 {
+                                     <i class="fa-solid fa-circle-xmark delete-permission" @onclick="() => { permissedUsers.Remove(user); }" />
+                                 }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="icon-container" @onmouseover="() => { UserToRemove = user.Id; }" @onmouseout="() => { UserToRemove = 0; }">
+                                <span class="fa-solid fa-circle-user user-icon-list" 
+                                      data-bs-toggle="tooltip" 
+                                      title="@user.Firstname @user.Lastname"/>
+                                @if (UserToRemove == user.Id)
+                                {
+                                    <i class="fa-solid fa-circle-xmark delete-permission" @onclick="() => { permissedUsers.Remove(user); }" />
+                                }
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            <button class="permissed-users-select mt-3"
+                id="dropdownPermissedUsers"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Select members
+            </button>
+            <ul class="dropdown-menu permissed-users-list" aria-labelledby="dropdownPermissedUsers">
+                @foreach (var user in Project.Users) 
+                {
+                    if (user.Id != Project.Manager.Id && !permissedUsers.Contains(user))
+                    {
+                        <li class="single-user" @onclick="() => { UpdatePermissedUsers(user); }">
+                            @if (System.IO.File.Exists(Path.Combine(Env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{user.Id}.jpg")))
+                            {
+                                var path = $"/avatars/pm-avatar-{user.Id}.jpg";
+                                <img src="@path" class="user-avatar" />
+                                <div class="fullname-avatar">
+                                    @user.Firstname @user.Lastname
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="fa-solid fa-circle-user user-icon" />
+                                <div class="fullname-icon">
+                                    @user.Firstname @user.Lastname
+                                </div>
+                            }
+                        </li>
+                    }
+                }
+            </ul>
+
+        }
+    }
+    <button class="create-button" type="submit" id="createChannel">Create</button>
+    </EditForm>
+</ul>

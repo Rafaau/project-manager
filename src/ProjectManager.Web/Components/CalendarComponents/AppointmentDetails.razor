@@ -1,0 +1,70 @@
+﻿@using ProjectManager.Web.Extensions
+
+<ul class="dropdown-menu appointment-details-container" aria-labelledby="appointmentDetailsDropdown">
+    @if (Appointment != null)
+    {
+        <div class="details-header">
+            <div class="appointment-name">
+                @Appointment.Name
+            </div>
+            <div class="details-type">
+                Appointment
+            </div>
+        </div>
+        <div class="details-date">
+            @Appointment.Date.ToString("MMMM dd  yyyy")
+        </div>
+        <div class="details-description">
+            @Appointment.Description
+        </div>
+        <div style="margin-top: 0.3rem; font-size: 0.8rem;">
+            Participants:
+        </div>
+        <div class="participants-container">
+            @foreach (var user in Appointment.Users)
+            {
+                if (user.CheckIfAvatarExist(env))
+                {
+                    <img src="@user.GetAvatarPath()" class="user-avatar" data-bs-toggle="tooltip" title="@user.Firstname @user.Lastname" />
+                }
+                else
+                {
+                    <span class="fa-solid fa-circle-user user-icon" data-bs-toggle="tooltip" title="@user.Firstname @user.Lastname" />
+                }
+            }
+        </div>
+    }
+    @if (Assignment != null)
+    {
+        <div class="details-header">
+            <div class="appointment-name">
+                @Assignment.Name
+            </div>
+            <div class="details-type">
+                Assignment deadline
+            </div>
+        </div>
+        <div class="details-date">
+            @Assignment.Deadline.ToString("MMMM dd  yyyy")
+        </div>
+        <div class="details-description">
+            @Assignment.Description
+        </div>
+        <div style="margin-top: 0.3rem; font-size: 0.8rem;">
+            Participants:
+        </div>
+        <div class="participants-container">
+            @foreach (var user in Assignment.Users)
+            {
+                if (user.CheckIfAvatarExist(env))
+                {
+                    <img src="@user.GetAvatarPath()" class="user-avatar" data-bs-toggle="tooltip" title="@user.Firstname @user.Lastname" />
+                }
+                else
+                {
+                    <span class="fa-solid fa-circle-user user-icon" data-bs-toggle="tooltip" title="@user.Firstname @user.Lastname" />
+                }
+            }
+        </div>
+    }
+</ul>

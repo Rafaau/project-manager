@@ -20,8 +20,12 @@ public class User : EntityBase, IAggregateRoot
   public virtual ICollection<Project2>? Projects { get; set; }
   public UserSpecialization? Specialization { get; set; }
   public virtual ICollection<Assignment>? Assignments { get; set; }
-  public virtual ICollection<Message>? Messages { get; set; }
+  public virtual ICollection<ChatMessage>? Messages { get; set; }
   public virtual ICollection<ChatChannel>? ChatChannels { get; set; }
+  public virtual ICollection<Appointment>? Appointments { get; set; }
+  public virtual ICollection<Notification>? Notifications { get; set; }
+  public virtual ICollection<PrivateMessage>? PrivateMessagesSent { get; set; }
+  public virtual ICollection<PrivateMessage>? PrivateMessagesReceived { get; set; }
 
   public User(string firstname, string lastname, string email, string password, UserRole role, ICollection<Project2>? managedProjects, ICollection<Project2>? projects)
   {

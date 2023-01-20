@@ -127,7 +127,7 @@ public class ProjectControllerTests
 
     // Act
     var result = (OkObjectResult) await _sut.Post(projectResponse);
-    var resultData = (Response<ProjectRequest>) result.Value!;
+    var resultData = (Response<ProjectComplex>) result.Value!;
 
     // Assert
     result.StatusCode.Should().Be(200);

@@ -111,15 +111,6 @@ public class UserService : IUserService
       var userSpec = new UserById(request.Id);
       var userToUpdate = await _userRepository.FirstOrDefaultAsync(userSpec);
 
-      //userToUpdate.Projects.Clear();
-
-      //foreach (var project in request.Projects)
-      //{
-      //  var projectSpec = new ProjectById(project.Id);
-      //  var projectToAdd = await _projectRepository.FirstOrDefaultAsync(projectSpec);
-      //  userToUpdate.Projects.Add(projectToAdd);
-      //}
-
       userToUpdate.Firstname = request.Firstname;
       userToUpdate.Lastname = request.Lastname;
       userToUpdate.Email = request.Email;

@@ -43,9 +43,9 @@ public class AssignmentConfiguration : IEntityTypeConfiguration<Assignment>
   }
 }
 
-public class MessageConfiguration : IEntityTypeConfiguration<Message>
+public class MessageConfiguration : IEntityTypeConfiguration<ChatMessage>
 {
-  public void Configure(EntityTypeBuilder<Message> modelBuilder)
+  public void Configure(EntityTypeBuilder<ChatMessage> modelBuilder)
   {
     modelBuilder.HasOne(m => m.User)
                 .WithMany(u => u.Messages)
@@ -86,6 +86,50 @@ public class ChatChannelConfiguration : IEntityTypeConfiguration<ChatChannel>
     modelBuilder.HasOne(c => c.Project)
                 .WithMany(p => p.ChatChannels)
                 .HasForeignKey(c => c.ProjectId);
+  }
+}
+
+public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
+{
+  public void Configure(EntityTypeBuilder<Appointment> modelBuilder)
+  {
+    modelBuilder.HasMany(a => a.Users)
+                .WithMany(u => u.Appointments)
+                .UsingEntity(j => j.ToTable("UserAppointments"));
+  }
+}
+
+public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
+{
+  public void Configure(EntityTypeBuilder<Notification> modelBuilder)
+  {
+    modelBuilder.HasOne(n => n.User)
+                .WithMany(u => u.Notifications)
+                .HasForeignKey(n => n.UserId);
+  }
+}
+
+public class PrivateMessageConfiguration : IEntityTypeConfiguration<PrivateMessage>
+{
+  public void Configure(EntityTypeBuilder<PrivateMessage> modelBuilder)
+  {
+    modelBuilder.HasOne(p => p.Sender)
+                .WithMany(u => u.PrivateMessagesSent)
+                .HasForeignKey(p => p.SenderId);
+
+    modelBuilder.HasOne(p => p.Receiver)
+                .WithMany(u => u.PrivateMessagesReceived)
+                .HasForeignKey(p => p.ReceiverId);
+  }
+}
+
+public class InvitationLinkConfiguration : IEntityTypeConfiguration<InvitationLink>
+{
+  public void Configure(EntityTypeBuilder<InvitationLink> modelBuilder)
+  {
+    modelBuilder.HasOne(i => i.Project)
+                .WithMany(p => p.InvitationLinks)
+                .HasForeignKey(i => i.ProjectId);
   }
 }
 

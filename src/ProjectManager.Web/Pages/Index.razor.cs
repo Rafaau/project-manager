@@ -27,6 +27,8 @@ public partial class Index
   private int UserCount { get; set; } = 0;
   private string message { get; set; } = "";
   private bool showUserSettings { get; set; } = false;
+  private bool showNotifications { get; set; } = false;
+  private bool showConversations { get; set; } = false;
 
   protected override async Task OnInitializedAsync()
   {
@@ -43,8 +45,33 @@ public partial class Index
     showUserSettings =  !showUserSettings ? true : false;
   }
 
+  private void ShowNotifications()
+  {
+    showNotifications = !showNotifications ? true : false;
+  }
+
+  private void ShowConversations()
+  {
+    showConversations = !showConversations ? true : false;
+  }
+
   private async Task SaveUserProfile()
   {
     await userTab.ShowUserSettings();
+  }
+
+  private async Task HideNotifications()
+  {
+    await userTab.ShowNotifications();
+  }
+
+  private async Task HideConversations()
+  {
+    await userTab.ShowConversations();
+  }
+
+  private async Task MarkNotificationsAsSeen()
+  {
+    await userTab.MarkNotificationsAsSeen();
   }
 }

@@ -41,7 +41,7 @@ public partial class ProjectNav
     if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out var id))
       Id = Int32.Parse(id);
     var projectResponse = await _projectService.GetById(Id);
-    if (projectResponse != null)
+    if (projectResponse.IsSuccess)
       Project = projectResponse.Data;
   }
 }

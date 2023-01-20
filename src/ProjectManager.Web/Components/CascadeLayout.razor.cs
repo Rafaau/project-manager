@@ -20,16 +20,17 @@ namespace ProjectManager.Web.Components;
 
 public partial class CascadeLayout
 {
-    [Inject] private IUserCallService _userService { get; set; }
-    [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
-    public User User { get; set; }
+  [Inject] private IUserCallService _userService { get; set; }
+  [CascadingParameter] private Task<AuthenticationState> authenticationState { get; set; }
+  public User User { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-      var authState = await authenticationState;
+  protected override async Task OnInitializedAsync()
+  {
+    var authState = await authenticationState;
 
-      var userResponse = await _userService.GetUserByEmail(authState.User.Claims.ElementAt(2).Value);
-      if (userResponse != null)
-        User = userResponse.Data;
-    }
+    var userResponse = await _userService.GetUserByEmail(authState.User.Claims.ElementAt(2).Value);
+    if (userResponse != null)
+      User = userResponse.Data;
+  }
+
 }

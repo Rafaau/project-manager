@@ -1,0 +1,78 @@
+﻿@if (Channel != null)
+{
+    <ul class="dropdown-menu edit-permissions-container" aria-labelledby="@Channel.Id-Dropdown">
+        <div class="channel-label">
+            # @Channel.Name chat channel
+        </div>
+        <div class="pu-label mt-2">
+            Permissed users:
+        </div>
+        <div class="permissed-users mt-2">
+            @foreach (var user in permissedUsers)
+            {
+                <div class="permissed-user" 
+                     @onmouseover="() => { hoveredUser = user.Id; }"
+                     @onmouseout="() => { hoveredUser = 0; }">
+                    @if (System.IO.File.Exists(Path.Combine(Env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{user.Id}.jpg")))
+                    {
+                        var path = $"/avatars/pm-avatar-{user.Id}.jpg";
+                        <div class="icon-container">
+                            <img src="@path" class="user-avatar" data-bs-toggle="tooltip" title="@user.Firstname @user.Lastname" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="icon-container">
+                            <span class="fa-solid fa-circle-user user-icon" data-bs-toggle="tooltip" title="@user.Firstname @user.Lastname" />
+                        </div>
+                    }
+                    @if (hoveredUser == user.Id)
+                    {
+                        <i class="fa-solid fa-circle-xmark delete-permission" @onclick="() => { permissedUsers.Remove(user); }" />
+                    }
+                </div>
+            }
+        </div>
+        <button class="permissed-users-select mt-3"
+            id="dropdownPermissedUsers"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+            @{ string dropdownStyle = ""; }
+            @if (permissedUsers.Count == Project.Users.Length)
+            {
+                dropdownStyle = "disable-dropdown";
+                <div>The channel is public</div>
+            }
+            else
+            {
+                dropdownStyle = "";
+                <div>Select members</div>
+            }
+        </button>
+        <ul class="dropdown-menu permissed-users-list @dropdownStyle" aria-labelledby="dropdownPermissedUsers">
+            @foreach (var user in Project.Users.Where(x => x.Id != Project.Manager.Id && !permissedUsers.Where(y => y.Id == x.Id).Any()))
+            {
+                <li class="single-user" @onclick="() => { UpdatePermissedUsers(user); }">
+                    @if (System.IO.File.Exists(Path.Combine(Env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{user.Id}.jpg")))
+                    {
+                        var path = $"/avatars/pm-avatar-{user.Id}.jpg";
+                        <img src="@path" class="user-avatar" />
+                        <div class="fullname-avatar">
+                            @user.Firstname @user.Lastname
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="fa-solid fa-circle-user user-icon" />
+                        <div class="fullname-icon">
+                            @user.Firstname @user.Lastname
+                        </div>
+                    }
+                </li>
+            }
+        </ul>
+        <button class="pm-modal-btn save-button" @onclick="UpdatePermissions">Save</button>
+    </ul>
+}
+
+

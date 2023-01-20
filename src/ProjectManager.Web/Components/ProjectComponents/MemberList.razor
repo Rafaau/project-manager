@@ -1,27 +1,58 @@
-﻿@if (Project != null)
+﻿@using ProjectManager.Core.ProjectAggregate
+@using ProjectManager.Web.ApiModels
+
+@if (Project != null)
 {
     <div style="position: fixed;">
-        <div style="display: flex;">
-            <div class="pe-3">
-                <span class="fa-solid fa-circle-user mt-1 ms-1 user-icon" />
+        <div class="dropstart">
+            <div style="display: flex; cursor: pointer;"
+                 id="dropdownUserDetails"
+                 data-bs-toggle="dropdown"
+                 aria-expanded="false"
+                 @onclick="() => { details.Refresh(); }">
+                <div class="pe-3">
+                    @if (System.IO.File.Exists(Path.Combine(env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{Project.Manager.Id}.jpg")))
+                    {
+                        var path = $"/avatars/pm-avatar-{Project.Manager.Id}.jpg";
+                        <img src="@path" class="user-avatar" />
+                    }
+                    else
+                    {
+                        <span class="fa-solid fa-circle-user mt-1 ms-1 user-icon" />
+                    }
+                </div>
+                <div>
+                    @Project.Manager.Firstname @Project.Manager.Lastname
+                    <p class="user-role">@Project.Manager.Role</p>
+                </div>
             </div>
-            <div>
-                @Project.Manager.Firstname @Project.Manager.Lastname
-                <p class="user-role">@Project.Manager.Role</p>
-            </div>
+            <UserDetails ViewedUser="@Project.Manager" @ref="details" />
         </div>
         @foreach (var user in Project.Users.Where(u => u.Role != 0))
         {
-            <div class="mb-1">
-                <div style="display: flex;">
+            <div class="dropstart mb-1">
+                <div style="display: flex; cursor: pointer;" 
+                    id="dropdownUserDetails" 
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false"
+                    @onclick="() => { details.Refresh(); }">
                     <div class="pe-3">
-                        <span class="fa-solid fa-circle-user mt-1 ms-1 user-icon" />
+                        @if (System.IO.File.Exists(Path.Combine(env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{user.Id}.jpg")))
+                        {
+                            var path = $"/avatars/pm-avatar-{user.Id}.jpg";
+                            <img src="@path" class="user-avatar" />
+                        }
+                        else
+                        {
+                            <span class="fa-solid fa-circle-user mt-1 ms-1 user-icon" />
+                        }
                     </div>
                     <div>
                         @user.Firstname @user.Lastname
                         <p class="user-role">@user.Role.ToString()</p>
                     </div>
                 </div>
+                <UserDetails ViewedUser="user" @ref="details"/>
             </div>
         }
     </div>

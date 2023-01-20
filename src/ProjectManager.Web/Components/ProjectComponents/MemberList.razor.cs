@@ -18,6 +18,7 @@ using ProjectManager.Core.Interfaces;
 using ProjectManager.Core.ProjectAggregate;
 using ProjectManager.Web.DirectApiCalls.Interfaces;
 using ProjectManager.Web.ApiModels;
+using AutoMapper;
 
 namespace ProjectManager.Web.Components.ProjectComponents;
 
@@ -25,7 +26,10 @@ public partial class MemberList
 {
   [Inject] private IProjectCallService _projectService { get; set; }
   [Inject] private NavigationManager navManager { get; set; }
+  [Inject] private IWebHostEnvironment env { get; set; }
+  [Inject] private IMapper _mapper { get; set; }
   private int Id { get; set; }
+  private UserDetails details;
 
   private ProjectComplex Project { get; set; }
 

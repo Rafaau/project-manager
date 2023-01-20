@@ -20,6 +20,8 @@
     <PackageReference Include="Ardalis.Result" />
     <PackageReference Include="Ardalis.Result.AspNetCore" />
     <PackageReference Include="AutoMapper" />
+    <PackageReference Include="BlazorInputFile" />
+    <PackageReference Include="BlazorInputFileExtended" />
     <PackageReference Include="FluentValidation" />
     <PackageReference Include="FluentValidation.AspNetCore" />
     <PackageReference Include="Majorsoft.Blazor.Components.Common.JsInterop" />
@@ -46,6 +48,7 @@
     <Folder Include="Logs\" />
     <Folder Include="Views\Project\" />
     <Folder Include="wwwroot\fonts\poppins\" />
+    <Folder Include="wwwroot\avatars\" />
   </ItemGroup>
   
 </Project>

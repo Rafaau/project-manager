@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ProjectManager.Core.ProjectAggregate;
 using ProjectManager.Core.Interfaces;
 using ProjectManager.Web.DirectApiCalls.Interfaces;
+using ProjectManager.Web.ApiModels;
 
 namespace ProjectManager.Web.Components.Modals;
 
@@ -35,11 +36,11 @@ public partial class AddProject
 
   private async Task Submit()
   {
-    var project = new Project2
-    (
-      name: model.Name,
-      manager: User
-    );
+    var project = new ProjectRequest()
+    {
+      Name = model.Name,
+      ManagerId = User.Id
+    };
 
     var response = await _projectService.AddProject(project);
     if (response.IsSuccess)

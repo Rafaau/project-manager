@@ -16,18 +16,33 @@ public class ProjectCallService : ServiceBase, IProjectCallService
   {
   }
 
+  public async Task<Response<ProjectComplex[]>> GetUserProjects(int userId)
+  {
+    return await HttpClient.GetResponse<ProjectComplex[]>($"/api/Project?$filter=users/any(u: u/id eq {userId})");
+  }
+
+  public async Task<Response<ProjectComplex[]>> GetManagerProjects(int managerId)
+  {
+    return await HttpClient.GetResponse<ProjectComplex[]>($"/api/Project?$filter=managerid eq {managerId}");
+  }
+
   public async Task<Response<ProjectComplex>> GetById(int id)
   {
     return await HttpClient.GetResponse<ProjectComplex>($"/api/Project/{id}");
   }
 
-  public async Task<Response<Project2>> AddProject(Project2 project)
+  public async Task<Response<ProjectComplex>> AddProject(ProjectRequest project)
   {
-    return await HttpClient.Post<Project2, Project2>("/api/Project", project);
+    return await HttpClient.Post<ProjectRequest, ProjectComplex>("/api/Project", project);
   }
 
   public async Task<Response<ProjectComplex>> UpdateProject(ProjectComplex project)
   {
     return await HttpClient.Put<ProjectComplex, ProjectComplex>("/api/Project", project);
+  }
+
+  public async Task<Response<ProjectComplex>> DeleteProject(int projectId)
+  {
+    return await HttpClient.Delete<ProjectComplex>($"/api/Project/{projectId}");
   }
 }

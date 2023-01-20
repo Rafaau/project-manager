@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ProjectManager.Core.Interfaces;
 using ProjectManager.Core.ProjectAggregate;
 using ProjectManager.SharedKernel;
+using ProjectManager.Web.ApiModels;
 
 namespace ProjectManager.Core.Services;
 public class UserCallService : ServiceBase, IUserCallService
@@ -28,4 +29,9 @@ public class UserCallService : ServiceBase, IUserCallService
   {
     return await HttpClient.Post<User, User>("api/user", user);
   }
+
+  public async Task<Response<UserSimplified>> UpdateUser(UserSimplified user)
+  {
+    return await HttpClient.Put<UserSimplified, UserSimplified>("api/user", user);
+  } 
 }

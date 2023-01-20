@@ -3,9 +3,17 @@
 }
 
 .left {
-    border: 1px solid white;
+    height: 90vh;
+    position: relative;
 }
 
 .right {
-    border: 1px solid white;
+    height: 90vh;
+    display: flex;
+    flex-flow: column;
+}
+
+.lower-section {
+    bottom: 0;
+    height: 100%;
 }

@@ -280,8 +280,8 @@ public class ProjectServiceTests
     await _sut.DeleteProject(1);
 
     // Assert
-    _logger.LogInformation("Deleting project (id: {0}ms", 1);
-    _logger.LogInformation("Project (id: {0}) deleted in {1}ms", 1, Arg.Any<long>());
+    _logger.Received(1).LogInformation("Deleting project (id: {0})", Arg.Is(1));
+    _logger.Received(1).LogInformation("Project (id: {0}) deleted in {1}ms", Arg.Is(1), Arg.Any<long>());
   }
   #endregion
 }

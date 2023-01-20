@@ -1,33 +1,56 @@
 ﻿@page "/project/chat"
+@using ProjectManager.Web.ApiModels
 @using ProjectManager.Web.Components
 @using ProjectManager.Web.Components.Modals
 @using ProjectManager.Web.Components.ProjectComponents
+@using System.Text.RegularExpressions
 
-@layout CascadeLayout
+@layout ProjectLayout
 
-<div class="row content-block mt-3 ms-3">
-    <div class="col-lg-9 pt-5 content-child">
+<div class="row content-block ms-3">
+    <div class="col-lg-9 content-child">
         @if (Messages != null && Project != null)
         {
             <div style="display: flex;">
-                @foreach (var channel in Project.ChatChannels)
+                @foreach (var channel in Project.ChatChannels.Where(x => x.PermissedUsers.Where(u => u.Id == User.Id).Any() || x.PermissedUsers.Length == 0).OrderBy(x => x.Id))
                 {
                     var channelStyle = channel.Id == CurrentChannel ? "current-channel" : "rest-of-channels";
-                    <div class="@channelStyle" @onclick="() => { SetCurrentChannel(channel.Id); }">
-                        <i style="padding-right: 0.2rem;">#</i>
-                        @channel.Name
+                    <div class="channel-container">
+                        <div class="@channelStyle" @onclick="() => { SetCurrentChannel(channel.Id); }">
+                            <i style="padding-right: 0.2rem;">#</i>
+                            @channel.Name
+                        </div>
+                        <i class="fa-solid fa-user-plus edit-channel-btn" 
+                           id="@channel.Id-Dropdown" 
+                           data-bs-toggle="dropdown" 
+                           data-bs-auto-close="outside"
+                           aria-expanded="false" />
+                        <EditPermissions Channel="channel" Env="env" Project="Project" @ref="permissions" />
+                        <i class="fa-solid fa-trash-can delete-channel-btn"
+                           data-bs-toggle="modal"
+                           data-bs-target="#deleteChannelConfirm"
+                           @onclick="() => { chosenChannel = channel; }" />
                     </div>
                 }
+
+                    <span class="fa-plus add-channel-button" 
+                        id="dropdownCreateChatChannel"
+                        data-bs-toggle="dropdown"
+                        data-bs-auto-close="outside"
+                        aria-expanded="false"/>
+                    <ChatChannelForm Project="@Project" Env="env" OnChannelCreate="RefreshProject"/>
+
             </div>
             <div class="mt-3 ms-3 chat-frame pe-1">
                 @{ var previousId = 0;
                 var previousDate = new DateTime(); }
-                @foreach (var message in Messages.Where(m => m.ChatChannelId == CurrentChannel))
+                @foreach (var message in Messages.Where(m => m.ChatChannelId == CurrentChannel).OrderBy(x => x.PostDate))
                 {
                     <div class="single-message">
-                        @if (message.User.Id == User.Id)
+                        @if (message.User.Id == User.Id && messageToEdit == 0)
                         {
                             <div class="message-actions flex">
+                                <span class="fa-solid fa-pen edit-button" @onclick="() => { messageToEdit = message.Id; editModel.Content = message.Content; }"/>
                                 <span class="fa-solid fa-trash-can remove-button" data-bs-toggle="modal" data-bs-target="#removeConfirm" @onclick="() => { PassMessageData(message); }"/>
                             </div>
                         }
@@ -35,7 +58,22 @@
                             <div class="col-lg-1">
                                 @if (previousId != message.User.Id || message.PostDate.Date != previousDate)
                                 {
-                                    <span class="fa-solid fa-circle-user mt-1 ms-1 user-icon" />
+                                    <div class="dropend">
+                                        <div id="dropdownUserDetails"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            @if (System.IO.File.Exists(Path.Combine(env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{message.User.Id}.jpg")))
+                                            {
+                                                var path = $"/avatars/pm-avatar-{message.User.Id}.jpg";
+                                                <img src="@path" class="user-avatar"/>
+                                            }
+                                            else
+                                            {
+                                                <span class="fa-solid fa-circle-user mt-1 ms-1 user-icon" />
+                                            }
+                                        </div>
+                                        <UserDetails ViewedUser="message.User" @ref="details" />
+                                    </div>
                                 }
                                 else
                                 {
@@ -48,29 +86,138 @@
                                 @if (previousId != message.User.Id || message.PostDate.Date != previousDate)
                                 {
                                     <div class="flex">
-                                        <div class="message-owner">
-                                            @message.User.Firstname @message.User.Lastname 
+                                        <div class="dropend">
+                                            <div class="message-owner"
+                                                 id="dropdownUserDetails"
+                                                 data-bs-toggle="dropdown"
+                                                 aria-expanded="false">                                               
+                                                @message.User.Firstname @message.User.Lastname 
+                                            </div>
+                                            <UserDetails ViewedUser="message.User" @ref="details" />
                                         </div>
                                         <div class="post-date ms-3 mt-1">
                                             @message.PostDate.ToString("dddd H:mmm")
                                         </div>
                                     </div>
                                 }
-                                <p class="message-content">@message.Content</p>
+                                @if (message.Id != messageToEdit)
+                                {
+                                    <p class="message-content">
+                                        @if (membersFullnames.Any(s => message.Content.Contains(s)))
+                                        {
+                                            List<string> members = new List<string>();
+                                            List<string> sortedMembers = new List<string>();
+                                            var temp = message.Content;
+                                            var temp2 = message.Content;
+                                            var duplicateCheck = message.Content;
+                                            var duplicateCheck2 = message.Content;
+                                            var mentionsInContent = 0;
+                                            foreach (var mention in membersFullnames.Where(x => message.Content.Contains(x)))
+                                            {
+                                                var reps = 1;
+                                                var regex = new Regex(Regex.Escape(mention));
+                                                duplicateCheck2 = regex.Replace(duplicateCheck2, "", 1);
+                                                mentionsInContent++;
+                                                for (int i = 1; i <= reps; i++)
+                                                {
+                                                    if (duplicateCheck2.Contains(mention))
+                                                    {
+                                                        mentionsInContent++;
+                                                        duplicateCheck2 = regex.Replace(duplicateCheck2, "", 1);
+                                                        reps++;
+                                                    }
+                                                    else
+                                                        break;
+                                                }
+                                            }
+                                            for (int i = 0; i < mentionsInContent; i++)
+                                            {
+                                                for (int j = 0; j < membersFullnames.Count(); j++)
+                                                {
+                                                    if (temp2.Contains("@"))
+                                                    {
+                                                        var attempt = temp2.Substring(temp2.IndexOf("@"), membersFullnames.ToArray()[j].Length - 1);
+                                                        if (membersFullnames.Any(x => attempt.Contains(x)))
+                                                        {
+                                                            sortedMembers.Add(attempt);
+                                                            var regex = new Regex(Regex.Escape(attempt));
+                                                            temp2 = regex.Replace(temp2, "", 1);
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            for (int i = 0; i < sortedMembers.Count(); i++)
+                                            {
+                                                @temp.Substring(0, message.Content.IndexOf("@"))
+                                                <div class="dropend" style="display: inline-block;">
+                                                    <div class="mention"
+                                                        id="dropdownUserDetails"
+                                                        data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                        @sortedMembers.ToArray()[i]
+                                                    </div>
+                                                    <UserDetails ViewedUser="usersToMention.Where(x => sortedMembers.ToArray()[i].Contains(x.Firstname) && sortedMembers.ToArray()[i].Contains(x.Lastname)).Single()" @ref="details" />
+                                                </div>
+                                                var dif = temp.IndexOf("@") + sortedMembers.ToArray()[i].Length;
+                                                temp = temp.Substring(dif, temp.Length - dif);
+                                                <div class="no-mention">
+                                                    @temp.Substring(0, temp.Contains("@") ? temp.IndexOf("@") : temp.Length)
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @message.Content
+                                        }
+                                    </p>
+                                }
+                                else
+                                {
+                                    <div class="edit-container">
+                                        <EditForm Model="@model" OnValidSubmit="Update" id="message-form">
+                                            <InputText @bind-Value="@editModel.Content" @oninput="(e) => { OnInputChange(e); }" class="form-control message-input shadow-none" />
+                                        </EditForm>
+                                        <i class="fa-solid fa-xmark close-edit-button" @onclick="() => { messageToEdit = 0; }" />
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
                     previousId = message.User.Id;
                     previousDate = message.PostDate.Date;
                 }
-                <section id="anchor" style="position: relative; margin-top: 5vh;" />
+                <section id="anchor" style="position: relative; margin-top: 3vh;" />
             </div>
         }
         <div class="input-container">
+            @if (showMentions) 
+            {
+                <div class="mentions-container">
+                    @foreach (var userToMention in membersFullnames.Where(x => x.ToLower().Contains(currentMention.ToLower())))
+                    {
+                        var user = Project.Users.First(x => userToMention.Contains(x.Firstname) && userToMention.Contains(x.Lastname));
+                        <div class="single-mention" @onclick="() => { MentionUser(userToMention); }">
+                            @if (System.IO.File.Exists(Path.Combine(env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{user.Id}.jpg")))
+                            {
+                                var path = $"/avatars/pm-avatar-{user.Id}.jpg";
+                                <img src="@path" class="user-avatar-sm" data-bs-toggle="tooltip" title="@user.Firstname @user.Lastname" />
+                            }
+                            else
+                            {
+                                <span class="fa-solid fa-circle-user user-icon-sm" />
+                            }
+                            @userToMention.Replace("@", "")
+                        </div>
+                    }
+                </div>
+            }
             <EditForm Model="@model" OnValidSubmit="Submit" id="message-form">
-                <InputText @bind-Value="@model.Content" class="form-control message-input shadow-none" placeholder="Message #general" />
+                <InputText @bind-Value="@model.Content" @oninput="(e) => { OnInputChange(e); }" class="form-control message-input shadow-none" placeholder="Message #general" />
             </EditForm>
+
         </div>
     </div>
 </div>
 <RemoveConfirm Message="@MessageToPass" RefreshMessages="RefreshMessages" />
+<RemoveChannelConfirm ChatChannel="chosenChannel" OnChannelDelete="RefreshProject" js="js"/>

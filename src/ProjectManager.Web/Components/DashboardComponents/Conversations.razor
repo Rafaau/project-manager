@@ -1,0 +1,58 @@
+﻿@using ProjectManager.Web.Components.Modals
+@layout CascadeLayout
+
+<i class="fa-solid fa-chevron-up hide-button" @onclick="HideConversations" />
+
+<div class="conversations-container">
+    @if (conversations != null)
+    {
+        foreach (var conversation in conversations.OrderByDescending(x => x.PostDate))
+        {
+            <div class="single-conversations" data-bs-toggle="modal" data-bs-target="#conversationModal" 
+                @onclick="() => { PassId(conversation.Receiver.Id != User.Id ? conversation.Receiver.Id : conversation.Sender.Id); }">
+                <i class="fa-solid fa-circle-user user-icon" />
+                @if (conversation.Receiver.Id != User.Id)
+                {
+                    <div class="fullname">
+                    @conversation.Receiver.Firstname @conversation.Receiver.Lastname
+                    </div>
+                }
+                else
+                {
+                    <div class="fullname">
+                    @conversation.Sender.Firstname @conversation.Sender.Lastname
+                    </div>
+                }
+                <div class="conversation-date">
+                    @if (conversation.PostDate.Date == DateTime.UtcNow.Date)
+                    {
+                        <div>
+                            Today at @conversation.PostDate.ToString("HH:mm")
+                        </div>
+                    }
+                    else if (conversation.PostDate.Date == DateTime.UtcNow.AddDays(-1).Date)
+                    {
+                        <div>
+                            Yesterday at @conversation.PostDate.ToString("HH:mm")
+                        </div>
+                    }
+                    else
+                    {
+                        @conversation.PostDate.ToString("MM/dd/yyyy  HH:mm")
+                    }
+                </div>
+                <div class="conversation-last-message">
+                    @if (conversation.Sender.Id == User.Id)
+                    {
+                        <div class="me-2" style="display: inline-block; color: #fdfdfd">
+                            You:
+                        </div>
+                    }
+                    @conversation.Content
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<Conversation UserId="User.Id" ReceiverId="receiverId" @ref="conversation"/>

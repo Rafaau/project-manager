@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Ardalis.Specification;
 
 namespace ProjectManager.Core.ProjectAggregate.Specifications;
-public class MessageById : Specification<Message>
+public class MessageById : Specification<ChatMessage>
 {
   public MessageById(int messageId)
   {

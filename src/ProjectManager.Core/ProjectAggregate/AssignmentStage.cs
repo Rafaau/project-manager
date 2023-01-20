@@ -15,13 +15,6 @@ public class AssignmentStage : EntityBase, IAggregateRoot
   public int ProjectId { get; set; }
   public virtual Project2 Project { get; set; }
 
-  public AssignmentStage(string name, int index, int projectId)
-  {
-    Name = name;
-    Index = index;
-    ProjectId = projectId;
-  }
-
   public AssignmentStage()
   {
   }

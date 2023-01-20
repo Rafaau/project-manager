@@ -12,5 +12,6 @@ public interface IAssignmentService
   Task<Assignment> CreateAssignment(Assignment request);
   Task<Assignment> UpdateAssignment(Assignment request);
   Task<Assignment> MoveAssignmentToStage(int assignmentId, int stageId);
+  Task<Assignment> SignUpUserToAssignment(int assignmentId, int userId);
   Task<Assignment> DeleteAssignment(int id);
 }

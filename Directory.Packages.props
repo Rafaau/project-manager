@@ -20,6 +20,12 @@
     <PackageVersion Include="BlazorAnimate">
       <Version>3.0.0</Version>
     </PackageVersion>
+    <PackageVersion Include="BlazorInputFile">
+      <Version>0.2.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="BlazorInputFileExtended">
+      <Version>2.4.18</Version>
+    </PackageVersion>
     <PackageVersion Include="Bogus">
       <Version>34.0.2</Version>
     </PackageVersion>

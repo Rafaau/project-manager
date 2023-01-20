@@ -4,6 +4,7 @@ using ProjectManager.SharedKernel;
 using ProjectManager.SharedKernel.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using ProjectManager.Infrastructure.Data.Config;
+using Microsoft.Extensions.Options;
 
 namespace ProjectManager.Infrastructure.Data;
 
@@ -16,9 +17,13 @@ public class AppDbContext : DbContext
   public DbSet<Project2> Projects2 => Set<Project2>();
   public DbSet<User> Users => Set<User>();
   public DbSet<Assignment> Assignments => Set<Assignment>();
-  public DbSet<Message> Messages => Set<Message>();
+  public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
   public DbSet<AssignmentStage> AssignmentStages => Set<AssignmentStage>();
   public DbSet<ChatChannel> ChatChannels => Set<ChatChannel>();
+  public DbSet<Appointment> Appointments => Set<Appointment>();
+  public DbSet<Notification> Notifications => Set<Notification>();
+  public DbSet<PrivateMessage> PrivateMessages => Set<PrivateMessage>();
+  public DbSet<InvitationLink> InvitationLinks => Set<InvitationLink>();
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
@@ -27,9 +32,7 @@ public class AppDbContext : DbContext
     if (optionsBuilder.IsConfigured) return;
 
     if (AppDbContextOptions.IsTesting)
-    {
-      optionsBuilder.UseInMemoryDatabase("projectmanagerDb");
-    }
+      optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=projectmanagerDbTests;User Id=postgres;Password=postgrespw;Pooling=false");
     else
     {
       optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=projectmanagerDb;User Id=postgres;Password=postgrespw;Pooling=false",
@@ -42,36 +45,6 @@ public class AppDbContext : DbContext
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     base.OnModelCreating(modelBuilder);
-
-    //modelBuilder.Entity<User>()
-    //            .HasMany(u => u.Projects)
-    //            .WithMany(p => p.Users)
-    //            .UsingEntity(j => j.ToTable("UserProjects"));
-
-    //modelBuilder.Entity<Project2>()
-    //            .HasOne(p => p.Manager)
-    //            .WithMany(u => u.ManagedProjects)
-    //            .HasForeignKey(p => p.ManagerId);
-
-    //modelBuilder.Entity<Assignment>()
-    //            .HasOne(a => a.Project)
-    //            .WithMany(p => p.Assignments)
-    //            .HasForeignKey(a => a.ProjectId);
-
-    //modelBuilder.Entity<Assignment>()
-    //            .HasMany(a => a.Users)
-    //            .WithMany(u => u.Assignments)
-    //            .UsingEntity(j => j.ToTable("AssignmentUser"));
-
-    //modelBuilder.Entity<Message>()
-    //            .HasOne(m => m.User)
-    //            .WithMany(u => u.Messages)
-    //            .HasForeignKey(m => m.UserId);
-
-    //modelBuilder.Entity<Message>()
-    //            .HasOne(m => m.Project)
-    //            .WithMany(p => p.Messages)
-    //            .HasForeignKey(m => m.ProjectId);
     
     modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
   }

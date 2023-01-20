@@ -68,8 +68,7 @@ public class UserController : BaseApiController
 
       var createdUser = await _userService.CreateUser(mapped);
 
-      return CreatedAtAction(nameof(GetByEmail), new { createdUser.Email }, _mapper.Map<UserSimplified>(createdUser));
-      //return Ok(_mapper.Map<UserComplex>(createdUser).Success());
+      return CreatedAtAction(nameof(GetByEmail), new { createdUser.Email }, _mapper.Map<UserSimplified>(createdUser).Success());
     }
     catch (Exception e)
     {

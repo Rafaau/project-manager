@@ -145,6 +145,68 @@ public class AssignmentControllerTests
   }
 
   [Fact]
+  public async Task MoveToStage_ShouldReturnOkAndObject_WhenSucceeded()
+  {
+    // Arrange
+    var assignmentToMove = _mapper.Map<AssignmentComplex>(FakeAssignment());
+    _assignmentService.MoveAssignmentToStage(Arg.Any<int>(), Arg.Any<int>())
+      .Returns(FakeAssignment());
+
+    // Act
+    var result = (ObjectResult) await _sut.MoveToStage(assignmentToMove.Id, 1);
+    var resultData = (Response<AssignmentComplex>) result.Value!;
+
+    // Assert
+    result.StatusCode.Should().Be(200);
+    resultData.Data.Should().BeEquivalentTo(assignmentToMove);
+  }
+
+  [Fact]
+  public async Task MoveToStage_ShouldReturnInternalServerError_WhenExceptionIsThrown()
+  {
+    // Arrange
+    _assignmentService.MoveAssignmentToStage(Arg.Any<int>(), Arg.Any<int>())
+      .Throws<Exception>();
+
+    // Act
+    var result = (ObjectResult) await _sut.MoveToStage(1, 1);
+
+    // Assert
+    result.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+  }
+
+  [Fact]
+  public async Task SignUpUser_ShouldReturnOkAndObject_WhenSucceeded()
+  {
+    // Arrange
+    var mapped = _mapper.Map<AssignmentComplex>(FakeAssignment());
+    _assignmentService.SignUpUserToAssignment(Arg.Any<int>(), Arg.Any<int>())
+      .Returns(FakeAssignment());
+
+    // Act
+    var result = (ObjectResult) await _sut.SignUpUserToAssignment(mapped.Id, 1);
+    var resultData = (Response<AssignmentComplex>) result.Value!;
+
+    // Assert
+    result.StatusCode.Should().Be(200);
+    resultData.Data.Should().BeEquivalentTo(mapped);
+  }
+
+  [Fact]
+  public async Task SignUpUser_ShouldReturnInternalServerError_WhenExceptionIsThrown()
+  {
+    // Arrange
+    _assignmentService.SignUpUserToAssignment(Arg.Any<int>(), Arg.Any<int>())
+      .Throws<Exception>();
+
+    // Act
+    var result = (ObjectResult) await _sut.SignUpUserToAssignment(1, 1);
+
+    // Assert
+    result.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+  }
+
+  [Fact]
   public async Task Delete_ShouldReturnOkAndObject_WhenSucceeded()
   {
     // Arrange

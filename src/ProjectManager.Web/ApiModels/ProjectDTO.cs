@@ -32,6 +32,7 @@ public class ProjectComplex
 {
   public int Id { get; set; }
   public string Name { get; set; }
+  public int ManagerId { get; set; }
   public UserSimplified Manager { get; set; }
   public UserSimplified[]? Users { get; set; }
   public AssignmentSimplified[]? Assignments { get; set; }
@@ -43,4 +44,7 @@ public class ProjectSimplified
 {
   public int Id { get; set; }
   public string Name { get; set; }
+  public int ManagerId { get; set; }
+  public UserSimplified Manager { get; set; }
+  public UserSimplified[]? Users { get; set; }
 }

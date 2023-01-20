@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Ardalis.Specification;
@@ -187,6 +188,133 @@ public class AssignmentServiceTests
     // Assert
     _logger.Received(1).LogInformation("Updating assignment (id: {0})", 1);
     _logger.Received(1).LogInformation("Assignment (id: {0}) updated in {1}ms", 1, Arg.Any<long>());
+  }
+  #endregion
+
+  #region Patch
+  [Fact]
+  public async Task MoveAssignment_ShouldLogMessageAndException_WhenExceptionIsThrown()
+  {
+    // Arrange
+    var exception = new NpgsqlException("Something went wrong");
+    _assignmentRepository.FirstOrDefaultAsync(Arg.Any<Specification<Assignment>>())
+      .Throws(exception);
+
+    // Act
+    var requestAction = async () => await _sut.MoveAssignmentToStage(1,1);
+
+    // Assert
+    await requestAction.Should()
+      .ThrowAsync<NpgsqlException>()
+      .WithMessage("Something went wrong");
+    _logger.Received(1)
+      .LogError(
+      Arg.Is(exception),
+      Arg.Is("Something went wrong while moving assignment (id: {0}) to stage (id: {1})"), 
+      Arg.Is(1), Arg.Is(1));
+  }
+
+  [Fact]
+  public async Task MoveAssignment_ShouldReturnObject_WhenSucceeded()
+  {
+    // Arrange
+    var assignment = FakeAssignment();
+    _assignmentRepository.FirstOrDefaultAsync(Arg.Any<Specification<Assignment>>())
+      .Returns(assignment);
+
+    // Act
+    var result = await _sut.MoveAssignmentToStage(assignment.Id, assignment.AssignmentStageId);
+
+    // Assert
+    result.Should().BeEquivalentTo(assignment);
+  }
+
+  [Fact]
+  public async Task MoveAssignment_ShouldLogMessages_WhenInvoked()
+  {
+    // Arrange
+    var assignment = FakeAssignment();
+    _assignmentRepository.FirstOrDefaultAsync(Arg.Any<Specification<Assignment>>())
+      .Returns(assignment);
+
+    // Act
+    await _sut.MoveAssignmentToStage(assignment.Id, assignment.AssignmentStageId);
+
+    // Assert
+    _logger.Received(1)
+      .LogInformation(
+        Arg.Is("Moving assignment (id: {0}) to stage (id: {1})"), 
+        Arg.Is(assignment.Id), 
+        Arg.Is(assignment.AssignmentStageId));
+    _logger.Received(1)
+      .LogInformation(
+        Arg.Is("Assignment (id: {0}) moved to stage (id: {1}) in {2}ms"), 
+        Arg.Is(assignment.Id), 
+        Arg.Is(assignment.AssignmentStageId), 
+        Arg.Any<long>());
+  }
+
+  [Fact]
+  public async Task SignUpToAssignment_ShouldLogMessageAndException_WhenExceptionIsThrown()
+  {
+    // Arrange
+    var exception = new NpgsqlException("Something went wrong");
+    _assignmentRepository.FirstOrDefaultAsync(Arg.Any<Specification<Assignment>>())
+      .Throws(exception);
+
+    // Act
+    var requestAction = async () => await _sut.SignUpUserToAssignment(1, 1);
+
+    // Assert
+    await requestAction.Should()
+      .ThrowAsync<NpgsqlException>().WithMessage(exception.Message);
+    _logger.LogError(
+      Arg.Is(exception),
+      Arg.Is("Something went wrong while signing up user(id: {0}) to assignment(id: {1})"),
+      Arg.Is(1), Arg.Is(1));
+  }
+
+  [Fact]
+  public async Task SignUpToAssignment_ShouldReturnObject_WhenSucceeded()
+  {
+    // Arrange
+    var assignment = FakeAssignment();
+    var user = FakeUser();
+    _assignmentRepository.FirstOrDefaultAsync(Arg.Any<Specification<Assignment>>())
+      .Returns(assignment);
+    _userRepository.FirstOrDefaultAsync(Arg.Any<Specification<User>>())
+      .Returns(user);
+
+    // Act
+    var result = await _sut.SignUpUserToAssignment(assignment.Id, user.Id);
+
+    // Assert
+    result.Should().BeEquivalentTo(assignment);
+  }
+
+  [Fact]
+  public async Task SignUpToAssignment_ShouldLogMessages_WhenInvoked()
+  {
+    // Arrange
+    var assignment = FakeAssignment();
+    var user = FakeUser();
+    _assignmentRepository.FirstOrDefaultAsync(Arg.Any<Specification<Assignment>>())
+      .Returns(assignment);
+    _userRepository.FirstOrDefaultAsync(Arg.Any<Specification<User>>())
+      .Returns(user);
+
+    // Act
+    await _sut.SignUpUserToAssignment(assignment.Id, user.Id);
+
+    // Assert
+    _logger.Received(1)
+      .LogInformation(
+        Arg.Is("Signing up user (id: {0}) to assignment (id: {1})"),
+        Arg.Is(user.Id), Arg.Is(assignment.Id));
+    _logger.Received(1)
+      .LogInformation(
+        Arg.Is("User (id: {0}) signed up to assignment (id: {1}) in {3}ms"),
+        Arg.Is(user.Id), Arg.Is(assignment.Id), Arg.Any<long>());
   }
   #endregion
 

@@ -45,6 +45,9 @@ public class ProjectController : BaseApiController
       var retrievedProject =
         await _projectService.RetrieveProjectById(id);
 
+      if (retrievedProject is null)
+        return NotFound();
+
       return Ok(_mapper.Map<ProjectComplex>(retrievedProject).Success());
     }
     catch (Exception e)
@@ -62,7 +65,7 @@ public class ProjectController : BaseApiController
 
       var createdProject = await _projectService.CreateProject(mapped);
 
-      return Ok(_mapper.Map<ProjectRequest>(createdProject).Success());
+      return Ok(_mapper.Map<ProjectComplex>(createdProject).Success());
     }
     catch (Exception e)
     {
@@ -87,7 +90,7 @@ public class ProjectController : BaseApiController
     }
   }
 
-  [HttpDelete]
+  [HttpDelete("{id}")]
   public async Task<IActionResult> Delete(int id)
   {
     try

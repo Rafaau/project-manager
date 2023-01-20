@@ -27,7 +27,8 @@ public class AssignmentStageController : BaseApiController
 
       var createdStage = await _stageService.AddAssignmentStage(mapped);
 
-      return Ok(_mapper.Map<AssignmentStageComplex>(createdStage).Success());
+      return CreatedAtAction(null, _mapper.Map<AssignmentStageRequest>(createdStage).Success());
+      //return Ok(_mapper.Map<AssignmentStageRequest>(createdStage).Success());
     }
     catch (Exception e)
     {

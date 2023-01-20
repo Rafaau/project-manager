@@ -13,11 +13,24 @@ using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.JSInterop;
 using ProjectManager.Web;
 using ProjectManager.Web.Shared;
+using ProjectManager.Web.DirectApiCalls.Interfaces;
+using ProjectManager.Core.ProjectAggregate;
+using ProjectManager.Web.ApiModels;
+using ProjectManager.Web.Components.Modals;
 
 namespace ProjectManager.Web.Pages;
 
 public partial class Calendar
 {
+  [Inject] private IAppointmentCallService _appointmentService { get; set; }
+  [Inject] private IAssignmentCallService _assignmentService { get; set; }
+  [CascadingParameter] User User { get; set; }
+  AddAppointment child;
+  private AppointmentComplex[] appointments { get; set; }
+  private AssignmentComplex[] assignments { get; set; }
+  private int showAddButton { get; set; } = 0;
+  public DateTime DateToPass { get; set; } = DateTime.Now;
+
   #region CalendarInitials
   string monthName = "";
   DateTime monthEnd;
@@ -35,6 +48,16 @@ public partial class Calendar
   {
     CreateMonth();
     await base.OnInitializedAsync();
+  }
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (User != null && appointments == null && assignments == null)
+    {
+      await GetAppointments();
+      await GetAssignments();
+      StateHasChanged();
+    }
   }
 
   private void CreateMonth()
@@ -70,5 +93,25 @@ public partial class Calendar
     previousMonthEnd = monthStart.AddDays(-1).Day;
     var firstDayOfNextMonth = (int)monthEnd.DayOfWeek;
     nextMonthStart = 7 - firstDayOfNextMonth;
+  }
+
+  private async Task GetAppointments()
+  {
+    var response = await _appointmentService.GetByUserId(User.Id);
+    if (response.IsSuccess)
+      appointments = response.Data; 
+  }
+
+  private async Task GetAssignments()
+  {
+    var response = await _assignmentService.GetByUserId(User.Id);
+    if (response.IsSuccess)
+      assignments = response.Data;
+  }
+
+  private void PassDateToModal(int day)
+  {
+    DateToPass = new DateTime(year, month, day);
+    child.InitModel();
   }
 }

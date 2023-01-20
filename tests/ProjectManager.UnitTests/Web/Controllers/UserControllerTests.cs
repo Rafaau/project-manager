@@ -128,11 +128,11 @@ public class UserControllerTests
 
     // Act
     var result = (CreatedAtActionResult) await _sut.Post(userResponse);
-    var resultData = (UserSimplified) result.Value!;
+    var resultData = (Response<UserSimplified>) result.Value!;
 
     // Assert
     result.StatusCode.Should().Be(201);
-    resultData.As<UserSimplified>().Should().BeEquivalentTo(userResponse);
+    resultData.Data.Should().BeEquivalentTo(userResponse);
   }
 
   [Fact]

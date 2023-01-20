@@ -20,13 +20,18 @@ using ProjectManager.Core.ProjectAggregate.Enums;
 using ProjectManager.Web.DirectApiCalls.Interfaces;
 using ProjectManager.Web.ApiModels;
 using Majorsoft.Blazor.Components.Common.JsInterop.Scroll;
+using ProjectManager.Web.Components.ProjectComponents;
+using NuGet.Protocol.Plugins;
+using AutoMapper;
 
 namespace ProjectManager.Web.Pages.ProjectPages;
 
 public partial class ProjectChat
 {
-  [Inject] private IMessageCallService _messageService { get; set; }
+  [Inject] private IChatMessageCallService _messageService { get; set; }
   [Inject] private IProjectCallService _projectService { get; set; }
+  [Inject] private INotificationCallService _notificationService { get; set; }
+  [Inject] private IWebHostEnvironment env { get; set; }
   [Inject] private NavigationManager navManager { get; set; }
   [Inject] private IJSRuntime js { get; set; }
   [Inject] private IScrollHandler scroll { get; set; }
@@ -35,14 +40,24 @@ public partial class ProjectChat
   private ProjectComplex Project { get; set; }
   private class Model
   {
-    public string Content { get; set; }
+    public string Content { get; set; } = string.Empty;
   }
 
   private Model model = new Model();
-  private MessageComplex[] Messages { get; set; }
-  private MessageComplex MessageToPass { get; set; }
+  private Model editModel = new Model();
+  private ChatMessageComplex[] Messages { get; set; }
+  private ChatMessageComplex MessageToPass { get; set; }
   private int Id { get; set; }
   private int CurrentChannel { get; set; }
+  private bool showMentions { get; set; } = false;
+  private List<string> membersFullnames { get; set; } = new List<string>();
+  private UserSimplified[] usersToMention { get; set; }
+  private string currentContent { get; set; }
+  private string currentMention { get; set; }
+  private int messageToEdit { get; set; } = 0;
+  private ChatChannelComplex chosenChannel { get; set; } = new();
+  private UserDetails details;
+  private EditPermissions permissions;
 
   protected override async Task OnInitializedAsync()
   {
@@ -51,20 +66,55 @@ public partial class ProjectChat
       Id = int.Parse(id);
 
     await RefreshMessages();
+    await RefreshProject();
+  }
 
+  private async Task RefreshProject()
+  {
     var projectResponse = await _projectService.GetById(Id);
     if (projectResponse.IsSuccess)
     {
       Project = projectResponse.Data;
       if (Project.ChatChannels is not null)
-        CurrentChannel = Project.ChatChannels.First().Id;
+        CurrentChannel = Project.ChatChannels.OrderBy(x => x.Id).First().Id;
+      if (Project.Users is not null)
+      {
+        usersToMention = Project.Users;
+        foreach (var member in Project.Users)
+        {
+          membersFullnames.Add($"@{member.Firstname} {member.Lastname}");
+        }
+      }
     }
   }
 
   protected override async Task OnAfterRenderAsync(bool firstRender)
   {
-    if (!firstRender)
+    if (!firstRender && messageToEdit == 0) // to avoid scrolling after edit click
       await scroll.ScrollToElementByIdAsync("anchor");
+  }
+
+  private void OnInputChange(ChangeEventArgs e)
+  {
+    currentContent = e.Value.ToString();
+    currentMention = "";
+
+    if (currentContent.Contains("@"))
+      currentMention = currentContent.Substring(currentContent.LastIndexOf("@"), currentContent.Length - currentContent.LastIndexOf("@"));
+
+    if (currentMention.EndsWith("@") || (currentMention.Contains("@") && !membersFullnames.ToArray().Any(s => currentMention.Contains(s))))
+    {
+      showMentions = true;
+    }
+    else
+      showMentions = false;
+  }
+
+  private void MentionUser(string fullname)
+  {
+    model.Content = model.Content.Substring(0, model.Content.LastIndexOf("@"));
+    model.Content += fullname;
+    showMentions = false;
   }
 
   private async Task RefreshMessages()
@@ -75,10 +125,19 @@ public partial class ProjectChat
   }
   private async Task Submit()
   {
-    var message = new MessageRequest()
+    foreach (var userToMention in membersFullnames)
+    {
+      if (model.Content.Contains(userToMention))
+      {
+        var userId = Project.Users.FirstOrDefault(x => $"@{x.Firstname} {x.Lastname}" == userToMention).Id;
+        await _notificationService.CreateNotification(new NotificationRequest() 
+          { Content = $"You have been mentioned in #{Project.ChatChannels.First(x => x.Id == CurrentChannel).Name} chat in {Project.Name}", 
+            UserId = userId });
+      }
+    }
+    var message = new ChatMessageRequest()
     {
       Content = model.Content,
-      PostDate = DateTime.UtcNow,
       UserId = User.Id,
       ProjectId = Project.Id,
       ChatChannelId = CurrentChannel,
@@ -91,9 +150,22 @@ public partial class ProjectChat
       model = new Model();
       await scroll.ScrollToElementByIdAsync("anchor");
     }
+
+    showMentions = false;
   }
 
-  private void PassMessageData(MessageComplex message)
+  private async Task Update()
+  {
+    var response = await _messageService.EditMessage(messageToEdit, editModel.Content);
+    if (response.IsSuccess)
+    {
+      await RefreshMessages();
+      await scroll.ScrollToElementByIdAsync("anchor");
+      messageToEdit = 0;
+    }
+  }
+
+  private void PassMessageData(ChatMessageComplex message)
   {
     MessageToPass = message;
   }
@@ -102,4 +174,5 @@ public partial class ProjectChat
   {
     CurrentChannel = channelId;
   }
+
 }

@@ -1,5 +1,4 @@
 ﻿.user-label {
-    border: 1px solid white;
     text-align: center;
 }
 
@@ -13,6 +12,11 @@
     position: relative;
 }
 
+.user-avatar {
+    width: 7rem;
+    border-radius: 50%;
+}
+
 .edit-avatar {
     position: absolute;
     background-color: #181818;
@@ -20,7 +24,8 @@
     top: -0.5rem;
     padding: 0.8rem;
     border-radius: 50%;
-    right: -0.5rem;
+    right: 35%;
+    cursor: pointer;
 }
 
 .user-type {
@@ -60,6 +65,7 @@
 }
 
 .icon-container {
+    position: relative;
     cursor: pointer;
     color: #8d8d8d;
     font-size: 1.3rem;
@@ -68,4 +74,61 @@
     margin: 0.6rem;
     border-radius: 50%;
     background-color: #181818;
+    transition: 0.2s;
 }
+
+.icon-container:hover {
+    transform: scale(1.1);
+}
+
+.circle-span {
+    position: absolute;
+    top: 0;
+    right: -0.3rem;
+    background-color: #8100cb;
+    border-radius: 50%;
+    font-size: 1rem;
+    height: 1.3rem;
+    width: 1.3rem;
+    color: #fdfdfd;
+}
+
+.notifications-dropdown {
+    background-color: #181818;
+    width: 500px;
+}
+
+.verified {
+    margin-left: 0.7rem;
+    border-radius: 50%;
+    background-color: #8100cb;
+    padding: 0.15rem;
+    padding-top: 0.2rem;
+    font-size: 0.9rem;
+}
+
+.save-button {
+    width: 2rem;
+    float: right;
+    font-size: 2rem;
+    margin-right: 1rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+
+.fields-container {
+    justify-content: center;
+    margin-left: 3rem;
+    margin-right: 3rem;
+}
+
+.form-label {
+    text-align: left;
+    float: left;
+    margin: 0;
+}
+
+.submit-btn {
+    float: right;
+}
+

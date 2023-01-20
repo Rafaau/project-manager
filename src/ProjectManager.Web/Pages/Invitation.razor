@@ -1,0 +1,54 @@
+﻿@page "/invitation"
+@using ProjectManager.Web.Components
+@using ProjectManager.Web.Extensions
+
+@layout CascadeLayout
+
+<div class="invitation-container">
+    @if (invitationLink != null) 
+    {
+        <AuthorizeView Roles="Developer">
+            @if (User != null)
+            {
+                if (invitationLink.Project.Users.Where(x => x.Id == User.Id).Any())
+                {
+                    <div class="not-allowed-message">
+                        You are already member of this project team
+                    </div>
+                }
+                else if (invitationLink.IsUsed) 
+                {
+                    <div class="not-allowed-message">
+                        This invitation is already used.<br/>
+                        Ask the Manager for a new invitation link.
+                    </div>
+                }
+                else
+                {
+                    <i class="fa-solid fa-people-group project-icon" />
+                    <div class="invitation-message">You have been invited to join</div>
+                    <div class="invitation-project">@invitationLink.Project.Name</div>
+                    <div class="details">
+                        <div class="project-members">@invitationLink.Project.Users.Count() members</div>
+                        <div class="project-manager">Manager: @invitationLink.Project.Manager.Firstname  @invitationLink.Project.Manager.Lastname</div>
+                        @if (invitationLink.Project.Manager.CheckIfAvatarExist(env))
+                        {
+                            <img src="@invitationLink.Project.Manager.GetAvatarPath()" class="user-avatar"/>
+                        }
+                    </div>
+                    <button class="pm-modal-btn join-btn" @onclick="HandleJoinClick">Join @invitationLink.Project.Name</button>
+                }
+            }
+        </AuthorizeView>
+        <AuthorizeView Roles="Manager">
+            <div class="not-allowed-message">
+                You cannot join projects as a Manager
+            </div>
+        </AuthorizeView>
+        <AuthorizeView>
+            <NotAuthorized>
+                <LoginRedirect/>
+            </NotAuthorized>
+        </AuthorizeView>
+    }
+</div>

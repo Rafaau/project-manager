@@ -22,6 +22,21 @@ namespace ProjectManager.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("AppointmentUser", b =>
+                {
+                    b.Property<int>("AppointmentsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("AppointmentsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("UserAppointments", (string)null);
+                });
+
             modelBuilder.Entity("AssignmentUser", b =>
                 {
                     b.Property<int>("AssignmentsId")
@@ -65,6 +80,30 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("UserProjects", (string)null);
+                });
+
+            modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.Appointment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.Assignment", b =>
@@ -151,7 +190,7 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.ToTable("ChatChannels");
                 });
 
-            modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.Message", b =>
+            modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.ChatMessage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -183,7 +222,96 @@ namespace ProjectManager.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("ChatMessages");
+                });
+
+            modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.InvitationLink", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpirationTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("InvitationLinks");
+                });
+
+            modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsSeen")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.PrivateMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsSeen")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("PostDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("PrivateMessages");
                 });
 
             modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.Project2", b =>
@@ -241,6 +369,21 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("AppointmentUser", b =>
+                {
+                    b.HasOne("ProjectManager.Core.ProjectAggregate.Appointment", null)
+                        .WithMany()
+                        .HasForeignKey("AppointmentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManager.Core.ProjectAggregate.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AssignmentUser", b =>
@@ -329,7 +472,7 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.Message", b =>
+            modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.ChatMessage", b =>
                 {
                     b.HasOne("ProjectManager.Core.ProjectAggregate.ChatChannel", "ChatChannel")
                         .WithMany("Messages")
@@ -354,6 +497,47 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.Navigation("Project");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.InvitationLink", b =>
+                {
+                    b.HasOne("ProjectManager.Core.ProjectAggregate.Project2", "Project")
+                        .WithMany("InvitationLinks")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.Notification", b =>
+                {
+                    b.HasOne("ProjectManager.Core.ProjectAggregate.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.PrivateMessage", b =>
+                {
+                    b.HasOne("ProjectManager.Core.ProjectAggregate.User", "Receiver")
+                        .WithMany("PrivateMessagesReceived")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManager.Core.ProjectAggregate.User", "Sender")
+                        .WithMany("PrivateMessagesSent")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.Project2", b =>
@@ -385,6 +569,8 @@ namespace ProjectManager.Infrastructure.Migrations
 
                     b.Navigation("ChatChannels");
 
+                    b.Navigation("InvitationLinks");
+
                     b.Navigation("Messages");
                 });
 
@@ -393,6 +579,12 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.Navigation("ManagedProjects");
 
                     b.Navigation("Messages");
+
+                    b.Navigation("Notifications");
+
+                    b.Navigation("PrivateMessagesReceived");
+
+                    b.Navigation("PrivateMessagesSent");
                 });
 #pragma warning restore 612, 618
         }

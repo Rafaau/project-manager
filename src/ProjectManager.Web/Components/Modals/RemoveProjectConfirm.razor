@@ -1,0 +1,25 @@
+﻿<div class="modal fade" id="removeProjectConfirm" tabindex="-1" aria-labelledby="removeProjectConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        @if (Project != null)
+        {
+            <div class="modal-content pm-modal-container  p-3 border-2">
+                <div class="modal-header pm-modal-header">
+                    <h5 class="modal-title">Delete @Project.Name</h5>
+                    <span class="fa-solid fa-xmark cross" data-bs-dismiss="modal" aria-label="Close"></span>
+                </div>
+                <div class="modal-body">
+                    Please type the project name to confirm.
+                    <input @bind-value="@confirmInput" class="pm-modal-input form-control shadow-none mt-2" />
+                    @if (incorrectConfirm)
+                    {
+                        <p style="color: #AE0000;">The confirm name is incorrect</p>
+                    }
+                </div>
+                <div class="modal-footer pm-modal-footer">
+                    <button class="pm-modal-btn" type="button" data-bs-dismiss="modal">Cancel</button>
+                    <button class="pm-modal-btn" type="button" @onclick="Delete">Delete</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>

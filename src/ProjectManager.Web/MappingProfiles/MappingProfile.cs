@@ -12,11 +12,12 @@ public class MappingProfile : Profile
     CreateMap<User, UserComplex>().ReverseMap();
     CreateMap<User, UserSimplified>().ReverseMap();
     CreateMap<User, UserRequest>().ReverseMap();
+    CreateMap<UserSimplified, UserComplex>().ReverseMap();
     CreateMap<Project2, ProjectComplex>().ReverseMap();
     CreateMap<Project2, ProjectSimplified>().ReverseMap();
     CreateMap<Project2, ProjectRequest>().ReverseMap();
-    CreateMap<Message, MessageComplex>().ReverseMap();
-    CreateMap<Message, MessageRequest>().ReverseMap();
+    CreateMap<ChatMessage, ChatMessageComplex>().ReverseMap();
+    CreateMap<ChatMessage, ChatMessageRequest>().ReverseMap();
     CreateMap<Assignment, AssignmentComplex>().ReverseMap();
     CreateMap<Assignment, AssignmentSimplified>().ReverseMap();
     CreateMap<Assignment, AssignmentRequest>().ReverseMap();
@@ -25,5 +26,15 @@ public class MappingProfile : Profile
     CreateMap<AssignmentStage, AssignmentStageRequest>().ReverseMap();
     CreateMap<ChatChannel, ChatChannelRequest>().ReverseMap();
     CreateMap<ChatChannel, ChatChannelComplex>().ReverseMap();
+    CreateMap<ChatChannel, ChatChannelSimplified>().ReverseMap();
+    CreateMap<Appointment, AppointmentRequest>().ReverseMap();
+    CreateMap<Appointment, AppointmentComplex>().ReverseMap();
+    CreateMap<Notification, NotificationRequest>().ReverseMap();
+    CreateMap<Notification, NotificationComplex>().ReverseMap();
+    CreateMap<PrivateMessage, PrivateMessageRequest>().ReverseMap();
+    CreateMap<PrivateMessage, PrivateMessageComplex>().ReverseMap();
+    CreateMap<PrivateMessage, PrivateMessageSimplified>().ReverseMap();
+    CreateMap<InvitationLink, InvitationLinkRequest>().ReverseMap();
+    CreateMap<InvitationLink, InvitationLinkComplex>().ReverseMap();
   }
 }

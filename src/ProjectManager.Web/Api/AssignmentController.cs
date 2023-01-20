@@ -86,6 +86,21 @@ public class AssignmentController : BaseApiController
     }
   }
 
+  [HttpPatch("SignUp/{assignmentId}/{userId}")]
+  public async Task<IActionResult> SignUpUserToAssignment(int assignmentId, int userId)
+  {
+    try
+    {
+      var patchedAssignment = await _assignmentService.SignUpUserToAssignment(assignmentId, userId);
+
+      return Ok(_mapper.Map<AssignmentComplex>(patchedAssignment).Success());
+    }
+    catch (Exception e)
+    {
+      return this.ReturnErrorResult(e);
+    }
+  }
+
   [HttpDelete]
   public async Task<IActionResult> Delete(int id)
   {

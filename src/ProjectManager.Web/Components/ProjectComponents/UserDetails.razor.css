@@ -1,0 +1,67 @@
+﻿.user-details-container {
+    width: 20rem;
+    height: 20rem;
+    background-color: #181818;
+    border-radius: 1.5rem;
+    color: #8d8d8d;
+    padding:0;
+    overflow: hidden;
+    position: relative;
+}
+
+.user-icon {
+    font-size: 4.3rem;
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    border-radius: 50%;
+    border: 0.5rem solid #181818;
+}
+
+.user-avatar {
+    width: 5.8rem;
+    border-radius: 50%;
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    border: 0.5rem solid #181818;
+}
+
+.details-header {
+    display: flex;
+    background-color: #222222;
+    height: 4rem;
+}
+
+.fullname {
+    color: #fdfdfd;
+    position: absolute;
+    right: 1.5rem;
+    top: 0.8rem;
+}
+
+.user-role {
+    position: absolute;
+    right: 1.5rem;
+    top: 2.2rem;
+}
+
+.other-details-container {
+    padding: 1rem;
+    padding-top: 3.5rem;
+}
+
+.details-label {
+    font-size: 1.1rem;
+    color: #fdfdfd;
+}
+
+.details-field {
+
+}
+
+.message-field {
+    position: absolute;
+    bottom: 1rem;
+    width: 90%;
+}
