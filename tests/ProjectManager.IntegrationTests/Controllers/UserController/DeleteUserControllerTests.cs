@@ -1,27 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using ProjectManager.Infrastructure.Data.Config;
 using ProjectManager.SharedKernel;
 using ProjectManager.Web.ApiModels;
 using Xunit;
-using static ProjectManager.IntegrationTests.UserController.UserGenerator;
+using static ProjectManager.IntegrationTests.FakerGenerator;
 
 namespace ProjectManager.IntegrationTests.UserController;
-public class DeleteUserControllerTests : IClassFixture<ApiFactory>
+
+[Collection("Test collection")]
+public class DeleteUserControllerTests : IAsyncLifetime
 {
   private readonly HttpClient _client;
+  private readonly Func<Task> _resetDatabase;
 
   public DeleteUserControllerTests(ApiFactory factory)
   {
-    AppDbContextOptions.IsTesting = true;
-    _client = factory.CreateClient();
+    _client = factory.HttpClient;
+    _resetDatabase = factory.ResetDatabaseAsync;
   }
 
   [Fact]
@@ -50,4 +46,8 @@ public class DeleteUserControllerTests : IClassFixture<ApiFactory>
     // Assert
     response.StatusCode.Should().Be(HttpStatusCode.NotFound);
   }
+
+  public Task InitializeAsync() => Task.CompletedTask;
+
+  public Task DisposeAsync() => _resetDatabase();
 }

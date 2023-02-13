@@ -6,8 +6,6 @@ namespace ProjectManager.Web.ApiModels;
 [DataContract]
 public class AssignmentStageRequest
 {
-  [JsonIgnore]
-  public int Id { get; set; }
   [DataMember]
   public int Index { get; set; }
   [JsonIgnore]

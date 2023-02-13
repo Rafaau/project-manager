@@ -63,6 +63,8 @@ public class NotificationController : BaseApiController
     }
     catch (Exception e)
     {
+      if (e.GetType() == typeof(NullReferenceException))
+        return NotFound();
       return this.ReturnErrorResult(e);
     }
   }

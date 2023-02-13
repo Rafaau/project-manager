@@ -11,7 +11,6 @@ namespace ProjectManager.IntegrationTests.UserController;
 public static class UserGenerator
 {
   public static readonly Faker<UserSimplified> _userGenerator = new Faker<UserSimplified>()
-    //.RuleFor(x => x.Id, faker => faker.Random.Number(0, 100))
     .RuleFor(x => x.Firstname, faker => ApiFactory.Username)
     .RuleFor(x => x.Lastname, faker => faker.Person.LastName)
     .RuleFor(x => x.Email, faker => faker.Person.Email)

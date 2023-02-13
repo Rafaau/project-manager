@@ -93,12 +93,12 @@ public class ChatMessageControllerTests
     var messageResponse = _mapper.Map<ChatMessageRequest>(FakeMessage());
 
     // Act
-    var result = (OkObjectResult) await _sut.Post(messageResponse);
-    var resultData = (Response<ChatMessageRequest>) result.Value!;
+    var result = (CreatedAtActionResult) await _sut.Post(messageResponse);
+    var resultData = (Response<ChatMessageComplex>) result.Value!;
 
     // Assert
-    result.StatusCode.Should().Be(200);
-    resultData.Data.Should().BeEquivalentTo(messageResponse);
+    result.StatusCode.Should().Be(201);
+    resultData.Data.Should().BeEquivalentTo(messageResponse, o => o.ExcludingMissingMembers());
   }
 
   [Fact]

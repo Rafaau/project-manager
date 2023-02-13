@@ -50,7 +50,7 @@ public class ChatMessageController : BaseApiController
 
       var createdMessage = await _messageService.PostMessage(mapped);
 
-      return Ok(_mapper.Map<ChatMessageRequest>(createdMessage).Success());
+      return CreatedAtAction(null, _mapper.Map<ChatMessageComplex>(createdMessage).Success());
     }
     catch (Exception e)
     {
@@ -69,6 +69,8 @@ public class ChatMessageController : BaseApiController
     }
     catch (Exception e)
     {
+      if (e.GetType() == typeof(NullReferenceException))
+        return NotFound();
       return this.ReturnErrorResult(e);
     }
   }
@@ -84,6 +86,8 @@ public class ChatMessageController : BaseApiController
     }
     catch (Exception e)
     {
+      if (e.GetType() == typeof(ArgumentNullException))
+        return NotFound();
       return this.ReturnErrorResult(e);
     }
   }

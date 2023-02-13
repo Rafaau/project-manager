@@ -1,30 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
-using Bogus;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using ProjectManager.Core.ProjectAggregate.Enums;
-using ProjectManager.Infrastructure.Data.Config;
 using ProjectManager.SharedKernel;
 using ProjectManager.Web.ApiModels;
 using Xunit;
-using static ProjectManager.IntegrationTests.UserController.UserGenerator;
+using static ProjectManager.IntegrationTests.FakerGenerator;
 
 namespace ProjectManager.IntegrationTests.UserController;
-public class UpdateUserControllerTests : IClassFixture<ApiFactory>, IAsyncLifetime
+
+[Collection("Test collection")]
+public class UpdateUserControllerTests : IAsyncLifetime
 {
   private readonly HttpClient _client;
-  private List<int> _idsToDelete = new();
+  private readonly Func<Task> _resetDatabase;
 
   public UpdateUserControllerTests(ApiFactory factory)
   {
-    AppDbContextOptions.IsTesting = true;
-    _client = factory.CreateClient();
+    _client = factory.HttpClient;
+    _resetDatabase = factory.ResetDatabaseAsync;
   }
 
   [Fact]
@@ -34,7 +28,6 @@ public class UpdateUserControllerTests : IClassFixture<ApiFactory>, IAsyncLifeti
     var user = _userGenerator.Generate();
     var createdResponse = await _client.PostAsJsonAsync("/api/user", user);
     var createdUser = await createdResponse.Content.ReadFromJsonAsync<Response<UserSimplified>>();
-    _idsToDelete.Add(createdUser!.Data.Id);
 
     user = _userGenerator.Clone()
       .RuleFor(x => x.Id, createdUser!.Data.Id).Generate();
@@ -55,7 +48,6 @@ public class UpdateUserControllerTests : IClassFixture<ApiFactory>, IAsyncLifeti
     var user = _userGenerator.Generate();
     var createdResponse = await _client.PostAsJsonAsync("/api/user", user);
     var createdUser = await createdResponse.Content.ReadFromJsonAsync<UserSimplified>();
-    _idsToDelete.Add(createdUser!.Id);
 
     const string invalidEmail = "invalid@em";
     user = _userGenerator.Clone()
@@ -80,7 +72,6 @@ public class UpdateUserControllerTests : IClassFixture<ApiFactory>, IAsyncLifeti
     var user = _userGenerator.Generate();
     var createdResponse = await _client.PostAsJsonAsync("/api/user", user);
     var createdUser = await createdResponse.Content.ReadFromJsonAsync<UserSimplified>();
-    _idsToDelete.Add(createdUser!.Id);
 
     user = _userGenerator.Clone()
       .RuleFor(x => x.Id, createdUser!.Id)
@@ -99,11 +90,5 @@ public class UpdateUserControllerTests : IClassFixture<ApiFactory>, IAsyncLifeti
 
   public Task InitializeAsync() => Task.CompletedTask;
 
-  public async Task DisposeAsync()
-  {
-    foreach (var id in _idsToDelete)
-    {
-      await _client.DeleteAsync($"/api/user/{id}");
-    }
-  }
+  public async Task DisposeAsync() => _resetDatabase();
 }

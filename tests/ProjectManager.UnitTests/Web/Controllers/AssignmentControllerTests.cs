@@ -94,12 +94,12 @@ public class AssignmentControllerTests
     var assignmentResponse = _mapper.Map<AssignmentRequest>(FakeAssignment());
 
     // Act
-    var result = (OkObjectResult) await _sut.Post(assignmentResponse);
-    var resultData = (Response<AssignmentRequest>) result.Value!;
+    var result = (CreatedAtActionResult) await _sut.Post(assignmentResponse);
+    var resultData = (Response<AssignmentComplex>) result.Value!;
 
     // Assert
-    result.StatusCode.Should().Be(200);
-    resultData.Data.Should().BeEquivalentTo(assignmentResponse);
+    result.StatusCode.Should().Be(201);
+    resultData.Data.Should().BeEquivalentTo(assignmentResponse, o => o.ExcludingMissingMembers());
   }
 
   [Fact]
@@ -214,11 +214,11 @@ public class AssignmentControllerTests
 
     // Act
     var result = (ObjectResult) await _sut.Delete(1);
-    var resultData = (Response<AssignmentComplex>) result.Value!;
+    var resultData = (Response<AssignmentSimplified>) result.Value!;
 
     // Assert
     result.StatusCode.Should().Be(200);
-    resultData.Data.Should().BeEquivalentTo(_mapper.Map<AssignmentComplex>(FakeAssignment()));
+    resultData.Data.Should().BeEquivalentTo(_mapper.Map<AssignmentSimplified>(FakeAssignment()));
   }
 
   [Fact]

@@ -65,7 +65,7 @@ public class ProjectController : BaseApiController
 
       var createdProject = await _projectService.CreateProject(mapped);
 
-      return Ok(_mapper.Map<ProjectComplex>(createdProject).Success());
+      return CreatedAtAction(nameof(GetById), new { createdProject.Id }, _mapper.Map<ProjectComplex>(createdProject).Success());
     }
     catch (Exception e)
     {
@@ -86,6 +86,8 @@ public class ProjectController : BaseApiController
     }
     catch (Exception e)
     {
+      if (e.GetType() == typeof(NullReferenceException))
+        return NotFound();
       return this.ReturnErrorResult(e);
     }
   }
@@ -101,6 +103,8 @@ public class ProjectController : BaseApiController
     }
     catch (Exception e)
     {
+      if (e.GetType() == typeof(ArgumentNullException))
+        return NotFound();
       return this.ReturnErrorResult(e);
     }
   }

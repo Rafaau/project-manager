@@ -46,7 +46,7 @@ public class AssignmentController : BaseApiController
 
       var createdAssignment = await _assignmentService.CreateAssignment(mapped);
 
-      return Ok(_mapper.Map<AssignmentRequest>(createdAssignment).Success());
+      return CreatedAtAction(null, _mapper.Map<AssignmentComplex>(createdAssignment).Success());
     }
     catch (Exception e)
     {
@@ -101,17 +101,19 @@ public class AssignmentController : BaseApiController
     }
   }
 
-  [HttpDelete]
-  public async Task<IActionResult> Delete(int id)
+  [HttpDelete("{assignmentId}")]
+  public async Task<IActionResult> Delete(int assignmentId)
   {
     try
     {
-      var deletedAssignment = await _assignmentService.DeleteAssignment(id);
+      var deletedAssignment = await _assignmentService.DeleteAssignment(assignmentId);
 
-      return Ok(_mapper.Map<AssignmentComplex>(deletedAssignment).Success());
+      return Ok(_mapper.Map<AssignmentSimplified>(deletedAssignment).Success());
     }
     catch (Exception e)
     {
+      if (e.GetType() == typeof(ArgumentNullException))
+        return NotFound();
       return this.ReturnErrorResult(e);
     }
   }

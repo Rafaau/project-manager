@@ -126,11 +126,11 @@ public class ProjectControllerTests
       .Returns(FakeProject());
 
     // Act
-    var result = (OkObjectResult) await _sut.Post(projectResponse);
+    var result = (CreatedAtActionResult) await _sut.Post(projectResponse);
     var resultData = (Response<ProjectComplex>) result.Value!;
 
     // Assert
-    result.StatusCode.Should().Be(200);
+    result.StatusCode.Should().Be(201);
     resultData.Data.Should().BeEquivalentTo(projectResponse);
   }
 

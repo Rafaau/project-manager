@@ -9,7 +9,6 @@ using ProjectManager.Web.ApiModels;
 namespace ProjectManager.IntegrationTests.ProjectController;
 public static class ProjectGenerator
 {
-  public static readonly Faker<ProjectSimplified> _projectGenerator = new Faker<ProjectSimplified>()
-    //.RuleFor(x => x.Id, faker => faker.Random.Number(0, 100))
+  public static readonly Faker<ProjectRequest> _projectGenerator = new Faker<ProjectRequest>()
     .RuleFor(x => x.Name, faker => faker.Company.CompanyName());
 }

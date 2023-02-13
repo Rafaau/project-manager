@@ -78,6 +78,8 @@ public class PrivateMessageController : BaseApiController
     }
     catch (Exception e)
     {
+      if (e.GetType() == typeof(NullReferenceException))
+        return NotFound();
       return this.ReturnErrorResult(e);
     }
   }
@@ -95,6 +97,8 @@ public class PrivateMessageController : BaseApiController
     }
     catch (Exception e)
     {
+      if (e.GetType() == typeof(NullReferenceException))
+        return NotFound();
       return this.ReturnErrorResult(e);
     }
   }
@@ -110,6 +114,8 @@ public class PrivateMessageController : BaseApiController
     }
     catch (Exception e)
     {
+      if (e.GetType() == typeof(ArgumentNullException))
+        return NotFound();
       return this.ReturnErrorResult(e);
     }
   }

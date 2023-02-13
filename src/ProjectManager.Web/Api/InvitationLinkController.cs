@@ -41,6 +41,8 @@ public class InvitationLinkController : BaseApiController
     {
       var retrievedInvitationLink = await _invitationLinkService.GetInvitationLink(url);
 
+      if (retrievedInvitationLink is null)
+        return NotFound();
       return Ok(_mapper.Map<InvitationLinkComplex>(retrievedInvitationLink).Success());
     }
     catch (Exception e)
@@ -60,6 +62,8 @@ public class InvitationLinkController : BaseApiController
     }
     catch (Exception e)
     {
+      if (e.GetType() == typeof(NullReferenceException))
+        return NotFound();
       return this.ReturnErrorResult(e);
     }
   }

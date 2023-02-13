@@ -1,25 +1,24 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
-using Bogus;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using ProjectManager.Core.ProjectAggregate.Enums;
-using ProjectManager.Infrastructure.Data.Config;
 using ProjectManager.SharedKernel;
 using ProjectManager.Web.ApiModels;
 using Xunit;
-using static ProjectManager.IntegrationTests.UserController.UserGenerator;
+using static ProjectManager.IntegrationTests.FakerGenerator;
 
 namespace ProjectManager.IntegrationTests.UserController;
-public class CreateUserControllerTests : IClassFixture<ApiFactory>, IAsyncLifetime
+
+[Collection("Test collection")]
+public class CreateUserControllerTests : IAsyncLifetime
 {
   private readonly HttpClient _client;
-  private List<int> _idsToDelete = new();
+  private readonly Func<Task> _resetDatabase;
 
   public CreateUserControllerTests(ApiFactory factory)
   {
-    AppDbContextOptions.IsTesting = true;
-    _client = factory.CreateClient();
+    _client = factory.HttpClient;
+    _resetDatabase = factory.ResetDatabaseAsync;
   }
 
   [Fact]
@@ -37,8 +36,6 @@ public class CreateUserControllerTests : IClassFixture<ApiFactory>, IAsyncLifeti
     response.StatusCode.Should().Be(HttpStatusCode.Created);
     response.Headers.Location!.ToString().Should()
       .Be($"http://localhost/api/User/{userResponse!.Data.Email}");
-
-    _idsToDelete.Add(userResponse.Data.Id);
   }
 
   [Fact]
@@ -81,11 +78,5 @@ public class CreateUserControllerTests : IClassFixture<ApiFactory>, IAsyncLifeti
 
   public Task InitializeAsync() => Task.CompletedTask;
 
-  public async Task DisposeAsync()
-  {
-    foreach (var id in _idsToDelete)
-    {
-      await _client.DeleteAsync($"/api/user/{id}");
-    }
-  }
+  public async Task DisposeAsync() => _resetDatabase();
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,12 +15,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Npgsql;
+using ProjectManager.Infrastructure;
 using ProjectManager.Infrastructure.Data;
 using ProjectManager.Infrastructure.Data.Config;
 using ProjectManager.Web;
+using Respawn;
+using Xunit;
 
 namespace ProjectManager.IntegrationTests;
-public class ApiFactory : WebApplicationFactory<IApiMarker>
+public class ApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
 {
   public const string Username = "Rafau";
 
@@ -32,7 +37,12 @@ public class ApiFactory : WebApplicationFactory<IApiMarker>
         Password = "postgrespw",
       }).Build();
 
-  private readonly ApiServer _apiServer = new ();
+  private DbConnection _dbConnection = default!;
+  private Respawner _respawner = default!;
+  public HttpClient HttpClient { get; private set; } = default!;
+
+
+  private readonly ApiServer _apiServer = new();
 
   protected override void ConfigureWebHost(IWebHostBuilder builder)
   {
@@ -49,7 +59,8 @@ public class ApiFactory : WebApplicationFactory<IApiMarker>
       });
 
       services.RemoveAll(typeof(AppDbContext));
-      services.AddDbContext<AppDbContext>(options => options.UseNpgsql("Server=localhost;Port=5432;Database=projectmanagerDbTests;User Id=postgres;Password=postgrespw;Pooling=false"));
+      services.RemoveAll<AppDbContext>();
+      services.AddDbContext(_dbContainer.ConnectionString);
     });
   }
 
@@ -58,6 +69,26 @@ public class ApiFactory : WebApplicationFactory<IApiMarker>
     _apiServer.Start();
     _apiServer.SetupUser(Username);
     await _dbContainer.StartAsync();
+    AppDbContextOptions.IsTesting = true;
+    AppDbContextOptions.ConnectionString = _dbContainer.ConnectionString;
+    _dbConnection = new NpgsqlConnection(_dbContainer.ConnectionString);
+    HttpClient = CreateClient();
+    await InitializeRespawner();
+  }
+
+  private async Task InitializeRespawner()
+  {
+    await _dbConnection.OpenAsync();
+    _respawner = await Respawner.CreateAsync(_dbConnection, new RespawnerOptions
+    {
+      DbAdapter = DbAdapter.Postgres,
+      SchemasToInclude = new[] { "public" }
+    });
+  }
+
+  public async Task ResetDatabaseAsync()
+  {
+    await _respawner.ResetAsync(_dbConnection);
   }
 
   public new async Task DisposeAsync()

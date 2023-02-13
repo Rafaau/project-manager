@@ -47,11 +47,11 @@ public class AssignmentStageControllerTests
 
     // Act
     var result = (ObjectResult) await _sut.Post(stageToAdd);
-    var resultData = (Response<AssignmentStageRequest>) result.Value!;
+    var resultData = (Response<AssignmentStageComplex>) result.Value!;
 
     // Assert
     result.StatusCode.Should().Be(201);
-    resultData.Data.Should().BeEquivalentTo(stageToAdd);
+    resultData.Data.Should().BeEquivalentTo(stageToAdd, o => o.ExcludingMissingMembers());
   }
 
   [Fact]
@@ -109,11 +109,11 @@ public class AssignmentStageControllerTests
 
     // Act
     var result = (ObjectResult) await _sut.Delete(stageToDelete.Id);
-    var resultData = (Response<AssignmentStageComplex>) result.Value!;
+    var resultData = (Response<AssignmentStageSimplified>) result.Value!;
 
     // Assert
     result.StatusCode.Should().Be(200);
-    resultData.Data.Should().BeEquivalentTo(stageToDelete);
+    resultData.Data.Should().BeEquivalentTo(stageToDelete, o => o.ExcludingMissingMembers());
   }
 
   [Fact]

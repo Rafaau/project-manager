@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ProjectManager.IntegrationTests": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

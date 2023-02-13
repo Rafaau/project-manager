@@ -27,8 +27,7 @@ public class AssignmentStageController : BaseApiController
 
       var createdStage = await _stageService.AddAssignmentStage(mapped);
 
-      return CreatedAtAction(null, _mapper.Map<AssignmentStageRequest>(createdStage).Success());
-      //return Ok(_mapper.Map<AssignmentStageRequest>(createdStage).Success());
+      return CreatedAtAction(null, _mapper.Map<AssignmentStageComplex>(createdStage).Success());
     }
     catch (Exception e)
     {
@@ -46,6 +45,8 @@ public class AssignmentStageController : BaseApiController
     }
     catch (Exception e)
     {
+      if (e.GetType() == typeof(NullReferenceException))
+        return NotFound();
       return this.ReturnErrorResult(e);
     }
   }
@@ -56,10 +57,12 @@ public class AssignmentStageController : BaseApiController
     try
     {
       var deletedStage = await _stageService.DeleteAssignmentStage(stageId);
-      return Ok(_mapper.Map<AssignmentStageComplex>(deletedStage).Success());
+      return Ok(_mapper.Map<AssignmentStageSimplified>(deletedStage).Success());
     }
     catch (Exception e)
     {
+      if (e.GetType() == typeof(ArgumentNullException))
+        return NotFound();
       return this.ReturnErrorResult(e);
     }
   }

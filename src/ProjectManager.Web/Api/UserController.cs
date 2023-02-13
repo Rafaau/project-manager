@@ -100,13 +100,12 @@ public class UserController : BaseApiController
     {
       var deletedUser = await _userService.DeleteUser(id);
 
-      if (deletedUser is null)
-        return NotFound();
-
       return Ok(_mapper.Map<UserComplex>(deletedUser).Success());
     }
     catch (Exception e)
     {
+      if (e.GetType() == typeof(ArgumentNullException))
+        return NotFound();
       return this.ReturnErrorResult(e);
     }
   }
