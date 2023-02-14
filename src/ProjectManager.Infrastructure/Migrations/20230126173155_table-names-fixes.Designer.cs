@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProjectManager.Infrastructure.Data;
@@ -11,9 +12,10 @@ using ProjectManager.Infrastructure.Data;
 namespace ProjectManager.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230126173155_table-names-fixes")]
+    partial class tablenamesfixes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,48 +37,6 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("AssignmentUser");
-
-                    b.HasData(
-                        new
-                        {
-                            AssignmentsId = 1,
-                            UsersId = 1
-                        },
-                        new
-                        {
-                            AssignmentsId = 1,
-                            UsersId = 2
-                        },
-                        new
-                        {
-                            AssignmentsId = 1,
-                            UsersId = 3
-                        },
-                        new
-                        {
-                            AssignmentsId = 1,
-                            UsersId = 4
-                        },
-                        new
-                        {
-                            AssignmentsId = 2,
-                            UsersId = 1
-                        },
-                        new
-                        {
-                            AssignmentsId = 2,
-                            UsersId = 2
-                        },
-                        new
-                        {
-                            AssignmentsId = 2,
-                            UsersId = 3
-                        },
-                        new
-                        {
-                            AssignmentsId = 2,
-                            UsersId = 4
-                        });
                 });
 
             modelBuilder.Entity("ChatChannelUser", b =>
@@ -116,29 +76,6 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Appointments");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Date = new DateTime(2023, 1, 29, 17, 35, 49, 701, DateTimeKind.Utc).AddTicks(8364),
-                            Description = "As in title",
-                            Name = "Weekly"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Date = new DateTime(2023, 1, 31, 17, 35, 49, 701, DateTimeKind.Utc).AddTicks(8519),
-                            Description = "For customers",
-                            Name = "Demo presentation"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Date = new DateTime(2023, 1, 31, 17, 35, 49, 701, DateTimeKind.Utc).AddTicks(8521),
-                            Description = "On Teams video conference",
-                            Name = "Brainstorming"
-                        });
                 });
 
             modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.Assignment", b =>
@@ -176,28 +113,6 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("Assignments");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AssignmentStageId = 1,
-                            Deadline = new DateTime(2023, 1, 30, 17, 35, 49, 964, DateTimeKind.Utc).AddTicks(1367),
-                            Description = "Services are broken and need to be optimized.",
-                            Name = "Refactor services",
-                            Priority = 2,
-                            ProjectId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AssignmentStageId = 1,
-                            Deadline = new DateTime(2023, 2, 1, 17, 35, 49, 964, DateTimeKind.Utc).AddTicks(1373),
-                            Description = "There are some problems with components that need to be fixed.",
-                            Name = "Frontend bugs",
-                            Priority = 2,
-                            ProjectId = 1
-                        });
                 });
 
             modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.AssignmentStage", b =>
@@ -223,29 +138,6 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("AssignmentStages");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Index = 1,
-                            Name = "To Do",
-                            ProjectId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Index = 3,
-                            Name = "In Progress",
-                            ProjectId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Index = 2,
-                            Name = "Done",
-                            ProjectId = 1
-                        });
                 });
 
             modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.ChatChannel", b =>
@@ -268,44 +160,6 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("ChatChannels");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "General",
-                            ProjectId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Daily",
-                            ProjectId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "General",
-                            ProjectId = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Daily",
-                            ProjectId = 2
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "General",
-                            ProjectId = 3
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Daily",
-                            ProjectId = 3
-                        });
                 });
 
             modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.ChatMessage", b =>
@@ -340,27 +194,7 @@ namespace ProjectManager.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChatMessages");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ChatChannelId = 1,
-                            Content = "This is test message @Kadie Rooney @Noriah Craig",
-                            PostDate = new DateTime(2023, 1, 24, 17, 35, 49, 964, DateTimeKind.Utc).AddTicks(3652),
-                            ProjectId = 1,
-                            UserId = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ChatChannelId = 1,
-                            Content = "This is test message.",
-                            PostDate = new DateTime(2023, 1, 24, 17, 35, 49, 964, DateTimeKind.Utc).AddTicks(3654),
-                            ProjectId = 1,
-                            UserId = 2
-                        });
+                    b.ToTable("Chatmessages");
                 });
 
             modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.InvitationLink", b =>
@@ -417,24 +251,6 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Notifications");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Content = "You have been mentioned in Project Manager #General chat.",
-                            Date = new DateTime(2023, 1, 25, 17, 35, 49, 964, DateTimeKind.Utc).AddTicks(4376),
-                            IsSeen = false,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Content = "Hugh Campbell has moved the assignment to the next stage.",
-                            Date = new DateTime(2023, 1, 25, 17, 35, 49, 964, DateTimeKind.Utc).AddTicks(4377),
-                            IsSeen = false,
-                            UserId = 1
-                        });
                 });
 
             modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.PrivateMessage", b =>
@@ -468,44 +284,6 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.HasIndex("SenderId");
 
                     b.ToTable("PrivateMessages");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Content = "This is test message.",
-                            IsSeen = true,
-                            PostDate = new DateTime(2023, 1, 25, 17, 5, 49, 965, DateTimeKind.Utc).AddTicks(3840),
-                            ReceiverId = 2,
-                            SenderId = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Content = "This is test message.",
-                            IsSeen = false,
-                            PostDate = new DateTime(2023, 1, 23, 16, 55, 49, 965, DateTimeKind.Utc).AddTicks(3842),
-                            ReceiverId = 2,
-                            SenderId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Content = "This is test message.",
-                            IsSeen = false,
-                            PostDate = new DateTime(2023, 1, 22, 16, 45, 49, 965, DateTimeKind.Utc).AddTicks(3843),
-                            ReceiverId = 1,
-                            SenderId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Content = "This is test message.",
-                            IsSeen = false,
-                            PostDate = new DateTime(2023, 1, 24, 17, 15, 49, 965, DateTimeKind.Utc).AddTicks(3844),
-                            ReceiverId = 1,
-                            SenderId = 4
-                        });
                 });
 
             modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.Project2", b =>
@@ -528,26 +306,6 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.HasIndex("ManagerId");
 
                     b.ToTable("Projects");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ManagerId = 1,
-                            Name = "Project Manager"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ManagerId = 1,
-                            Name = "Digital Library"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ManagerId = 1,
-                            Name = "Office Management"
-                        });
                 });
 
             modelBuilder.Entity("ProjectManager.Core.ProjectAggregate.User", b =>
@@ -583,44 +341,6 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "rooney@gmail.com",
-                            Firstname = "Kadie",
-                            Lastname = "Rooney",
-                            Password = "AKSjnVFBcTQXExt0sCHkfHmPXzIvUs/bgfk408knGZeX+E1X4aWeXqlmunzw306kkA==",
-                            Role = 0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "campbell@gmail.com",
-                            Firstname = "Hugh",
-                            Lastname = "Campbell",
-                            Password = "AKSjnVFBcTQXExt0sCHkfHmPXzIvUs/bgfk408knGZeX+E1X4aWeXqlmunzw306kkA==",
-                            Role = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Email = "craig@gmail.com",
-                            Firstname = "Noriah",
-                            Lastname = "Craig",
-                            Password = "AKSjnVFBcTQXExt0sCHkfHmPXzIvUs/bgfk408knGZeX+E1X4aWeXqlmunzw306kkA==",
-                            Role = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Email = "morgan@gmail.com",
-                            Firstname = "Arthur",
-                            Lastname = "Morgan",
-                            Password = "AKSjnVFBcTQXExt0sCHkfHmPXzIvUs/bgfk408knGZeX+E1X4aWeXqlmunzw306kkA==",
-                            Role = 1
-                        });
                 });
 
             modelBuilder.Entity("UserAppointments", b =>
@@ -636,68 +356,6 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("UserAppointments");
-
-                    b.HasData(
-                        new
-                        {
-                            AppointmentsId = 1,
-                            UsersId = 1
-                        },
-                        new
-                        {
-                            AppointmentsId = 1,
-                            UsersId = 2
-                        },
-                        new
-                        {
-                            AppointmentsId = 1,
-                            UsersId = 3
-                        },
-                        new
-                        {
-                            AppointmentsId = 1,
-                            UsersId = 4
-                        },
-                        new
-                        {
-                            AppointmentsId = 2,
-                            UsersId = 1
-                        },
-                        new
-                        {
-                            AppointmentsId = 2,
-                            UsersId = 2
-                        },
-                        new
-                        {
-                            AppointmentsId = 2,
-                            UsersId = 3
-                        },
-                        new
-                        {
-                            AppointmentsId = 2,
-                            UsersId = 4
-                        },
-                        new
-                        {
-                            AppointmentsId = 3,
-                            UsersId = 1
-                        },
-                        new
-                        {
-                            AppointmentsId = 3,
-                            UsersId = 2
-                        },
-                        new
-                        {
-                            AppointmentsId = 3,
-                            UsersId = 3
-                        },
-                        new
-                        {
-                            AppointmentsId = 3,
-                            UsersId = 4
-                        });
                 });
 
             modelBuilder.Entity("UserProjects", b =>
@@ -713,53 +371,6 @@ namespace ProjectManager.Infrastructure.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("UserProjects");
-
-                    b.HasData(
-                        new
-                        {
-                            ProjectsId = 1,
-                            UsersId = 2
-                        },
-                        new
-                        {
-                            ProjectsId = 1,
-                            UsersId = 3
-                        },
-                        new
-                        {
-                            ProjectsId = 1,
-                            UsersId = 4
-                        },
-                        new
-                        {
-                            ProjectsId = 2,
-                            UsersId = 2
-                        },
-                        new
-                        {
-                            ProjectsId = 2,
-                            UsersId = 3
-                        },
-                        new
-                        {
-                            ProjectsId = 2,
-                            UsersId = 4
-                        },
-                        new
-                        {
-                            ProjectsId = 3,
-                            UsersId = 2
-                        },
-                        new
-                        {
-                            ProjectsId = 3,
-                            UsersId = 3
-                        },
-                        new
-                        {
-                            ProjectsId = 3,
-                            UsersId = 4
-                        });
                 });
 
             modelBuilder.Entity("AssignmentUser", b =>

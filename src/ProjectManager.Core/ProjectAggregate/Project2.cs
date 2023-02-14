@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,8 @@ using ProjectManager.SharedKernel;
 using ProjectManager.SharedKernel.Interfaces;
 
 namespace ProjectManager.Core.ProjectAggregate;
+
+[Table("Projects")]
 public class Project2 : EntityBase, IAggregateRoot
 {
   public string Name { get; set; } = string.Empty;

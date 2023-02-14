@@ -142,9 +142,6 @@ public class UserService : IUserService
       var userSpec = new UserById(id);
       var userToDelete = await _userRepository.FirstOrDefaultAsync(userSpec);
 
-      if (userToDelete is null)
-        return null!;
-
       await _userRepository.DeleteAsync(userToDelete);
       return userToDelete;
     }

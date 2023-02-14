@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
@@ -8,6 +9,8 @@ using ProjectManager.SharedKernel;
 using ProjectManager.SharedKernel.Interfaces;
 
 namespace ProjectManager.Core.ProjectAggregate;
+
+[Table("ChatMessages")]
 public class ChatMessage : EntityBase, IAggregateRoot
 {
   public string Content { get; set; } = string.Empty;

@@ -66,8 +66,8 @@ public class PrivateMessageService : IPrivateMessageService
 
       for (int i = 0; i < conversations.Length; i++)
       {
-        if ((conversations[i].SenderId == userId && conversations.Any(x => x.PostDate > conversations[i].PostDate && x.SenderId == conversations[i].ReceiverId))
-          ||(conversations[i].SenderId != userId && conversations.Any(x => x.PostDate > conversations[i].PostDate && x.SenderId == conversations[i].ReceiverId)))
+        if ((conversations[i].SenderId == userId && conversations.Any(x => x.PostDate > conversations[i].PostDate && x.SenderId == userId && x.ReceiverId == conversations[i].ReceiverId))
+          ||(conversations[i].ReceiverId == userId && conversations.Any(x => x.PostDate > conversations[i].PostDate && x.SenderId == conversations[i].SenderId && x.ReceiverId == userId)))
         {
           //conversations = conversations.Where(x => x.Id != conversations[i].Id).ToArray();
           idsToRemove.Add(conversations[i].Id);

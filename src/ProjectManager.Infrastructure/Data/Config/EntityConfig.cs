@@ -15,7 +15,20 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
   {
     modelBuilder.HasMany(u => u.Projects)
                 .WithMany(p => p.Users)
-                .UsingEntity(j => j.ToTable("UserProjects"));
+                .UsingEntity<Dictionary<string, object>>(
+                  "UserProjects",
+                  u => u.HasOne<Project2>().WithMany().HasForeignKey("ProjectsId"),
+                  p => p.HasOne<User>().WithMany().HasForeignKey("UsersId"),
+                  up =>
+                  {
+                    up.HasKey("ProjectsId", "UsersId");
+                    if (!AppDbContextOptions.IsTesting)
+                      up.SeedProjectsUsers();
+                  }
+                );
+
+    if (!AppDbContextOptions.IsTesting)
+      modelBuilder.SeedUsers();
   }
 }
 
@@ -26,6 +39,9 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project2>
     modelBuilder.HasOne(p => p.Manager)
                 .WithMany(u => u.ManagedProjects)
                 .HasForeignKey(p => p.ManagerId);
+
+    if (!AppDbContextOptions.IsTesting)
+      modelBuilder.SeedProjects();
   }
 }
 
@@ -39,11 +55,24 @@ public class AssignmentConfiguration : IEntityTypeConfiguration<Assignment>
 
     modelBuilder.HasMany(a => a.Users)
                 .WithMany(u => u.Assignments)
-                .UsingEntity(j => j.ToTable("AssignmentUser"));
+                .UsingEntity<Dictionary<string, object>>(
+                  "AssignmentUser",
+                  a => a.HasOne<User>().WithMany().HasForeignKey("UsersId"),
+                  u => u.HasOne<Assignment>().WithMany().HasForeignKey("AssignmentsId"),
+                  au =>
+                  {
+                    au.HasKey("AssignmentsId", "UsersId");
+                    if (!AppDbContextOptions.IsTesting)
+                      au.SeedAssignmentsUsers();
+                  }
+                );
+
+    if (!AppDbContextOptions.IsTesting)
+      modelBuilder.SeedAssignments();
   }
 }
 
-public class MessageConfiguration : IEntityTypeConfiguration<ChatMessage>
+public class ChatMessageConfiguration : IEntityTypeConfiguration<ChatMessage>
 {
   public void Configure(EntityTypeBuilder<ChatMessage> modelBuilder)
   {
@@ -58,6 +87,9 @@ public class MessageConfiguration : IEntityTypeConfiguration<ChatMessage>
     modelBuilder.HasOne(m => m.ChatChannel)
                 .WithMany(c => c.Messages)
                 .HasForeignKey(m => m.ChatChannelId);
+
+    if (!AppDbContextOptions.IsTesting)
+      modelBuilder.SeedChatMessages();
   }
 }
 
@@ -72,6 +104,9 @@ public class AssignmentStageConfiguration : IEntityTypeConfiguration<AssignmentS
     modelBuilder.HasMany(m => m.Assignments)
                 .WithOne(p => p.AssignmentStage)
                 .HasForeignKey(m => m.AssignmentStageId);
+
+    if (!AppDbContextOptions.IsTesting)
+      modelBuilder.SeedAssignmentStages();
   }
 }
 
@@ -86,6 +121,9 @@ public class ChatChannelConfiguration : IEntityTypeConfiguration<ChatChannel>
     modelBuilder.HasOne(c => c.Project)
                 .WithMany(p => p.ChatChannels)
                 .HasForeignKey(c => c.ProjectId);
+
+    if (!AppDbContextOptions.IsTesting)
+      modelBuilder.SeedChatChannels();
   }
 }
 
@@ -95,7 +133,20 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
   {
     modelBuilder.HasMany(a => a.Users)
                 .WithMany(u => u.Appointments)
-                .UsingEntity(j => j.ToTable("UserAppointments"));
+                .UsingEntity<Dictionary<string, object>>(
+                  "UserAppointments",
+                  a => a.HasOne<User>().WithMany().HasForeignKey("UsersId"),
+                  u => u.HasOne<Appointment>().WithMany().HasForeignKey("AppointmentsId"),
+                  au =>
+                  {
+                    au.HasKey("AppointmentsId", "UsersId");
+                    if (!AppDbContextOptions.IsTesting)
+                      au.SeedAppointmentsUsers();
+                  }
+                );
+
+    if (!AppDbContextOptions.IsTesting)
+      modelBuilder.SeedAppointments();
   }
 }
 
@@ -106,6 +157,9 @@ public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
     modelBuilder.HasOne(n => n.User)
                 .WithMany(u => u.Notifications)
                 .HasForeignKey(n => n.UserId);
+
+    if (!AppDbContextOptions.IsTesting)
+      modelBuilder.SeedNotifications();
   }
 }
 
@@ -120,6 +174,9 @@ public class PrivateMessageConfiguration : IEntityTypeConfiguration<PrivateMessa
     modelBuilder.HasOne(p => p.Receiver)
                 .WithMany(u => u.PrivateMessagesReceived)
                 .HasForeignKey(p => p.ReceiverId);
+
+    if (!AppDbContextOptions.IsTesting)
+      modelBuilder.SeedPrivateMessages();
   }
 }
 
