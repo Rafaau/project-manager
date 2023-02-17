@@ -1,7 +1,26 @@
 ﻿.content-block {
     position: fixed;
     bottom: 2%;
-    right: 1%;
+    right: 2%;
     left: 275px;
     height: 90%;
+}
+
+.undeveloped-space {
+    position: relative;
+    background-image: repeating-linear-gradient(-60deg, #d4d4d4, #d4d4d4 7.8px, transparent 10px, transparent 23.259999999999998px, #d4d4d4 27px), repeating-linear-gradient(30deg, #d4d4d4, #d4d4d4 7.8px, transparent 10px, transparent 23.259999999999998px, #d4d4d4 27px), repeating-linear-gradient(120deg, #d4d4d4, #d4d4d4 7.8px, transparent 10px, transparent 23.259999999999998px, #d4d4d4 27px), repeating-linear-gradient(210deg, #d4d4d4, #d4d4d4 7.8px, transparent 10px, transparent 23.259999999999998px, #d4d4d4 27px);
+    background-size: 3px 100%, 100% 3px, 3px 100%, 100% 3px;
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat;
+}
+
+.undeveloped-space-text {
+    font-family: "Sketchy";
+    position: absolute;
+    transform: rotate(-30deg);
+    top: 45%;
+    width: 100%;
+    text-align: center;
+    font-size: 1.8vw;
+    color: #d4d4d4;
 }

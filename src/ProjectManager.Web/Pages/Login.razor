@@ -9,23 +9,27 @@
           </div>
           <div class="mb-3">
                <label>Email</label>
-               <input @bind="model.Email" class="form-control login-input shadow-none" placeholder="Email" />
+               <input id="login" @bind="model.Email" class="form-control login-input shadow-none" placeholder="Email" />
           </div>
           <div class="mb-3">
                <label>Password</label>
-               <input @bind="model.Password" type="password" class="form-control login-input shadow-none" placeholder="Password" />
+               <input id="password" @bind="model.Password" type="password" class="form-control login-input shadow-none" placeholder="Password" />
           </div>
+          @if (isWrongData)
+          {
+               <p style="color: #be0000">Invalid email or password!</p>
+          }
           <div class="mb-1">
               <label>Remember me</label>
               <label class="switch mt-2">
-                  <input type="checkbox" @bind="@Remember"/>
+                  <input id="remember-me" type="checkbox" @bind="@Remember"/>
                   <span class="slider"/>
               </label>
           </div>
           <div class="mb-3 mt-3 d-grid gap-2">
-               <button @onclick="Authenticate" class="login-btn">Login</button>
+               <button id="login-btn" @onclick="Authenticate" class="login-btn">Login</button>
           </div>
-          <p class="no-account">Don't have an account? <a href="/register"><b>Sign Up</b></a></p>
+          <p class="no-account">Don't have an account? <a id="sign-up-link" href="/register"><b>Sign Up</b></a></p>
      </div>
 </div>
 

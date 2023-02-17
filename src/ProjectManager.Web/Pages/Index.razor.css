@@ -3,12 +3,12 @@
 }
 
 .left {
-    height: 90vh;
+    height: 100%;
     position: relative;
 }
 
 .right {
-    height: 90vh;
+    height: 100%;
     display: flex;
     flex-flow: column;
 }
@@ -16,4 +16,35 @@
 .lower-section {
     bottom: 0;
     height: 100%;
+}
+
+.undeveloped-space-1 {
+    position: relative;
+    height: 60vh;
+    background-image: repeating-linear-gradient(-60deg, #d4d4d4, #d4d4d4 7.8px, transparent 10px, transparent 23.259999999999998px, #d4d4d4 27px), repeating-linear-gradient(30deg, #d4d4d4, #d4d4d4 7.8px, transparent 10px, transparent 23.259999999999998px, #d4d4d4 27px), repeating-linear-gradient(120deg, #d4d4d4, #d4d4d4 7.8px, transparent 10px, transparent 23.259999999999998px, #d4d4d4 27px), repeating-linear-gradient(210deg, #d4d4d4, #d4d4d4 7.8px, transparent 10px, transparent 23.259999999999998px, #d4d4d4 27px);
+    background-size: 3px 100%, 100% 3px, 3px 100%, 100% 3px;
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat;
+    margin-top: 7vh;
+}
+
+.undeveloped-space-2 {
+    position: relative;
+    height: 60vh;
+    background-image: repeating-linear-gradient(-60deg, #d4d4d4, #d4d4d4 7.8px, transparent 10px, transparent 23.259999999999998px, #d4d4d4 27px), repeating-linear-gradient(30deg, #d4d4d4, #d4d4d4 7.8px, transparent 10px, transparent 23.259999999999998px, #d4d4d4 27px), repeating-linear-gradient(120deg, #d4d4d4, #d4d4d4 7.8px, transparent 10px, transparent 23.259999999999998px, #d4d4d4 27px), repeating-linear-gradient(210deg, #d4d4d4, #d4d4d4 7.8px, transparent 10px, transparent 23.259999999999998px, #d4d4d4 27px);
+    background-size: 3px 100%, 100% 3px, 3px 100%, 100% 3px;
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat;
+    margin-top: 6.7vh;
+}
+
+.undeveloped-space-text {
+    font-family: "Sketchy";
+    position: absolute;
+    transform: rotate(-30deg);
+    top: 45%;
+    width: 100%;
+    text-align: center;
+    font-size: 1.8vw;
+    color: #d4d4d4;
 }

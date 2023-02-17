@@ -173,6 +173,7 @@
     border-radius: 0.2rem;
     cursor: pointer;
     transition: 0.2s;
+    margin-bottom: 0.2rem;
 }
 
 .mention:hover {

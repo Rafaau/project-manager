@@ -15,8 +15,10 @@
                 </div>
             </div>
             <div class="board-row">
+            @{ var s = 0; }
             @foreach (var stage in Project.AssignmentStages.OrderBy(x => x.Id))
             {
+                s++;
                 if (DragAndPlaceStageId == stage.Id)
                 {
                     IsDragOver = "drag-over";
@@ -25,19 +27,19 @@
                 {
                     IsDragOver = "";
                 }
-                <div class="stage-column @IsDragOver" ondragover="event.preventDefault();" @ondragenter="() => { OnDragEnter(stage.Id); }">
+                <div id="stage-column-@s" class="stage-column @IsDragOver" ondragover="event.preventDefault();" @ondragenter="() => { OnDragEnter(stage.Id); }">
                     <div class="stage-name">
                         @if (ShowStageNameForm && StageId == stage.Id)
                         {
-                            <input @bind-value="StageName" class="stage-input"/>
-                            <i class="fa-solid fa-check save-button" @onclick="SaveStageName"/>
+                            <input id="edit-stage-input" @bind-value="StageName" class="stage-input"/>
+                            <i id="edit-stage-save" class="fa-solid fa-check save-button" @onclick="SaveStageName"/>
                         }
                         else 
                         {
                             @stage.Name
                             <div class="action-buttons">
-                                <i class="fa-regular fa-pen-to-square edit-button" @onclick="() => { OnEditStageClick(stage); }"/>
-                                <i class="fa-regular fa-trash-can delete-button" data-bs-toggle="modal" data-bs-target="#removeConfirm" @onclick="() => { StageId = stage.Id; }" />
+                                <i id="edit-stage-btn" class="fa-regular fa-pen-to-square edit-button" @onclick="() => { OnEditStageClick(stage); }"/>
+                                <i id="delete-stage-btn" class="fa-regular fa-trash-can delete-button" data-bs-toggle="modal" data-bs-target="#removeConfirm" @onclick="() => { StageId = stage.Id; }" />
                             </div>
                         }
                     </div>
@@ -54,11 +56,12 @@
                                 {
                                     IsDragged = "";
                                 }
-                                <div draggable="true" 
-                                    class="assignment @IsDragged" 
-                                    @ondragstart="() => { OnDrag(assignment.Id); }"
-                                    @ondragend="OnDrop"
-                                    @onclick="() => { OnAssignmentClick(assignment.Id); }">
+                                <div id="assignment-to-drag"
+                                     draggable="true" 
+                                     class="assignment @IsDragged" 
+                                     @ondragstart="() => { OnDrag(assignment.Id); }"
+                                     @ondragend="OnDrop"
+                                     @onclick="() => { OnAssignmentClick(assignment.Id); }">
 
                                     <div class="assignment-name">
                                         @assignment.Name
@@ -105,11 +108,11 @@
                             {
                                 <i class="fa-solid fa-xmark close-button" @onclick="() => { ShowAssignmentForm = false; }" />
                                 <EditForm Model="@AssignmentToAdd" OnValidSubmit="SubmitAssignment">
-                                    <InputText class="form-control input-text shadow-none mb-2" @bind-Value="AssignmentToAdd.Name" placeholder="Name" />
-                                    <InputText class="form-control input-text shadow-none mb-2"  @bind-Value="AssignmentToAdd.Description" placeholder="Description" />
+                                    <InputText id="assignment-name-input" class="form-control input-text shadow-none mb-2" @bind-Value="AssignmentToAdd.Name" placeholder="Name" />
+                                    <InputText id="assignment-description-input" class="form-control input-text shadow-none mb-2"  @bind-Value="AssignmentToAdd.Description" placeholder="Description" />
                                     <div style="display: flex; width: 100%;" class="mb-2">
                                             <label style="width: 80%;" class="mt-2">Deadline: </label>
-                                        <InputDate class="form-control input-date shadow-none" @bind-Value="AssignmentToAdd.Deadline"/>
+                                        <InputDate id="assignment-date-input" class="form-control input-date shadow-none" @bind-Value="AssignmentToAdd.Deadline"/>
                                     </div>
                                     <div style="display: flex; width: 100%;" class="mb-2">
                                         <label style="width: 80%;" class="mt-2">Priority: </label>
@@ -130,7 +133,7 @@
                                                 @foreach (var dev in UnboundUsers)
                                                 {
                                                     <li class="dev-li" @onclick="() => { BoundUser(dev); }">
-                                                        <span class="fa-solid fa-circle-user"/>
+                                                        <span id="user-to-bound" class="fa-solid fa-circle-user"/>
                                                         @dev.Firstname @dev.Lastname
                                                     </li>
                                                 }
@@ -152,12 +155,12 @@
                                             }
                                         }
                                     </div>
-                                    <button class="submit-button" type="submit">Add</button>
+                                    <button id="submit-assignment-btn" class="submit-button" type="submit">Add</button>
                                 </EditForm>
                             }
                             else
                             {
-                                <i class="fa-solid fa-ellipsis add-button" @onclick="() => { ShowForm(stage.Id); }" />
+                                <i id="add-assignment-btn" class="fa-solid fa-ellipsis add-button" @onclick="() => { ShowForm(stage.Id); }" />
                             }
                         }
                     </div>

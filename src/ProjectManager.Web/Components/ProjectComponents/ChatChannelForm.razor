@@ -1,9 +1,9 @@
 ﻿<ul class="dropdown-menu chat-channel-create-container" aria-labelledby="dropdownCreateChatChannel">
-    <div class="header mb-3">
-        Create new channel
-    </div>
-    <EditForm Model="@model" OnValidSubmit="Submit">
-        <InputText class="form-control pm-modal-input shadow-none" @bind-Value="model.Name" placeholder="Channel name" />
+<div class="header mb-3">
+    Create new channel
+</div>
+<EditForm Model="@model" OnValidSubmit="Submit">
+    <InputText id="channel-name-input" class="form-control pm-modal-input shadow-none" @bind-Value="model.Name" placeholder="Channel name" />
 
     <div class="channel-type mt-3 ms-1">
         <div style="width: 2rem;">
@@ -108,5 +108,5 @@
         }
     }
     <button class="create-button" type="submit" id="createChannel">Create</button>
-    </EditForm>
+</EditForm>
 </ul>

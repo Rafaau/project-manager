@@ -1,7 +1,7 @@
 ﻿@using ProjectManager.Web.Components.Modals
 @layout CascadeLayout
 
-<i class="fa-solid fa-chevron-up hide-button" @onclick="HideConversations" />
+<i id="hide-messages-btn" class="fa-solid fa-chevron-up hide-button" @onclick="HideConversations" />
 
 <div class="conversations-container">
     @if (conversations != null)

@@ -31,11 +31,13 @@ public class AppDbContext : DbContext
 
     if (optionsBuilder.IsConfigured) return;
 
-    if (AppDbContextOptions.IsTesting)
-      optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=projectmanagerDbTests;User Id=postgres;Password=postgrespw;Pooling=false");
+    if (AppDbContextOptions.IsTesting || AppDbContextOptions.IsE2ETesting)
+      optionsBuilder.UseNpgsql(AppDbContextOptions.ConnectionString, 
+      b => b.EnableRetryOnFailure(10, TimeSpan.FromSeconds(3), null)
+            .MigrationsAssembly("ProjectManager.Infrastructure"));
     else
     {
-      optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=projectmanagerDb;User Id=postgres;Password=postgrespw;Pooling=false",
+      optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=projectManagerDb;User Id=postgres;Password=postgrespw;Pooling=false",
         b => b.MigrationsAssembly("ProjectManager.Infrastructure"));
 
       optionsBuilder.EnableSensitiveDataLogging();
@@ -45,7 +47,7 @@ public class AppDbContext : DbContext
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     base.OnModelCreating(modelBuilder);
-    
+
     modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
   }
 

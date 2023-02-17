@@ -74,4 +74,9 @@ public partial class Index
   {
     await userTab.MarkNotificationsAsSeen();
   }
+
+  private async Task RefreshConversations()
+  {
+    await userTab.GetConversations();
+  }
 }

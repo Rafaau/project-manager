@@ -8,7 +8,7 @@
             <AddProject UpdateProjectList="RefreshProjects"/>
         </div>
 
-        <div id="carouselExampleControls" class="carousel slide mt-4 pb-4" data-bs-ride="carousel" data-bs-interval="false">
+        <div id="carouselExampleControls" class="carousel-container carousel slide mt-4 pb-4" data-bs-ride="carousel" data-bs-interval="false">
             @if (Projects.Count() > 2)
             {
                 <div class="carousel-indicators">
@@ -16,7 +16,7 @@
                     @for (var i = 2; i < Projects.Count(); i+=2) 
                     {
                         var j = i - (i/2);
-                        <button type="button" class="indicator" data-bs-target="#carouselExampleControls" data-bs-slide-to="@j"></button>
+                        <button id="indicator-@i" type="button" class="indicator" data-bs-target="#carouselExampleControls" data-bs-slide-to="@j"></button>
                     }
                 </div>
             }
@@ -25,14 +25,16 @@
                 {
                     <div class="carousel-item active">
                         <div class="projects-slider">
-                            <div class="single-project ms-3" @onclick="() => { if(!IsButtonHovered) Redirect(Projects.FirstOrDefault().Id.ToString()); }">
+                            <div id="project-tab" class="single-project ms-3" @onclick="() => { if(!IsButtonHovered) Redirect(Projects.FirstOrDefault().Id.ToString()); }">
                                 <p>@Projects.FirstOrDefault().Name</p>
-                                <i class="fa-solid fa-user-plus invite-button" 
+                                <i id="invitation-btn"
+                                   class="fa-solid fa-user-plus invite-button" 
                                    @onmouseover="() => { IsButtonHovered = true; ProjectToPass = Projects.FirstOrDefault(); }" 
                                    @onmouseout="() => { IsButtonHovered = false; }"
                                    data-bs-toggle="modal" 
                                    data-bs-target="#generateInvitationLink" />
-                                <i class="fa-solid fa-trash-can delete-button" 
+                                <i id="delete-project-btn"
+                                   class="fa-solid fa-trash-can delete-button" 
                                    @onmouseover="() => { IsButtonHovered = true; ProjectToPass = Projects.FirstOrDefault(); }" 
                                    @onmouseout="() => { IsButtonHovered = false; }"
                                    data-bs-toggle="modal" 
@@ -91,7 +93,7 @@
                             </div>
                             @if (@Projects.Skip(i + 1).FirstOrDefault() != null)
                             {
-                                <div class="single-project ms-4" @onclick="() => { if(!IsButtonHovered) Redirect(Projects.Skip(i-1).FirstOrDefault().Id.ToString()); }">
+                                <div id="test-project-tab" class="single-project ms-4" @onclick="() => { if(!IsButtonHovered) Redirect(Projects.Skip(i-1).FirstOrDefault().Id.ToString()); }">
                                     <p>@Projects.Skip(i+1).FirstOrDefault().Name</p>
                                     <i class="fa-solid fa-user-plus invite-button"
                                        @onmouseover="() => { IsButtonHovered = true; ProjectToPass = Projects.Skip(i-1).FirstOrDefault(); }"

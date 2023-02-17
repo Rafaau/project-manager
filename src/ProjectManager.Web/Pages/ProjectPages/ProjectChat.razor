@@ -15,10 +15,10 @@
                 @foreach (var channel in Project.ChatChannels.Where(x => x.PermissedUsers.Where(u => u.Id == User.Id).Any() || x.PermissedUsers.Length == 0).OrderBy(x => x.Id))
                 {
                     var channelStyle = channel.Id == CurrentChannel ? "current-channel" : "rest-of-channels";
-                    <div class="channel-container">
+                    <div id="chat-channel-tab" class="channel-container">
                         <div class="@channelStyle" @onclick="() => { SetCurrentChannel(channel.Id); }">
                             <i style="padding-right: 0.2rem;">#</i>
-                            @channel.Name
+                            <span>@channel.Name</span>
                         </div>
                         <i class="fa-solid fa-user-plus edit-channel-btn" 
                            id="@channel.Id-Dropdown" 
@@ -26,7 +26,8 @@
                            data-bs-auto-close="outside"
                            aria-expanded="false" />
                         <EditPermissions Channel="channel" Env="env" Project="Project" @ref="permissions" />
-                        <i class="fa-solid fa-trash-can delete-channel-btn"
+                        <i id="delete-channel-btn" 
+                           class="fa-solid fa-trash-can delete-channel-btn"
                            data-bs-toggle="modal"
                            data-bs-target="#deleteChannelConfirm"
                            @onclick="() => { chosenChannel = channel; }" />
@@ -50,8 +51,13 @@
                         @if (message.User.Id == User.Id && messageToEdit == 0)
                         {
                             <div class="message-actions flex">
-                                <span class="fa-solid fa-pen edit-button" @onclick="() => { messageToEdit = message.Id; editModel.Content = message.Content; }"/>
-                                <span class="fa-solid fa-trash-can remove-button" data-bs-toggle="modal" data-bs-target="#removeConfirm" @onclick="() => { PassMessageData(message); }"/>
+                                <span id="edit-message-btn"
+                                      class="fa-solid fa-pen edit-button" 
+                                      @onclick="() => { messageToEdit = message.Id; editModel.Content = message.Content; }"/>
+                                <span id="delete-message-btn"
+                                      class="fa-solid fa-trash-can remove-button" 
+                                      data-bs-toggle="modal" data-bs-target="#removeConfirm" 
+                                      @onclick="() => { PassMessageData(message); }"/>
                             </div>
                         }
                         <div class="row">
@@ -136,7 +142,7 @@
                                                 {
                                                     if (temp2.Contains("@"))
                                                     {
-                                                        var attempt = temp2.Substring(temp2.IndexOf("@"), membersFullnames.ToArray()[j].Length - 1);
+                                                        var attempt = temp2.Substring(temp2.IndexOf("@"), membersFullnames.ToArray()[j].Length);
                                                         if (membersFullnames.Any(x => attempt.Contains(x)))
                                                         {
                                                             sortedMembers.Add(attempt);
@@ -149,7 +155,10 @@
 
                                             for (int i = 0; i < sortedMembers.Count(); i++)
                                             {
-                                                @temp.Substring(0, message.Content.IndexOf("@"))
+                                                if (i == 0)
+                                                {
+                                                    @temp.Substring(0, message.Content.IndexOf("@"))
+                                                }
                                                 <div class="dropend" style="display: inline-block;">
                                                     <div class="mention"
                                                         id="dropdownUserDetails"
@@ -157,7 +166,7 @@
                                                         aria-expanded="false">
                                                         @sortedMembers.ToArray()[i]
                                                     </div>
-                                                    <UserDetails ViewedUser="usersToMention.Where(x => sortedMembers.ToArray()[i].Contains(x.Firstname) && sortedMembers.ToArray()[i].Contains(x.Lastname)).Single()" @ref="details" />
+                                                    <UserDetails ViewedUser="usersToMention.Where(x => sortedMembers.ToArray()[i].Contains(x.Firstname) && sortedMembers.ToArray()[i].Contains(x.Lastname)).SingleOrDefault()" @ref="details" />
                                                 </div>
                                                 var dif = temp.IndexOf("@") + sortedMembers.ToArray()[i].Length;
                                                 temp = temp.Substring(dif, temp.Length - dif);
@@ -176,7 +185,7 @@
                                 {
                                     <div class="edit-container">
                                         <EditForm Model="@model" OnValidSubmit="Update" id="message-form">
-                                            <InputText @bind-Value="@editModel.Content" @oninput="(e) => { OnInputChange(e); }" class="form-control message-input shadow-none" />
+                                            <InputText id="edit-message-input" @bind-Value="@editModel.Content" @oninput="(e) => { OnInputChange(e); }" class="form-control message-input shadow-none" />
                                         </EditForm>
                                         <i class="fa-solid fa-xmark close-edit-button" @onclick="() => { messageToEdit = 0; }" />
                                     </div>
@@ -194,7 +203,7 @@
             @if (showMentions) 
             {
                 <div class="mentions-container">
-                    @foreach (var userToMention in membersFullnames.Where(x => x.ToLower().Contains(currentMention.ToLower())))
+                    @foreach (var userToMention in membersFullnames2.Where(x => x.ToLower().Contains(currentMention.ToLower())))
                     {
                         var user = Project.Users.First(x => userToMention.Contains(x.Firstname) && userToMention.Contains(x.Lastname));
                         <div class="single-mention" @onclick="() => { MentionUser(userToMention); }">
@@ -213,7 +222,7 @@
                 </div>
             }
             <EditForm Model="@model" OnValidSubmit="Submit" id="message-form">
-                <InputText @bind-Value="@model.Content" @oninput="(e) => { OnInputChange(e); }" class="form-control message-input shadow-none" placeholder="Message #general" />
+                <InputText id="chat-message-input" @bind-Value="@model.Content" @oninput="(e) => { OnInputChange(e); }" class="form-control message-input shadow-none" placeholder="Message #general" autocomplete="off" />
             </EditForm>
 
         </div>

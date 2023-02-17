@@ -25,6 +25,7 @@ public partial class Conversations
   [Inject] IPrivateMessageCallService _messageService { get; set; }
   [Inject] IJSRuntime js { get; set; }
   [Parameter] public EventCallback onHideConversations { get; set; }
+  [Parameter] public EventCallback onSetConversationAsSeen { get; set; }
   [CascadingParameter] User User { get; set; }
   private PrivateMessageComplex[] conversations { get; set; }
   private int receiverId { get; set; }
@@ -58,5 +59,17 @@ public partial class Conversations
   {
     receiverId = passedId;
     await conversation.GetMessages(passedId);
+    var response = await _messageService.GetByUsers(receiverId, User.Id);
+    if (response.IsSuccess)
+    {
+      foreach (var message in response.Data
+        .Where(x => x.IsSeen == false 
+        && (x.Receiver.Id == receiverId && x.Sender.Id == User.Id) 
+        || (x.Sender.Id == receiverId && x.Receiver.Id == User.Id)))
+        {
+          await _messageService.SetMessageAsSeen(message.Id);
+          await onSetConversationAsSeen.InvokeAsync();
+        }
+    }
   }
 }

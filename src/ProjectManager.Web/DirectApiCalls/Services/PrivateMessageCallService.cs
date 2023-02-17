@@ -30,6 +30,11 @@ public class PrivateMessageCallService : ServiceBase, IPrivateMessageCallService
     return await HttpClient.Put<PrivateMessageSimplified, PrivateMessageComplex>("/api/privatemessage", request);
   }
 
+  public async Task<Response<PrivateMessageComplex>> SetMessageAsSeen(int messageId)
+  {
+    return await HttpClient.Patch<PrivateMessageComplex>($"/api/privatemessage/{messageId}");
+  }
+
   public async Task<Response<PrivateMessageComplex>> DeleteMessage(int messageId)
   {
     return await HttpClient.Delete<PrivateMessageComplex>($"/api/privatemessage/{messageId}");

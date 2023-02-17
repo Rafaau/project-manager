@@ -9,5 +9,6 @@ public interface IPrivateMessageCallService
   Task<Response<PrivateMessageComplex[]>> GetUserConversations(int userId);
   Task<Response<PrivateMessageComplex>> SendMessage(PrivateMessageRequest request);
   Task<Response<PrivateMessageComplex>> UpdateMessage(PrivateMessageSimplified request);
+  Task<Response<PrivateMessageComplex>> SetMessageAsSeen(int messageId);
   Task<Response<PrivateMessageComplex>> DeleteMessage(int messageId);
 }

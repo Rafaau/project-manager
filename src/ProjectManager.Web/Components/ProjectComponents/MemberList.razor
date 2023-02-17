@@ -30,7 +30,7 @@
         </div>
         @foreach (var user in Project.Users.Where(u => u.Role != 0))
         {
-            <div class="dropstart mb-1">
+            <div id="single-member" class="dropstart mb-1">
                 <div style="display: flex; cursor: pointer;" 
                     id="dropdownUserDetails" 
                     data-bs-toggle="dropdown" 

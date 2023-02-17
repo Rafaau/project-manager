@@ -9,7 +9,7 @@
                 </div>
                 <div class="modal-body">
                     Please type the project name to confirm.
-                    <input @bind-value="@confirmInput" class="pm-modal-input form-control shadow-none mt-2" />
+                    <input id="confirm-delete-input" @bind-value="@confirmInput" class="pm-modal-input form-control shadow-none mt-2" />
                     @if (incorrectConfirm)
                     {
                         <p style="color: #AE0000;">The confirm name is incorrect</p>
@@ -17,7 +17,7 @@
                 </div>
                 <div class="modal-footer pm-modal-footer">
                     <button class="pm-modal-btn" type="button" data-bs-dismiss="modal">Cancel</button>
-                    <button class="pm-modal-btn" type="button" @onclick="Delete">Delete</button>
+                    <button id="confirm-delete-project-btn" class="pm-modal-btn" type="button" @onclick="Delete">Delete</button>
                 </div>
             </div>
         }

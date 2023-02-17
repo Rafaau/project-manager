@@ -95,6 +95,7 @@ public partial class ProjectBoard
     AssignmentToAdd.ProjectId = Project.Id;
     AssignmentToAdd.Priority = (Priority)SelectValue;
     AssignmentToAdd.Users = UsersToBound!.ToArray();
+    AssignmentToAdd.Deadline = AssignmentToAdd.Deadline.ToUniversalTime();
 
     var response = await _assignmentService.AddAssignment(AssignmentToAdd);
     if (response.IsSuccess)

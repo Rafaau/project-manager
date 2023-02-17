@@ -35,35 +35,18 @@ using ProjectManager.Web.DirectApiCalls.Services;
 using Majorsoft.Blazor.Components.Common.JsInterop.Scroll;
 using ProjectManager.Web.FileServices.Interfaces;
 using ProjectManager.Web.FileServices.Services;
-
-//namespace ProjectManager.Web;
-
-//public class Program
-//{
-//  public static void Main(string[] args)
-//  {
-//    CreateHostBuilder(args).Build().Run();
-//  }
-
-//  public static IHostBuilder CreateHostBuilder(string[] args)
-//  {
-//    var builder = WebApplication.CreateBuilder(args);
-//    builder.Host.UseSerilog();
-//    builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-//    builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
-//    {
-//      containerBuilder.RegisterModule(new DefaultCoreModule());
-//      containerBuilder.RegisterModule(new DefaultInfrastructureModule(builder.Environment.EnvironmentName == "Development"));
-//    });
-//    builder.Configuration.(webBuilder =>
-//    {
-//      webBuilder.UseStartup<Startup>().Build();
-//    });
-//    return builder.Host;
-//  } 
-//}
+using ProjectManager.Infrastructure.Data.Config;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var envConfig = builder.Configuration;
+envConfig.AddEnvironmentVariables("ProjectManagerWebApp_");
+
+if (envConfig.GetValue<string>("Database:ConnectionString") == "Server=test-db;Port=5432;Database=projectmanagerDb;User ID=postgres;Password=postgrespw;")
+{
+  AppDbContextOptions.IsE2ETesting = true;
+  AppDbContextOptions.ConnectionString = envConfig.GetValue<string>("Database:ConnectionString");
+}
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
@@ -157,7 +140,7 @@ builder.Services.Configure<ServiceConfig>(config =>
 
 builder.Services.AddHttpClient("api", cfg =>
 {
-  cfg.BaseAddress = new Uri("http://localhost:57678/");
+  cfg.BaseAddress = new Uri(envConfig.GetValue<string>("Api:ApiBaseUrl"));
 });
 builder.Services.AddHttpContextAccessor();
 

@@ -9,13 +9,13 @@
     <div class="calendar-nav"> 
         <div>
             <button class="nav-button" @onclick="() => { monthsAway--; CreateMonth(); }">
-                <i class="fa-solid fa-arrow-left"/>
+                <i id="previous-month-btn" class="fa-solid fa-arrow-left"/>
             </button>
             <button class="nav-button" @onclick="() => { monthsAway++; CreateMonth(); }">
-                <i class="fa-solid fa-arrow-right"/>
+                <i id="next-month-btn" class="fa-solid fa-arrow-right"/>
             </button>
             <button class="nav-button" @onclick="() => { monthsAway=0; CreateMonth(); }">
-                <span>Today</span>
+                <span id="today-btn">Today</span>
             </button>
             <span class="month-span">@monthName, @year</span>
         </div>
@@ -77,16 +77,17 @@
             }
             else
             {
-                <div @onmouseover="() => { showAddButton = day; }" @onmouseout="() => { showAddButton = 0; }">
+                <div id="day-@day" @onmouseover="() => { showAddButton = day; }" @onmouseout="() => { showAddButton = 0; }">
                     <div style="display: flex; width: 100%">
                         <span class="day-span">@i</span>
                         @if (showAddButton == i)
                         {
-                            <i class="fa-regular fa-calendar-plus add-button" 
-                                data-bs-target="#addAppointment" 
-                                data-bs-toggle="modal" 
-                                aria-expanded="false"
-                                @onclick="() => { PassDateToModal(day); }" />
+                            <i id="add-appointment-btn"
+                               class="fa-regular fa-calendar-plus add-button" 
+                               data-bs-target="#addAppointment" 
+                               data-bs-toggle="modal" 
+                               aria-expanded="false"
+                               @onclick="() => { PassDateToModal(day); }" />
                         }
                     </div>
                     <div style="display: flex; margin-top: 0.7rem;">

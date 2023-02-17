@@ -19,7 +19,7 @@
                             </h5>
                         }
                     }
-                <span class="fa-solid fa-xmark cross" data-bs-dismiss="modal" aria-label="Close" @onclick="ResetMessages"/>
+                <span id="close-conversation-btn" class="fa-solid fa-xmark cross" data-bs-dismiss="modal" aria-label="Close" @onclick="ResetMessages"/>
             </div>
             <div class="modal-body modal-pm">
                 @if (messages != null)
@@ -115,7 +115,7 @@
             </div>
             <div class="modal-footer border-0 input-container pm-message-footer">
                 <EditForm Model="message" OnValidSubmit="Submit">
-                    <InputText class="pm-message-input" @bind-Value="message.Content" placeholder="Enter message"/>
+                    <InputText id="private-message-input" class="pm-message-input" @bind-Value="message.Content" placeholder="Enter message"/>
                 </EditForm>
             </div>
         </div>

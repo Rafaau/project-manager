@@ -50,7 +50,7 @@
                 <button class="pm-modal-btn" type="button" data-bs-dismiss="modal">Cancel</button>
                 @if (Message != null)
                 {
-                    <button class="pm-modal-btn" type="button" @onclick="Remove">Delete</button>
+                    <button id="confirm-delete-btn" class="pm-modal-btn" type="button" @onclick="Remove">Delete</button>
                 }
                 @if (PrivateMessage != null)
                 {

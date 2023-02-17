@@ -25,6 +25,7 @@ using BlazorInputFile;
 using Microsoft.Extensions.Hosting;
 using ProjectManager.Core.ProjectAggregate.Enums;
 using AutoMapper;
+using System.IO;
 
 namespace ProjectManager.Web.Components.DashboardComponents;
 
@@ -36,6 +37,7 @@ public partial class UserTab
   [Inject] NavigationManager navManager { get; set; }
   [Inject] private IUserCallService _userService { get; set; }
   [Inject] private INotificationCallService _notificationService { get; set; }
+  [Inject] private IPrivateMessageCallService _messageService { get; set; }
   [Inject] private IImageService _imageService { get; set; }
   [Inject] private IWebHostEnvironment env { get; set; }
   [Inject] private IMapper mapper { get; set; }
@@ -49,6 +51,7 @@ public partial class UserTab
   private bool isConversationsOn { get; set; } = false;
   private string imageURL { get; set; }
   private NotificationComplex[] notifications { get; set; }
+  private PrivateMessageComplex[] messages { get; set; }
   private IFileListEntry file;
   private bool isAvatarExist { get; set; } = false;
   private class UserFields
@@ -59,13 +62,15 @@ public partial class UserTab
     public string PasswordToConfirm { get; set; }
   }
   private UserFields userModel { get; set; } = new();
+  private bool justUploaded { get; set; } = false;
 
   protected override async Task OnAfterRenderAsync(bool firstRender)
   {
     if (User != null && notifications == null)
     {
       await GetNotifications();
-      CheckIfAvatarExist();
+      await GetConversations();
+      await CheckIfAvatarExist();
       Init();
       StateHasChanged();
     }
@@ -78,7 +83,7 @@ public partial class UserTab
     navManager.NavigateTo("/pm", true);
   }
 
-  private void CheckIfAvatarExist()
+  private async Task CheckIfAvatarExist()
   {
     var path = Path.Combine(env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{User.Id}.jpg");
     isAvatarExist = System.IO.File.Exists(path);
@@ -93,6 +98,7 @@ public partial class UserTab
   {
     await onShowUserSettings.InvokeAsync();
     isSettingsOn = !isSettingsOn ?  true :  false;
+    justUploaded = false;
   }
 
   public async Task ShowNotifications()
@@ -113,6 +119,14 @@ public partial class UserTab
     if (response.IsSuccess)
       notifications = response.Data;
   }
+
+  public async Task GetConversations()
+  {
+    var response = await _messageService.GetUserConversations(User.Id);
+    if (response.IsSuccess)
+      messages = response.Data;
+  }
+
   public async Task MarkNotificationsAsSeen()
   {
     foreach (var notification in notifications.Where(x => !x.IsSeen))
@@ -125,10 +139,11 @@ public partial class UserTab
 
   private async Task HandleImageUpload(IFileListEntry[] files)
   {
-    file = files.FirstOrDefault();
+    file = files.Last();
     if (file != null)
     {
-      await _imageService.UploadImage(file, $"pm-avatar-{User.Id}.jpg");
+      await _imageService.UploadImage(file, $"pm-avatar-temp.jpg");
+      justUploaded = true;
     }
   }
 
@@ -145,6 +160,19 @@ public partial class UserTab
 
   private async Task UpdateUser()
   {
+    if (file != null)
+    {
+      var path1 = Path.Combine(env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-temp.jpg");
+      var path2 = Path.Combine(env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{User.Id}.jpg");
+      FileInfo newFile = new FileInfo(path1);
+      FileInfo oldFile = new FileInfo(path2);
+      if (newFile.Exists) 
+      {
+        oldFile.Delete();
+        System.IO.File.Move(path1, path2);
+      }
+    }
+
     if (userModel.Password == userModel.PasswordToConfirm)
     {
       bool updatePassword = userModel.Password.Length > 0;

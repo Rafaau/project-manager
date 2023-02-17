@@ -1,20 +1,22 @@
 ﻿<div class="flex">
     <h4>Profile</h4>
     <div class="dropdown float">
-        <span class="fa-solid fa-ellipsis-vertical" id="accountActionsDropdown" data-bs-toggle="dropdown" aria-expanded="false"/>
-        <ul class="dropdown-menu actions-container" aria-labelledby="accountActionsDropdown">
-            <li class="dropdown-item action" @onclick="RedirectToProfile">My Profile</li>
-            <li class="dropdown-item action" @onclick="Logout">Logout</li>
-        </ul>
+        <span id="logout-btn" class="fa-solid fa-arrow-right-from-bracket" @onclick="Logout"/>
     </div>
 </div>
 @if (User != null)
 {
     <div class="user-label">
         <div class="user-avatar-container">
-            @if (isAvatarExist)
+            @if (isAvatarExist && !justUploaded)
             {
-                var path = $"/avatars/pm-avatar-{User.Id}.jpg";
+                var path = $"/avatars/pm-avatar-{User.Id}.jpg?r={DateTime.Now.Ticks}";
+                <img src="@path" class="user-avatar"/>
+            }
+            else if (justUploaded)
+            {
+                var path = "";
+                path = $"/avatars/pm-avatar-temp.jpg?r={DateTime.Now.Ticks}";
                 <img src="@path" class="user-avatar"/>
             }
             else
@@ -39,13 +41,20 @@
         @if (!isSettingsOn && !isNotificationsOn && !isConversationsOn)
         {
             <div class="icon-container" @onclick="ShowUserSettings">
-                <i class="fa-regular fa-pen-to-square"/>
+                <i id="edit-profile-btn" class="fa-regular fa-pen-to-square"/>
             </div>
             <div class="icon-container" @onclick="ShowConversations">
-                <i class="fa-regular fa-envelope"/>
+                <i id="messages-btn" class="fa-regular fa-envelope"/>
+                @if (messages != null)
+                {
+                    @if (messages.Where(x => !x.IsSeen).Count() > 0) // not working with above if condition
+                    {
+                         <div class="circle-span">@messages.Where(x => !x.IsSeen).Count()</div>
+                    }
+                }
             </div>
             <div class="icon-container" @onclick="ShowNotifications">
-                <i class="fa-regular fa-bell"/>
+                <i id="notifications-btn" class="fa-regular fa-bell"/>
                 @if (notifications != null && notifications.Where(x => !x.IsSeen).Count() > 0)
                 {
                     <div class="circle-span">@notifications.Where(x => !x.IsSeen).Count()</div>
@@ -73,11 +82,11 @@
                         </InputSelect>
                     }
                     <label class="form-label">E-mail address</label>
-                    <InputText class="form-control pm-modal-input shadow-none mb-3" @bind-Value="userModel.Email" placeholder="E-mail" />
+                    <InputText id="edit-email-input" class="form-control pm-modal-input shadow-none mb-3" @bind-Value="userModel.Email" placeholder="E-mail" />
                     <label class="form-label">Password</label>
-                    <InputText type="password" class="form-control pm-modal-input shadow-none mb-2" @bind-Value="userModel.Password" placeholder="Password" />
-                    <InputText type="password" class="form-control pm-modal-input shadow-none mb-3" @bind-Value="userModel.PasswordToConfirm" placeholder="Confirm password" />
-                    <button type="submit" class="pm-modal-btn submit-btn">Save</button>
+                    <InputText id="edit-password-input" type="password" class="form-control pm-modal-input shadow-none mb-2" @bind-Value="userModel.Password" placeholder="Password" />
+                    <InputText id="edit-password-confirm" type="password" class="form-control pm-modal-input shadow-none mb-3" @bind-Value="userModel.PasswordToConfirm" placeholder="Confirm password" />
+                    <button id="edit-save-btn" type="submit" class="pm-modal-btn submit-btn">Save</button>
                 </EditForm>
             </div>
         }

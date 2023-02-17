@@ -35,6 +35,7 @@ public partial class ProjectChat
   [Inject] private NavigationManager navManager { get; set; }
   [Inject] private IJSRuntime js { get; set; }
   [Inject] private IScrollHandler scroll { get; set; }
+  [Inject] private IMapper _mapper { get; set; }
   [CascadingParameter] User User { get; set; }
 
   private ProjectComplex Project { get; set; }
@@ -51,6 +52,7 @@ public partial class ProjectChat
   private int CurrentChannel { get; set; }
   private bool showMentions { get; set; } = false;
   private List<string> membersFullnames { get; set; } = new List<string>();
+  private List<string> membersFullnames2 { get; set; } = new List<string>();
   private UserSimplified[] usersToMention { get; set; }
   private string currentContent { get; set; }
   private string currentMention { get; set; }
@@ -80,10 +82,15 @@ public partial class ProjectChat
       if (Project.Users is not null)
       {
         usersToMention = Project.Users;
+        var list = usersToMention.ToList();
+        list.Add(Project.Manager);
+        usersToMention = list.ToArray();
         foreach (var member in Project.Users)
         {
           membersFullnames.Add($"@{member.Firstname} {member.Lastname}");
+          membersFullnames2.Add($"@{member.Firstname} {member.Lastname}");
         }
+          membersFullnames.Add($"@{Project.Manager.Firstname} {Project.Manager.Lastname}");
       }
     }
   }

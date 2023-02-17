@@ -20,4 +20,10 @@ public static class StartupSetup
           options.UseNpgsql("Server=localhost;Port=5432;Database=projectmanagerDb;User Id=postgres;Password=postgrespw;Pooling=false",
             b => b.MigrationsAssembly("ProjectManager.Infrastructure"));
       });
+
+  public static void AddDbContext(this IServiceCollection services, string connectionString) =>
+    services.AddDbContext<AppDbContext>(options =>
+    {
+      options.UseNpgsql(connectionString);
+    });
 }

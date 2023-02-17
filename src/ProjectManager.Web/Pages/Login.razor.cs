@@ -28,6 +28,7 @@ public partial class Login
   [Inject] private IJSRuntime js { get; set; }
 
   private bool Remember { get; set; } = false;
+  private bool isWrongData = false;
 
   private class Model
   {
@@ -43,7 +44,7 @@ public partial class Login
     var userAccount = userResponse.Data;
     if (userAccount == null || !userAccount.Password.VerifyHashedPassword(model.Password))
     {
-      await js.InvokeVoidAsync("alert", "Invalid Email or Password");
+      isWrongData = true;
       return;
     }
 

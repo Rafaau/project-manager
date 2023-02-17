@@ -10,6 +10,9 @@
                <div class="col-lg-7 ps-4 pe-3 left">
                    <h1 class="ps-3">Dashboard</h1>
                    <ProjectsTab/>
+                   <div class="undeveloped-space-1">
+                         <div class="undeveloped-space-text">THERE WILL BE CONTENT</div>
+                   </div>
                </div>
                <div class="col-lg-5 px-4 right">
                     <UserTab onShowUserSettings="ShowUserSettings" onShowNotifications="ShowNotifications" onShowConversations="ShowConversations" @ref="userTab"/>
@@ -19,7 +22,13 @@
                     }
                     @if (showConversations)
                     {
-                        <Conversations onHideConversations="HideConversations"/>
+                        <Conversations onHideConversations="HideConversations" onSetConversationAsSeen="RefreshConversations"/>
+                    }
+                    @if (!showUserSettings)
+                    {
+                        <div class="undeveloped-space-2">
+                            <div class="undeveloped-space-text">THERE WILL BE CONTENT</div>
+                        </div>
                     }
                </div>
           </div>
