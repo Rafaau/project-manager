@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +6,6 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using ProjectManager.Core.Interfaces;
 using ProjectManager.Core.ProjectAggregate;
-using ProjectManager.Core.Services;
 using ProjectManager.SharedKernel;
 using ProjectManager.Web.Api;
 using ProjectManager.Web.ApiModels;

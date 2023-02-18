@@ -5,10 +5,8 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using Xunit;
-using System.Diagnostics;
 using System.Data.Common;
 using Respawn;
-using Npgsql;
 
 namespace ProjectManager.E2ETests;
 public class SharedTestContext : IAsyncLifetime

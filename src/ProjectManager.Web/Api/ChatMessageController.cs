@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using ProjectManager.Core.Interfaces;
 using ProjectManager.Core.ProjectAggregate;
-using ProjectManager.Core.ProjectAggregate.Enums;
-using ProjectManager.Core.ProjectAggregate.Specifications;
 using ProjectManager.SharedKernel;
 using ProjectManager.SharedKernel.Interfaces;
 using ProjectManager.Web.ApiModels;

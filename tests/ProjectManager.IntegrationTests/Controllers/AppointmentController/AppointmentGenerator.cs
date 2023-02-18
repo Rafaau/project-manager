@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bogus;
-using ProjectManager.Core.ProjectAggregate.Enums;
+﻿using Bogus;
 using ProjectManager.Web.ApiModels;
 
 namespace ProjectManager.IntegrationTests.AppointmentController;

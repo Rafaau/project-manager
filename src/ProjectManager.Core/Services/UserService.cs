@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using System.Diagnostics;
 using ProjectManager.Core.Interfaces;
 using ProjectManager.Core.Logging;
 using ProjectManager.Core.ProjectAggregate;
-using ProjectManager.Core.ProjectAggregate.Enums;
 using ProjectManager.Core.ProjectAggregate.Specifications;
 using ProjectManager.SharedKernel.Interfaces;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ProjectManager.Core.Services;
 public class UserService : IUserService

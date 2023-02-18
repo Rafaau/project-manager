@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using OpenQA.Selenium;
 using ProjectManager.E2ETests.Pages.PageObjects;
-using SeleniumExtras.WaitHelpers;
 using Xunit;
 
 namespace ProjectManager.E2ETests.Pages;

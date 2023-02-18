@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Json;
 
 namespace ProjectManager.SharedKernel;
 public static class HttpClientExtensions

@@ -1,10 +1,7 @@
 ﻿using ProjectManager.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Configuration;
 using ProjectManager.Infrastructure.Data.Config;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ProjectManager.Infrastructure;
 

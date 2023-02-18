@@ -1,13 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using ProjectManager.Core.Interfaces;
 using ProjectManager.Core.ProjectAggregate;
-using ProjectManager.Core.ProjectAggregate.Enums;
-using ProjectManager.Core.ProjectAggregate.Specifications;
 using ProjectManager.SharedKernel;
-using ProjectManager.SharedKernel.Interfaces;
 using ProjectManager.Web.ApiModels;
 using Microsoft.AspNetCore.OData.Query;
 

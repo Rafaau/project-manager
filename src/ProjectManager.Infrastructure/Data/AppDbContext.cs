@@ -1,10 +1,7 @@
 ﻿using System.Reflection;
 using ProjectManager.Core.ProjectAggregate;
-using ProjectManager.SharedKernel;
-using ProjectManager.SharedKernel.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using ProjectManager.Infrastructure.Data.Config;
-using Microsoft.Extensions.Options;
 
 namespace ProjectManager.Infrastructure.Data;
 

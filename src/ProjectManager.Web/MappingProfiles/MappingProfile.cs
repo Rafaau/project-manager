@@ -1,7 +1,6 @@
 ﻿using ProjectManager.Core.ProjectAggregate;
 using ProjectManager.Web.ApiModels;
 using AutoMapper;
-using ProjectManager.Core.ProjectAggregate.Specifications;
 
 namespace ProjectManager.Web.MappingProfiles;
 

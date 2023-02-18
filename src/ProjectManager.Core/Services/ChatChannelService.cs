@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using ProjectManager.Core.Interfaces;
 using ProjectManager.Core.Logging;
 using ProjectManager.Core.ProjectAggregate;
-using ProjectManager.Core.ProjectAggregate.Enums;
 using ProjectManager.Core.ProjectAggregate.Specifications;
 using ProjectManager.SharedKernel.Interfaces;
 

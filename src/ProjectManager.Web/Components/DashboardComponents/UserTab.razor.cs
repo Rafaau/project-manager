@@ -1,31 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
-using System.Net.Http;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.Web.Virtualization;
-using Microsoft.JSInterop;
-using ProjectManager.Web;
-using ProjectManager.Web.Shared;
 using ProjectManager.Web.Authentication;
 using ProjectManager.Core.Interfaces;
 using ProjectManager.Core.ProjectAggregate;
-using static System.Net.WebRequestMethods;
-using System.Security.Policy;
 using ProjectManager.Web.ApiModels;
 using ProjectManager.Web.DirectApiCalls.Interfaces;
 using ProjectManager.Web.FileServices.Interfaces;
 using BlazorInputFile;
-using Microsoft.Extensions.Hosting;
 using ProjectManager.Core.ProjectAggregate.Enums;
 using AutoMapper;
-using System.IO;
 
 namespace ProjectManager.Web.Components.DashboardComponents;
 

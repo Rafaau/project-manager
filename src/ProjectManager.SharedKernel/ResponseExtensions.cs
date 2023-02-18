@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ProjectManager.SharedKernel;
+﻿namespace ProjectManager.SharedKernel;
 public static class ResponseExtensions
 {
   public static Response<T> ErrorResponse<T>(this string error)

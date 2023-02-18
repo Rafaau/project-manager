@@ -1,5 +1,4 @@
-﻿
-namespace ProjectManager.SharedKernel;
+﻿namespace ProjectManager.SharedKernel;
 public class Error
 {
   public string Source { get; set; }

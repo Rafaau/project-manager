@@ -1,9 +1,7 @@
 ﻿using System.Reflection;
 using Autofac;
-using ProjectManager.Core.Interfaces;
 using ProjectManager.Core.ProjectAggregate;
 using ProjectManager.Infrastructure.Data;
-using ProjectManager.SharedKernel;
 using ProjectManager.SharedKernel.Interfaces;
 using MediatR;
 using MediatR.Pipeline;
@@ -20,7 +18,7 @@ public class DefaultInfrastructureModule : Module
   {
     _isDevelopment = isDevelopment;
     var coreAssembly =
-      Assembly.GetAssembly(typeof(Project2)); // TODO: Replace "Project" with any type from your Core project
+      Assembly.GetAssembly(typeof(Project2));
     var infrastructureAssembly = Assembly.GetAssembly(typeof(StartupSetup));
     if (coreAssembly != null)
     {
@@ -64,10 +62,6 @@ public class DefaultInfrastructureModule : Module
       .As<IMediator>()
       .InstancePerLifetimeScope();
 
-    //builder
-    //  .RegisterType<DomainEventDispatcher>()
-    //  .As<IDomainEventDispatcher>()
-    //  .InstancePerLifetimeScope();
 
     builder.Register<ServiceFactory>(context =>
     {
@@ -95,15 +89,9 @@ public class DefaultInfrastructureModule : Module
 
   private void RegisterDevelopmentOnlyDependencies(ContainerBuilder builder)
   {
-    // NOTE: Add any development only services here
-    builder.RegisterType<FakeEmailSender>().As<IEmailSender>()
-      .InstancePerLifetimeScope();
   }
 
   private void RegisterProductionOnlyDependencies(ContainerBuilder builder)
   {
-    // NOTE: Add any production only services here
-    builder.RegisterType<SmtpEmailSender>().As<IEmailSender>()
-      .InstancePerLifetimeScope();
   }
 }
