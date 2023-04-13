@@ -1,4 +1,5 @@
-﻿@if (Channel != null)
+﻿@using ProjectManager.Web.Extensions;
+@if (Channel != null)
 {
     <ul class="dropdown-menu edit-permissions-container" aria-labelledby="@Channel.Id-Dropdown">
         <div class="channel-label">
@@ -13,11 +14,10 @@
                 <div class="permissed-user" 
                      @onmouseover="() => { hoveredUser = user.Id; }"
                      @onmouseout="() => { hoveredUser = 0; }">
-                    @if (System.IO.File.Exists(Path.Combine(Env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{user.Id}.jpg")))
+                    @if (user.CheckIfAvatarExist(Env))
                     {
-                        var path = $"/avatars/pm-avatar-{user.Id}.jpg";
                         <div class="icon-container">
-                            <img src="@path" class="user-avatar" data-bs-toggle="tooltip" title="@user.Firstname @user.Lastname" />
+                            <img src="@user.GetAvatarPath()" class="user-avatar" data-bs-toggle="tooltip" title="@user.Firstname @user.Lastname" />
                         </div>
                     }
                     else
@@ -53,10 +53,9 @@
             @foreach (var user in Project.Users.Where(x => x.Id != Project.Manager.Id && !permissedUsers.Where(y => y.Id == x.Id).Any()))
             {
                 <li class="single-user" @onclick="() => { UpdatePermissedUsers(user); }">
-                    @if (System.IO.File.Exists(Path.Combine(Env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{user.Id}.jpg")))
+                    @if (user.CheckIfAvatarExist(Env))
                     {
-                        var path = $"/avatars/pm-avatar-{user.Id}.jpg";
-                        <img src="@path" class="user-avatar" />
+                        <img src="@user.GetAvatarPath()" class="user-avatar" />
                         <div class="fullname-avatar">
                             @user.Firstname @user.Lastname
                         </div>

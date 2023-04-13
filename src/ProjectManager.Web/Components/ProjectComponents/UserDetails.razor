@@ -1,13 +1,13 @@
-﻿@layout CascadeLayout
+﻿@using ProjectManager.Web.Extensions;
+@layout CascadeLayout
 
 <ul class="dropdown-menu user-details-container" aria-labelledby="dropdownUserDetails">
     @if (ViewedUser != null)
     {
         <div class="details-header">
-            @if (System.IO.File.Exists(Path.Combine(env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{ViewedUser.Id}.jpg")))
+            @if (ViewedUser.CheckIfAvatarExist(env))
             {
-                var path = $"/avatars/pm-avatar-{ViewedUser.Id}.jpg";
-                <img src="@path" class="user-avatar" />
+                <img src="@ViewedUser.GetAvatarPath()" class="user-avatar" />
             }
             else
             {

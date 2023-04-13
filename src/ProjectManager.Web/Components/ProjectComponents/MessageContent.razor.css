@@ -1,0 +1,136 @@
+﻿.post-date {
+    color: #8d8d8d;
+    font-family: Poppins-light;
+    font-size: 0.8rem;
+}
+
+.message-content {
+    font-family: Poppins-light;
+}
+
+.message-owner {
+    font-size: 1.2rem;
+}
+
+    .message-owner:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+.user-icon {
+    font-size: 3.5vw;
+    color: #8d8d8d;
+    cursor: pointer;
+}
+
+.user-avatar {
+    width: 3.5vw;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.user-icon-sm {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+}
+
+.user-avatar-sm {
+    width: 1.5rem;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.hour-on-hover {
+    display: none;
+}
+
+.single-message {
+    position: relative;
+}
+
+.single-message-muted {
+    position: relative;
+}
+
+.single-message:hover .hour-on-hover {
+    display: inline-block;
+    position: absolute;
+}
+
+.single-message:hover > .message-actions {
+    display: inline-block;
+}
+
+.remove-button {
+    padding: 0.5rem;
+    background-color: #181818;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.edit-button {
+    padding: 0.5rem;
+    background-color: #181818;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    margin-right: 0.1rem;
+}
+
+.new-input {
+    border: 1px solid #8d8d8d;
+    border-radius: 0.3rem;
+    padding: 0.7rem;
+}
+
+.mentions-container {
+    background-color: #181818;
+    border-radius: 0.8rem;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+}
+
+.single-mention {
+    padding: 0.4rem;
+    padding-left: 1rem;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+    .single-mention:hover {
+        background-color: #232323;
+    }
+
+.mention {
+    display: inline-block;
+    background-color: #8100cb;
+    opacity: 0.8;
+    padding-inline: 0.5rem;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-bottom: 0.2rem;
+}
+
+    .mention:hover {
+        opacity: 1;
+    }
+
+.no-mention {
+    display: inline-block;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.edit-container {
+    position: relative;
+}
+
+    .edit-container:hover {
+    }
+
+.close-edit-button {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    cursor: pointer;
+}

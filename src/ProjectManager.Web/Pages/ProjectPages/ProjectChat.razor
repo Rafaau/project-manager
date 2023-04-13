@@ -4,6 +4,7 @@
 @using ProjectManager.Web.Components.Modals
 @using ProjectManager.Web.Components.ProjectComponents
 @using System.Text.RegularExpressions
+@using ProjectManager.Web.Extensions;
 
 @layout ProjectLayout
 
@@ -68,10 +69,9 @@
                                         <div id="dropdownUserDetails"
                                             data-bs-toggle="dropdown"
                                             aria-expanded="false">
-                                            @if (System.IO.File.Exists(Path.Combine(env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{message.User.Id}.jpg")))
+                                            @if (message.User.CheckIfAvatarExist(env))
                                             {
-                                                var path = $"/avatars/pm-avatar-{message.User.Id}.jpg";
-                                                <img src="@path" class="user-avatar"/>
+                                                <img src="@message.User.GetAvatarPath()" class="user-avatar"/>
                                             }
                                             else
                                             {
@@ -108,78 +108,7 @@
                                 }
                                 @if (message.Id != messageToEdit)
                                 {
-                                    <p class="message-content">
-                                        @if (membersFullnames.Any(s => message.Content.Contains(s)))
-                                        {
-                                            List<string> members = new List<string>();
-                                            List<string> sortedMembers = new List<string>();
-                                            var temp = message.Content;
-                                            var temp2 = message.Content;
-                                            var duplicateCheck = message.Content;
-                                            var duplicateCheck2 = message.Content;
-                                            var mentionsInContent = 0;
-                                            foreach (var mention in membersFullnames.Where(x => message.Content.Contains(x)))
-                                            {
-                                                var reps = 1;
-                                                var regex = new Regex(Regex.Escape(mention));
-                                                duplicateCheck2 = regex.Replace(duplicateCheck2, "", 1);
-                                                mentionsInContent++;
-                                                for (int i = 1; i <= reps; i++)
-                                                {
-                                                    if (duplicateCheck2.Contains(mention))
-                                                    {
-                                                        mentionsInContent++;
-                                                        duplicateCheck2 = regex.Replace(duplicateCheck2, "", 1);
-                                                        reps++;
-                                                    }
-                                                    else
-                                                        break;
-                                                }
-                                            }
-                                            for (int i = 0; i < mentionsInContent; i++)
-                                            {
-                                                for (int j = 0; j < membersFullnames.Count(); j++)
-                                                {
-                                                    if (temp2.Contains("@"))
-                                                    {
-                                                        var attempt = temp2.Substring(temp2.IndexOf("@"), membersFullnames.ToArray()[j].Length);
-                                                        if (membersFullnames.Any(x => attempt.Contains(x)))
-                                                        {
-                                                            sortedMembers.Add(attempt);
-                                                            var regex = new Regex(Regex.Escape(attempt));
-                                                            temp2 = regex.Replace(temp2, "", 1);
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                            for (int i = 0; i < sortedMembers.Count(); i++)
-                                            {
-                                                if (i == 0)
-                                                {
-                                                    @temp.Substring(0, message.Content.IndexOf("@"))
-                                                }
-                                                <div class="dropend" style="display: inline-block;">
-                                                    <div class="mention"
-                                                        id="dropdownUserDetails"
-                                                        data-bs-toggle="dropdown"
-                                                        aria-expanded="false">
-                                                        @sortedMembers.ToArray()[i]
-                                                    </div>
-                                                    <UserDetails ViewedUser="usersToMention.Where(x => sortedMembers.ToArray()[i].Contains(x.Firstname) && sortedMembers.ToArray()[i].Contains(x.Lastname)).SingleOrDefault()" @ref="details" />
-                                                </div>
-                                                var dif = temp.IndexOf("@") + sortedMembers.ToArray()[i].Length;
-                                                temp = temp.Substring(dif, temp.Length - dif);
-                                                <div class="no-mention">
-                                                    @temp.Substring(0, temp.Contains("@") ? temp.IndexOf("@") : temp.Length)
-                                                </div>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            @message.Content
-                                        }
-                                    </p>
+                                    <MessageContent MembersFullnames="membersFullnames" Message="message" UsersToMention="usersToMention"/>
                                 }
                                 else
                                 {
@@ -207,10 +136,9 @@
                     {
                         var user = Project.Users.First(x => userToMention.Contains(x.Firstname) && userToMention.Contains(x.Lastname));
                         <div class="single-mention" @onclick="() => { MentionUser(userToMention); }">
-                            @if (System.IO.File.Exists(Path.Combine(env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{user.Id}.jpg")))
+                            @if (user.CheckIfAvatarExist(env))
                             {
-                                var path = $"/avatars/pm-avatar-{user.Id}.jpg";
-                                <img src="@path" class="user-avatar-sm" data-bs-toggle="tooltip" title="@user.Firstname @user.Lastname" />
+                                <img src="@user.GetAvatarPath()" class="user-avatar-sm" data-bs-toggle="tooltip" title="@user.Firstname @user.Lastname" />
                             }
                             else
                             {

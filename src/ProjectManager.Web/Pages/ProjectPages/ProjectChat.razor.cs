@@ -166,5 +166,4 @@ public partial class ProjectChat
   {
     CurrentChannel = channelId;
   }
-
 }

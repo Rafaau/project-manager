@@ -1,5 +1,6 @@
 ﻿@using ProjectManager.Core.ProjectAggregate
 @using ProjectManager.Web.ApiModels
+@using ProjectManager.Web.Extensions;
 
 @if (Project != null)
 {
@@ -11,10 +12,9 @@
                  aria-expanded="false"
                  @onclick="() => { details.Refresh(); }">
                 <div class="pe-3">
-                    @if (System.IO.File.Exists(Path.Combine(env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{Project.Manager.Id}.jpg")))
+                    @if (Project.Manager.CheckIfAvatarExist(env))
                     {
-                        var path = $"/avatars/pm-avatar-{Project.Manager.Id}.jpg";
-                        <img src="@path" class="user-avatar" />
+                        <img src="@Project.Manager.GetAvatarPath()" class="user-avatar" />
                     }
                     else
                     {
@@ -37,10 +37,9 @@
                     aria-expanded="false"
                     @onclick="() => { details.Refresh(); }">
                     <div class="pe-3">
-                        @if (System.IO.File.Exists(Path.Combine(env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{user.Id}.jpg")))
+                        @if (user.CheckIfAvatarExist(env))
                         {
-                            var path = $"/avatars/pm-avatar-{user.Id}.jpg";
-                            <img src="@path" class="user-avatar" />
+                            <img src="@user.GetAvatarPath()" class="user-avatar" />
                         }
                         else
                         {

@@ -1,0 +1,73 @@
+﻿@using System.Text.RegularExpressions;
+<p class="message-content">
+	@if (MembersFullnames.Any(s => Message.Content.Contains(s)))
+	{
+		List<string> members = new List<string>();
+		List<string> sortedMembers = new List<string>();
+		var temp = Message.Content;
+		var temp2 = Message.Content;
+		var duplicateCheck = Message.Content;
+		var duplicateCheck2 = Message.Content;
+		var mentionsInContent = 0;
+		foreach (var mention in MembersFullnames.Where(x => Message.Content.Contains(x)))
+		{
+			var reps = 1;
+			var regex = new Regex(Regex.Escape(mention));
+			duplicateCheck2 = regex.Replace(duplicateCheck2, "", 1);
+			mentionsInContent++;
+			for (int i = 1; i <= reps; i++)
+			{
+				if (duplicateCheck2.Contains(mention))
+				{
+					mentionsInContent++;
+					duplicateCheck2 = regex.Replace(duplicateCheck2, "", 1);
+					reps++;
+				}
+				else
+					break;
+			}
+		}
+		for (int i = 0; i < mentionsInContent; i++)
+		{
+			for (int j = 0; j < MembersFullnames.Count(); j++)
+			{
+				if (temp2.Contains("@"))
+				{
+					var attempt = temp2.Substring(temp2.IndexOf("@"), MembersFullnames.ToArray()[j].Length);
+					if (MembersFullnames.Any(x => attempt.Contains(x)))
+					{
+						sortedMembers.Add(attempt);
+						var regex = new Regex(Regex.Escape(attempt));
+						temp2 = regex.Replace(temp2, "", 1);
+					}
+				}
+			}
+		}
+
+		for (int i = 0; i < sortedMembers.Count(); i++)
+		{
+			if (i == 0)
+			{
+				@temp.Substring(0, Message.Content.IndexOf("@"))
+			}
+			<div class="dropend" style="display: inline-block;">
+				<div class="mention"
+					 id="dropdownUserDetails"
+					 data-bs-toggle="dropdown"
+					 aria-expanded="false">
+					@sortedMembers.ToArray()[i]
+				</div>
+				<UserDetails ViewedUser="UsersToMention.Where(x => sortedMembers.ToArray()[i].Contains(x.Firstname) && sortedMembers.ToArray()[i].Contains(x.Lastname)).SingleOrDefault()" @ref="details" />
+			</div>
+			var dif = temp.IndexOf("@") + sortedMembers.ToArray()[i].Length;
+			temp = temp.Substring(dif, temp.Length - dif);
+			<div class="no-mention">
+				@temp.Substring(0, temp.Contains("@") ? temp.IndexOf("@") : temp.Length)
+			</div>
+		}
+	}
+	else
+	{
+		@Message.Content
+	}
+</p>

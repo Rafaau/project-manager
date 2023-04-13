@@ -1,4 +1,5 @@
-﻿<ul class="dropdown-menu chat-channel-create-container" aria-labelledby="dropdownCreateChatChannel">
+﻿@using ProjectManager.Web.Extensions;
+<ul class="dropdown-menu chat-channel-create-container" aria-labelledby="dropdownCreateChatChannel">
 <div class="header mb-3">
     Create new channel
 </div>
@@ -27,11 +28,10 @@
         @if (Project != null)
         {
             <div class="permissed-users mt-2">
-                @if (System.IO.File.Exists(Path.Combine(Env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{Project.Manager.Id}.jpg")))
+                @if (Project.Manager.CheckIfAvatarExist(Env))
                 {
-                    var path = $"/avatars/pm-avatar-{Project.Manager.Id}.jpg";
                     <div class="icon-container">
-                        <img src="@path" class="user-avatar" data-bs-toggle="tooltip" title="@Project.Manager.Firstname @Project.Manager.Lastname" />
+                        <img src="@Project.Manager.GetAvatarPath()" class="user-avatar" data-bs-toggle="tooltip" title="@Project.Manager.Firstname @Project.Manager.Lastname" />
                     </div>
                 }
                 else
@@ -44,11 +44,10 @@
                 {
                     @if (user.Id != Project.Manager.Id)
                     {
-                        @if (System.IO.File.Exists(Path.Combine(Env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{user.Id}.jpg")))
+                        @if (user.CheckIfAvatarExist(Env))
                         {
-                            var path = $"/avatars/pm-avatar-{user.Id}.jpg";
                             <div class="icon-container" @onmouseover="() => { UserToRemove = user.Id; }" @onmouseout="() => { UserToRemove = 0; }">
-                            <img src="@path"
+                            <img src="@user.GetAvatarPath()"
                                  class="user-avatar" 
                                  data-bs-toggle="tooltip" 
                                  title="@user.Firstname @user.Lastname"/>
@@ -85,10 +84,9 @@
                     if (user.Id != Project.Manager.Id && !permissedUsers.Contains(user))
                     {
                         <li class="single-user" @onclick="() => { UpdatePermissedUsers(user); }">
-                            @if (System.IO.File.Exists(Path.Combine(Env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{user.Id}.jpg")))
+                            @if (user.CheckIfAvatarExist(Env))
                             {
-                                var path = $"/avatars/pm-avatar-{user.Id}.jpg";
-                                <img src="@path" class="user-avatar" />
+                                <img src="@user.GetAvatarPath()" class="user-avatar" />
                                 <div class="fullname-avatar">
                                     @user.Firstname @user.Lastname
                                 </div>

@@ -2,6 +2,7 @@
 @using ProjectManager.Web.Components
 @using ProjectManager.Web.Components.Modals
 @using ProjectManager.Web.Components.ProjectComponents
+@using ProjectManager.Web.Extensions;
 
 @layout ProjectLayout
 
@@ -86,10 +87,9 @@
                                         </div>
                                         @foreach (var bound in assignment.Users)
                                         {
-                                            @if (System.IO.File.Exists(Path.Combine(env.ContentRootPath, "wwwroot/avatars", $"pm-avatar-{bound.Id}.jpg")))
+                                            @if (bound.CheckIfAvatarExist(env))
                                             {
-                                                var path = $"/avatars/pm-avatar-{bound.Id}.jpg";
-                                                <img src="@path" class="user-avatar" data-bs-toggle="tooltip" title="@bound.Firstname @bound.Lastname"/>
+                                                <img src="@bound.GetAvatarPath()" class="user-avatar" data-bs-toggle="tooltip" title="@bound.Firstname @bound.Lastname"/>
                                             }
                                             else
                                             {
